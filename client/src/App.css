@@ -1,38 +1,65 @@
-.App {
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.vizitka {
   text-align: center;
+  background-color: grey;
+  max-width: 15rem;
+  padding: 1%;
+  border-radius: .5rem;
+  transition: all 0.2s linear;
+  /* height: 50rem; */
+  margin-block: 1%;
+    
+}
+.vizitka>* {
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+
+.vizitka>img {
+  padding: 5%;
+  height: 8rem;
+  width: 8rem;
+  border-radius: 50%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.vizitka h4 {
+  text-transform: capitalize;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.vizitka:hover {
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.nastenka {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-wrap: wrap;
+  gap: 1%;
+  margin-inline: 1%;
 }
 
-.App-link {
-  color: #61dafb;
+.tag {
+  background-color: aqua;
+  border-radius: 5px;
+  width:max-content;
+  padding: 1%;
+  font-size: 11px;
+  margin: 1%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.tagy {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.bio {
+  max-height: 10ch;
+  display: inline-block;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
 }
