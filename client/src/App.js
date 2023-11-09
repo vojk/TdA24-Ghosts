@@ -1,4 +1,4 @@
-import './App.css';
+import './output.css';
 import { useState } from 'react';
 
 function App() {
@@ -6,8 +6,6 @@ function App() {
 }
 
 function Vizitka({lecturerData}) {
-  const bio_length = 90; /* bio_length je hranice, kdy se vypustí zbytek textu a místo toho se přidají tři tečky na konec... borka se fr rozpovídala jakože tpč to se nedá, no tak ji trochu zatnu tipec, ať se tam ještě vejdou ty tagy a kontakty */
-
   const name = lecturerData.first_name;
   const mid_name = lecturerData.middle_name;
   const surname = lecturerData.last_name;
@@ -24,11 +22,11 @@ function Vizitka({lecturerData}) {
     <div key={lecturerData.UUID} className='vizitka'>
       <img src={pic_url} alt={'Picture of ' + name} />
 
-      <h1>{title_b} {name} {mid_name} {surname} {title_a}</h1>
+      <h1 className='text-3xl'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
 
       <h2>působí v: {location}</h2>
 
-      <h2>{claim}</h2>
+      <h2 className='text-xs'>{claim}</h2>
 
       <div dangerouslySetInnerHTML={{ __html: bio }} className='bio'/> {/* bude na spodu v rozbalovacím boxu? nebo proklik na samostatnou stránku. bude se loadit jen max délka textu v náhledu? */}
 {/* limitovat délku pomocí CSS */}

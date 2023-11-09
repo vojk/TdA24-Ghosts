@@ -1,8 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+:root {
+  --prussian-blue: #00384D; /*doplňková barva*/
+  --sky-blue: #74C7D3; /*základní barva*/
+  --white: #FFFFFF; /*základní barva; pro konzistenci dám i --white*/
+  --jet: #333333; /**/
+  --sunglow: #FECB2E; /**/
+}	
 
 .vizitka {
   text-align: center;
