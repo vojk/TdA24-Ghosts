@@ -1,20 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-*{
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+* {
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+/* *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-:root {
-  --prussian-blue: #00384D; /*doplňková barva*/
-  --sky-blue: #74C7D3; /*základní barva*/
-  --white: #FFFFFF; /*základní barva; pro konzistenci dám i --white*/
-  --jet: #333333; /**/
-  --sunglow: #FECB2E; /**/
-}	
 
 .vizitka {
   text-align: center;
@@ -23,7 +20,6 @@
   padding: 1%;
   border-radius: .5rem;
   transition: all 0.2s linear;
-  /* height: 50rem; */
   margin-block: 1%;
     
 }
@@ -68,10 +64,31 @@
   display: flex;
   flex-wrap: wrap;
 }
-
+ */
 .bio {
-  max-height: 10ch;
+  height: 10ch; 
   display: inline-block;
   overflow-y: hidden;
-  text-overflow: ellipsis;
+  text-overflow: scroll;
+
+}
+
+.to-be-continued {
+  mask-image: linear-gradient(black, transparent);
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0.15))); /* idk jak to funguje */
+}
+
+.shade-parent {
+  height: 10ch; /* jako bio */
+  position: relative;
+  overflow: hidden;
+}
+
+.shade { /* nezapomenout BG v tailwindu */
+  height: 5ch;
+  width: 22rem;
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0,0.1)), to(rgba(0, 0, 0))); /* idk jak to funguje */
+  mask-image: linear-gradient(transparent, black);
+  position: absolute;  
+  bottom: 0;
 }

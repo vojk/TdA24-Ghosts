@@ -16,7 +16,7 @@
   /* 2 */
   border-style: solid;
   /* 2 */
-  border-color: #e5e7eb;
+  border-color: currentColor;
   /* 2 */
 }
 
@@ -584,93 +584,7 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
-
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-/* ZAČÁTEK CUSTOM CSS - MÍSTO CUSTOM ASI NĚCO PAK UKRADNU */
-
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --prussian-blue: #00384D;
-  /*doplňková barva*/
-  --sky-blue: #74C7D3;
-  /*základní barva*/
-  --white: #FFFFFF;
-  /*základní barva; pro konzistenci dám i --white*/
-  --jet: #333333;
-  /**/
-  --sunglow: #FECB2E;
-  /**/
-}
-
-.vizitka {
-  text-align: center;
-  background-color: grey;
-  max-width: 15rem;
-  padding: 1%;
-  border-radius: .5rem;
-  transition: all 0.2s linear;
-  /* height: 50rem; */
-  margin-block: 1%;
-}
-
-.vizitka>* {
-  max-width: 100%;
-  overflow-wrap: break-word;
-}
-
-.vizitka>img {
-  padding: 5%;
-  height: 8rem;
-  width: 8rem;
-  border-radius: 50%;
-}
-
-.vizitka h4 {
-  text-transform: capitalize;
-}
-
-.vizitka:hover {
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
-}
-
-.nastenka {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1%;
-  margin-inline: 1%;
-}
-
-.tag {
-  background-color: aqua;
-  border-radius: 5px;
-  width:-webkit-max-content;
-  width:max-content;
-  padding: 1%;
-  font-size: 11px;
-  margin: 1%;
-}
-
-.tagy {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.bio {
-  max-height: 10ch;
-  display: inline-block;
-  overflow-y: hidden;
-  text-overflow: ellipsis;
 }

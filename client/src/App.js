@@ -1,11 +1,11 @@
-import './output.css';
+import "./App.css"
 import { useState } from 'react';
 
 function App() {
   return (<ListVizitek />)
 }
 
-function Vizitka({lecturerData}) {
+function Vizitka({ lecturerData }) {
   const name = lecturerData.first_name;
   const mid_name = lecturerData.middle_name;
   const surname = lecturerData.last_name;
@@ -19,38 +19,50 @@ function Vizitka({lecturerData}) {
   const telephone_numbers = lecturerData.contact.telephone_numbers;
   const emails = lecturerData.contact.emails;
   return (
-    <div key={lecturerData.UUID} className='vizitka'>
-      <img src={pic_url} alt={'Picture of ' + name} />
+    <div key={lecturerData.UUID} className='vizitka max-w-sm p-4 overflow-hidden bg-sky rounded-lg'>
+      <img src={pic_url} alt={'Picture of ' + name} className="rounded-full h-55 m-auto" />
 
-      <h1 className='text-3xl'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
+      <h1 className='text-4xl text-center text-prussian font-nadpis p-2'>{title_b} <br /> {name} {mid_name} {surname} <br /> {title_a}</h1>
 
-      <h2>působí v: {location}</h2>
+      <h2 className="text-xl text-center">Působí v: <br /> <span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
 
-      <h2 className='text-xs'>{claim}</h2>
+      <h2 className='text-md italic text-prussian text-center'>{claim}</h2>
 
-      <div dangerouslySetInnerHTML={{ __html: bio }} className='bio'/> {/* bude na spodu v rozbalovacím boxu? nebo proklik na samostatnou stránku. bude se loadit jen max délka textu v náhledu? */}
-{/* limitovat délku pomocí CSS */}
-      <div>
-        {telephone_numbers.map((num, index) => (
-          <div className='num' key={index}>
-            {num}
-          </div>
-        ))}
+      <div className="shade-parent">
+
+        <div dangerouslySetInnerHTML={{ __html: bio }} className='bio text-md font-semibold' /> {/* bude na spodu v rozbalovacím boxu? nebo proklik na samostatnou stránku. bude se loadit jen max délka textu v náhledu? */}
+        {/* limitovat délku pomocí CSS */}
+        <div className="shade bg-sky" />
       </div>
-      <div>
-        {emails.map((mail, index) => (
-          <div className='mail' key={index}> {/* prostě vypíše maily do samostatných divů s classou "mail" */}
-            {mail}
-          </div>
-        ))}
+
+
+      <div className="kontakty flex gap-1 flex-col md:flex-row sm:text-center">
+        <div className="flex-1">
+          {telephone_numbers.map((num, index) => (
+            <div className='num' key={index}>
+              {num}
+            </div>
+          ))}
+        </div>
+        <div className="flex-1">
+          {emails.map((mail, index) => (
+            <div className='mail' key={index}> {/* prostě vypíše maily do samostatných divů s classou "mail" */}
+              {mail}
+            </div>
+          ))}
+        </div></div>
+
+      <div className="shade-parent">
+        <div className='tagy h-56 flex flex-wrap '> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
+          {tagy.map(tag => (
+            <div key={tag.uuid} className='tag text-jet bg-sunglow m-1 p-1 w-fit max-h-8 rounded-md'> {/* nevim co ten key dělá ale radši ho tam dám, vypíše všechny tagy v samostatným divu s classou "tag" */}
+              {tag.name}
+            </div>
+          ))}
+        </div>
+        <div className="shade bg-sky" />
       </div>
-      <div className='tagy'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
-        {tagy.map(tag => (
-          <div key={tag.uuid} className='tag'> {/* nevim co ten key dělá ale radši ho tam dám, vypíše všechny tagy v samostatným divu s classou "tag" */}
-            {tag.name}
-          </div>
-        ))}
-      </div>
+
     </div>
   );
 }
@@ -106,15 +118,16 @@ function ListVizitek() {
     "contact": {
       "telephone_numbers": ["+420 722 482 974"],
       "emails": ["placha@scg.cz", "predseda@scg.cz"]
-    }},
-    {
+    }
+  },
+  {
     "UUID": "2d7e0a53-5a47-4b05-b8ea-60b3d7c8257c",
     "title_before": "Dr.",
     "first_name": "John",
     "middle_name": "Alexander",
     "last_name": "Smith",
     "title_after": "PhD",
-    "picture_url": "https://picsum.photos/200",
+    "picture_url": "https://picsum.photos/300",
     "location": "New York",
     "claim": "Medical Doctor",
     "bio": "<p>I'm a passionate medical doctor with years of experience.</p>",
@@ -141,7 +154,7 @@ function ListVizitek() {
     "middle_name": "James",
     "last_name": "Johnson",
     "title_after": "MSc",
-    "picture_url": "https://picsum.photos/200",
+    "picture_url": "https://picsum.photos/300",
     "location": "Los Angeles",
     "claim": "Software Engineer",
     "bio": "<p>I'm a software engineer with a passion for coding.</p>",
@@ -168,7 +181,7 @@ function ListVizitek() {
     "middle_name": "Grace",
     "last_name": "Brown",
     "title_after": "MA",
-    "picture_url": "https://picsum.photos/200",
+    "picture_url": "https://picsum.photos/300",
     "location": "Chicago",
     "claim": "Marketing Manager",
     "bio": "<p>I'm a marketing professional with a knack for strategy.</p>",
@@ -195,7 +208,7 @@ function ListVizitek() {
     "middle_name": "Lynn",
     "last_name": "Garcia",
     "title_after": "BA",
-    "picture_url": "https://picsum.photos/200",
+    "picture_url": "https://picsum.photos/300",
     "location": "San Francisco",
     "claim": "Graphic Designer",
     "bio": "<p>I'm a creative graphic designer with a love for visual arts.</p>",
@@ -222,7 +235,7 @@ function ListVizitek() {
     "middle_name": "Andrew",
     "last_name": "Williams",
     "title_after": "JD",
-    "picture_url": "https://picsum.photos/200",
+    "picture_url": "https://picsum.photos/300",
     "location": "Houston",
     "claim": "Lawyer",
     "bio": "<p>I'm an experienced lawyer with expertise in various legal matters.</p>",
@@ -249,7 +262,7 @@ function ListVizitek() {
     "middle_name": "Ann",
     "last_name": "Martinez",
     "title_after": "PharmD",
-    "picture_url": "https://picsum.photos/200",
+    "picture_url": "https://picsum.photos/300",
     "location": "Miami",
     "claim": "Pharmacist",
     "bio": "<p>I'm a licensed pharmacist with expertise in medication management.</p>",
@@ -269,11 +282,11 @@ function ListVizitek() {
       "emails": ["olivia.martinez@example.com"]
     }
   }]
-    
+
   return (
-    <div className='nastenka'>
-    {fakeAPI.map((data) => (
-      <Vizitka key={data.UUID} lecturerData={data}/>))}
+    <div className='flex flex-wrap gap-3 p-2 justify-center'>
+      {fakeAPI.map((data) => (
+        <Vizitka key={data.UUID} lecturerData={data} />))}
     </div>
   )
 }
