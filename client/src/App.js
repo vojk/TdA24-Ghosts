@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import "./App.css"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
   return (<ListVizitek />)
@@ -12,6 +14,7 @@ function Vizitka({ lecturerData }) {
   const title_b = lecturerData.title_before;
   const title_a = lecturerData.title_after;
   const pic_url = lecturerData.picture_url;
+  const cena = lecturerData.price_per_hour;
   const tagy = lecturerData.tags;
   const location = lecturerData.location;
   const claim = lecturerData.claim;
@@ -25,9 +28,8 @@ function Vizitka({ lecturerData }) {
       <h1 className='text-4xl text-center text-prussian font-nadpis p-2'>{title_b} <br /> {name} {mid_name} {surname} <br /> {title_a}</h1>
 
       <h2 className="text-xl text-center">Působí v: <br /> <span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
-
+      <h2 className="text-xl text-center">Cena: <br /> <span className="text-3xl text-sunglow font-nadpis">{cena}</span></h2>
       <h2 className='text-md italic text-prussian text-center'>{claim}</h2>
-
       <div className="shade-parent">
 
         <div dangerouslySetInnerHTML={{ __html: bio }} className='bio text-md font-semibold' /> {/* bude na spodu v rozbalovacím boxu? nebo proklik na samostatnou stránku. bude se loadit jen max délka textu v náhledu? */}
@@ -35,22 +37,30 @@ function Vizitka({ lecturerData }) {
         <div className="shade bg-sky" />
       </div>
 
-
-      <div className="kontakty flex gap-1 flex-col md:flex-row sm:text-center">
-        <div className="flex-1">
+      <div className="kontakty flex gap-1 flex-col"> {/* zkoušel jsem tady udělat responzivitu, kde byl mail a telefon vedle sebe na desktopu, ale delší maily zlobí a když se nevejdou, tak je to otřesný, raději nechám samostatný řádku pro všechny obrazovky */}
+        <div>
           {telephone_numbers.map((num, index) => (
-            <div className='num' key={index}>
-              {num}
+            <div className="flex w-fit m-auto">
+              <FontAwesomeIcon icon={faPhone} className="my-auto m-1" />
+              <div className='num' key={index}>
+                {num}
+              </div>
             </div>
+
           ))}
         </div>
-        <div className="flex-1">
+        <div>
           {emails.map((mail, index) => (
-            <div className='mail' key={index}> {/* prostě vypíše maily do samostatných divů s classou "mail" */}
-              {mail}
+            <div className="flex w-fit m-auto">
+              <FontAwesomeIcon icon={faEnvelope} className="my-auto m-1" />
+              <div className='mail' key={index}> {/* prostě vypíše maily do samostatných divů s classou "mail" */}
+                {mail}
+              </div>
             </div>
+
           ))}
-        </div></div>
+        </div>
+      </div>
 
       <div className="shade-parent">
         <div className='tagy h-56 flex flex-wrap '> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
@@ -68,7 +78,6 @@ function Vizitka({ lecturerData }) {
 }
 
 function ListVizitek() {
-
   const fakeAPI = [{
     "UUID": "67fda282-2bca-41ef-9caf-039cc5c8dd69",
     "title_before": "Mgr.",
@@ -283,11 +292,34 @@ function ListVizitek() {
     }
   }]
 
+  const [data, setData] = useState([]);
+  const [records, setRecords] = useState(data);
+
+  useEffect(() => { /* tady bude fetch nebo tak něco idk */
+    setData(fakeAPI);
+    setRecords(fakeAPI);
+  }, [])
+
+
+  /* pro checkboxy tohle -> https://medium.com/@compmonk/react-multi-select-with-check-boxes-and-select-all-option-bd16941538f3 */
+
+  const Filter = (event) => {
+      console.log(event)
+      setRecords(data.filter(f =>
+        f.location.toLowerCase().includes(event.target.value.toLowerCase())
+        /* nastaví "records" na data pokud obsahují hodnotu xy */
+  ))}
+
   return (
-    <div className='flex flex-wrap gap-3 p-2 justify-center'>
-      {fakeAPI.map((data) => (
-        <Vizitka key={data.UUID} lecturerData={data} />))}
-    </div>
+    <>
+      <input type="text" onChange={Filter} className="text-jet border-jet w-80" placeholder="filtr měst, později bude checkbox"></input>
+      <input type="checkbox" name="test" value="brno" onChange={Filter}></input>
+      <input type="checkbox" name="test" value="new york" onChange={Filter}></input>
+      <div className='flex flex-wrap gap-3 p-2 justify-center'>
+        {records.map((data) => (
+          <Vizitka key={data.UUID} lecturerData={data} />))}
+      </div>
+    </>
   )
 }
 
