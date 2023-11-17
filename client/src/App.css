@@ -1,38 +1,94 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+* {
   color: white;
+  font-family: 'Open Sans', sans-serif;
+}
+/* *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-link {
-  color: #61dafb;
+.vizitka {
+  text-align: center;
+  background-color: grey;
+  max-width: 15rem;
+  padding: 1%;
+  border-radius: .5rem;
+  transition: all 0.2s linear;
+  margin-block: 1%;
+    
+}
+.vizitka>* {
+  max-width: 100%;
+  overflow-wrap: break-word;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.vizitka>img {
+  padding: 5%;
+  height: 8rem;
+  width: 8rem;
+  border-radius: 50%;
+}
+
+.vizitka h4 {
+  text-transform: capitalize;
+}
+
+.vizitka:hover {
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.nastenka {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1%;
+  margin-inline: 1%;
+}
+
+.tag {
+  background-color: aqua;
+  border-radius: 5px;
+  width:max-content;
+  padding: 1%;
+  font-size: 11px;
+  margin: 1%;
+}
+
+.tagy {
+  display: flex;
+  flex-wrap: wrap;
+}
+ */
+.bio {
+  height: 10ch; 
+  display: inline-block;
+  overflow-y: hidden;
+  text-overflow: scroll;
+
+}
+
+.to-be-continued {
+  mask-image: linear-gradient(black, transparent);
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0.15))); /* idk jak to funguje */
+}
+
+.shade-parent {
+  height: 10ch; /* jako bio */
+  position: relative;
+  overflow: hidden;
+}
+
+.shade { /* nezapomenout BG v tailwindu */
+  height: 5ch;
+  width: 22rem;
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0,0.1)), to(rgba(0, 0, 0))); /* idk jak to funguje */
+  mask-image: linear-gradient(transparent, black);
+  position: absolute;  
+  bottom: 0;
 }
