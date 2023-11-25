@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.ghosts.tda.objects.process.Person;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class DbController {
   private List<Person> people = new ArrayList<>();
-  String url = "jdbc:sqlite:/home/zalubo/Documents/GitHub/TdA24-Ghosts/server/src/main/resources/tda.db";
+  String url = Dotenv.load().get("URL");
 
   public void checkExistenceOfDb() {
     File dbFile = new File(url.split(":")[2]);
