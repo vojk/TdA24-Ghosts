@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class Example {
     @GetMapping("")
     public ResponseEntity<TokenObject> responseEntity() {
-        TokenObject tokenObject = new TokenObject();
-        tokenObject.setSecret("The cake is a lie");
+        TokenObject tokenObject = new TokenObject("The cake is a lie");
         return ResponseEntity.ok(tokenObject);
     }
 
