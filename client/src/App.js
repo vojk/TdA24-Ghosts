@@ -89,13 +89,13 @@ function ProfilExample() {
   const telephone_numbers = data.contact.telephone_numbers;
   const emails = data.contact.emails;
   return (
-    <div key={data.UUID} className='vizitka max-w-fit p-5 overflow-hidden bg-sky rounded-lg grid grid-cols-2 grid-rows-2 m-5'>
-      <div className="col-span-1">
-        <img src={pic_url} alt={'Picture of ' + name} className="rounded-full h-55 m-auto" />
+    <div key={data.UUID} className='vizitka max-w-fit p-5 overflow-hidden bg-sky rounded-lg grid md:grid-cols-2 grid-cols-1 md:grid-rows-[1fr_auto_auto] grid-rows-[500px_1fr_auto_auto] m-5 gap-2'>
+      <div className="md:col-span-1 col-span-1 w-max m-auto">
+        <img src={pic_url} alt={'Picture of ' + name} className="rounded-full m-auto" />
         <h1 className='text-4xl text-center text-prussian font-nadpis p-2'>{title_b} <br /> {name} {mid_name} {surname} <br /> {title_a}</h1>
       </div>
 
-      <div className="col-span-1">
+       <div className="md:col-span-1 col-span-2">
         <h2 className="text-xl text-center"><span>Působí v: </span><span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
         <h2 className="text-xl text-center"><span>Cena: </span><span className="text-3xl text-sunglow font-nadpis">{cena}</span></h2>
         <h2 className='text-md italic text-prussian text-center'>{claim}</h2>
@@ -109,7 +109,7 @@ function ProfilExample() {
 
 
      {/*  <div className=""> */}
-        <div className="kontakty flex gap-1 flex-col col-span-1"> {/* zkoušel jsem tady udělat responzivitu, kde byl mail a telefon vedle sebe na desktopu, ale delší maily zlobí a když se nevejdou, tak je to otřesný, raději nechám samostatný řádku pro všechny obrazovky */}
+        <div className="kontakty flex gap-1 flex-col col-span-2"> {/* zkoušel jsem tady udělat responzivitu, kde byl mail a telefon vedle sebe na desktopu, ale delší maily zlobí a když se nevejdou, tak je to otřesný, raději nechám samostatný řádku pro všechny obrazovky */}
           <div>
             {telephone_numbers.map((num, index) => (
               <div className="flex w-fit m-auto">
@@ -134,9 +134,9 @@ function ProfilExample() {
           </div>
         </div>
         
-          <div className='tagy h-56 flex flex-wrap col-span-1'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
+          <div className='tagy flex flex-wrap gap-0 col-span-2'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
             {tagy.map(tag => (
-              <div key={tag.uuid} className='tag text-jet bg-sunglow m-1 p-1 w-fit rounded-md'> {/* nevim co ten key dělá ale radši ho tam dám, vypíše všechny tagy v samostatným divu s classou "tag" */}
+              <div key={tag.uuid} className='tag text-jet bg-sunglow m-1 p-1 w-fit h-fit rounded-md'> {/* nevim co ten key dělá ale radši ho tam dám, vypíše všechny tagy v samostatným divu s classou "tag" */}
                 {tag.name}
               </div>
             ))}
