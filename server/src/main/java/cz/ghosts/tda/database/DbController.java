@@ -1,78 +1,83 @@
 package cz.ghosts.tda.database;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.util.List;
+import java.util.ArrayList;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import cz.ghosts.tda.teachers.TeachersTDO;
+import cz.ghosts.tda.teachers.tags.TagsTDO;
 
-public class DbController {
-  String dburl = Dotenv.load().get("DBURL");
-  String initsqlURL = Dotenv.load().get("INITSQL");
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 
-  public void checkExistenceOfDb() {
-    System.out.println("Database URL: " + dburl);
-    System.out.println("Database init SQL: " + initsqlURL);
-    File dbFile = new File(dburl.split(":")[2]);
-    System.out.println("Database path: " + dburl.split(":")[2]);
-    if (!dbFile.exists()) {
-      System.out.println("Database does not exist");
-      try {
-        dbFile.createNewFile();
-        System.out.println("Database created");
-      } catch (Exception e) {
-        System.out.println("Error creating database file");
-        System.out.println(e.getMessage());
-      }
-    } else {
-      System.out.println("Database exists");
-    }
+public class DbController implements DBInterface {
+  public void createDatabase() {
+    InitDatabase initDatabase = new InitDatabase();
+    initDatabase.checkExistenceOfDb();
   }
 
-  private String readInitSql() {
-    String initSql = "";
-    try {
-      Path initSqlFile = Paths.get(initsqlURL);
-      if (initSqlFile.toFile().exists()) {
-        BufferedReader reader = Files.newBufferedReader(initSqlFile);
-        Stream<String> lines = reader.lines();
-        String data = lines.collect(Collectors.joining("\n"));
-        lines.close();
-        return data;
-      } else {
-        System.out.println("Init SQL file does not exist");
-      }
-    } catch (Exception e) {
-      System.out.println("Error reading init SQL file");
-      System.out.println(e.getMessage());
-    }
-    return initSql;
-  }
-
-  public void exampleDatabse() {
-    // System.out.println(readInitSql());
-    try (Connection connection = DriverManager.getConnection(dburl)) {
-      // Create a table
-      // String createTableSQL = "CREATE TABLE IF NOT EXISTS example_table (id INTEGER
-      // PRIMARY KEY, name TEXT);";
+  public void addTeacher(TeachersTDO teacher) {
+    List<String> tagsIds = new ArrayList<>();
+    System.out.println("Id ucitele: " + teacher.getId());
+    try (Connection connection = DBInterface.getConnection();) {
       try (Statement statement = connection.createStatement()) {
-        String[] sqlStatements = readInitSql().split("(?<=;)");
-        for (String sqlStatement : sqlStatements) {
-          System.out.println(sqlStatement);
-          statement.execute(sqlStatement);
+        for (TagsTDO tag : teacher.getTags()) {
+          String insertTagQuery = ("INSERT OR IGNORE INTO tags (id, name) SELECT ?, ? WHERE NOT EXISTS (SELECT 1 FROM tags WHERE name = ?)");
+          try (PreparedStatement insertTagStatement = connection.prepareStatement(insertTagQuery)) {
+            insertTagStatement.setString(1, tag.getId());
+            insertTagStatement.setString(2, tag.getName());
+            insertTagStatement.setString(3, tag.getName());
+            insertTagStatement.executeUpdate();
+          }
+
+          String selectTagQuery = "SELECT id FROM tags WHERE name = ?";
+          try (PreparedStatement selectTagIdStatement = connection.prepareStatement(selectTagQuery)) {
+            selectTagIdStatement.setString(1, tag.getName());
+            ResultSet tagIdResult = selectTagIdStatement.executeQuery();
+            if (tagIdResult.next()) {
+              tagsIds.add(tagIdResult.getString("id"));
+              System.out.println("Tag id: " + tagsIds);
+            }
+          }
+        }
+
+        for (String tagId : tagsIds) {
+          String insertTeacherTagQuery = ("INSERT OR IGNORE INTO tags_ucitele (id_tag, id_ucitel) VALUES (?, ?)");
+          try (PreparedStatement insertTeacherTagStatement = connection.prepareStatement(insertTeacherTagQuery)) {
+            insertTeacherTagStatement.setString(1, tagId);
+            insertTeacherTagStatement.setString(2, teacher.getId());
+            insertTeacherTagStatement.executeUpdate();
+          }
+        }
+
+        String insertTeacherQuery = "INSERT OR IGNORE INTO ucitele (uuid, first_name, last_name) VALUES (?, ?, ?)";
+        try (PreparedStatement insertTeacherStatement = connection.prepareStatement(insertTeacherQuery)) {
+          insertTeacherStatement.setString(1, teacher.getId());
+          insertTeacherStatement.setString(2, teacher.getFirst_name());
+          insertTeacherStatement.setString(3, teacher.getLast_name());
+          insertTeacherStatement.executeUpdate();
+        }
+
+        String selectTeacherQuery = "SELECT * FROM ucitele WHERE uuid = ?";
+        try (PreparedStatement selectTeacherStatement = connection.prepareStatement(selectTeacherQuery)) {
+          selectTeacherStatement.setString(1, teacher.getId());
+          ResultSet result = selectTeacherStatement.executeQuery();
+
+          System.out.println("Teachers:");
+          while (result.next()) {
+            System.out.print(result.getString("first_name") + " | ");
+            System.out.println(result.getString("last_name"));
+          }
         }
       } catch (Exception e) {
-        System.out.println("Error creating table");
+        System.out.println("Error executing query");
         System.out.println(e.getMessage());
       }
     } catch (Exception e) {
-      System.out.println("Error connecting to database");
+      System.out.println("Error adding teacher");
       System.out.println(e.getMessage());
     }
   }
+
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.UUID;
+
 import cz.ghosts.tda.objects.TeacherId;
 import cz.ghosts.tda.teachers.conctacts.Contact;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
@@ -22,6 +24,18 @@ public class TeachersTDO extends TeacherId<String> {
   private int price_per_hour;
   private Contact contact;
 
+  public TeachersTDO() {
+    super(UUID.randomUUID().toString()); // Pass a default or null value for the parent constructor
+  }
+
+  public TeachersTDO(String id, String first_name, String last_name, Contact contact, List<TagsTDO> tags) {
+    super(UUID.randomUUID().toString());
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.contact = contact;
+    this.tags = tags;
+  }
+
   @JsonProperty("contact")
   public Object getContact() {
     return contact;
@@ -37,14 +51,6 @@ public class TeachersTDO extends TeacherId<String> {
 
   public List<TagsTDO> getTags() {
     return tags;
-  }
-
-  public TeachersTDO(String id, String first_name, String last_name, Contact contact, List<TagsTDO> tags) {
-    super(id);
-    this.first_name = first_name;
-    this.last_name = last_name;
-    this.contact = contact;
-    this.tags = tags;
   }
 
   public String getTitle_before() {

@@ -8,6 +8,10 @@ public class Contact {
   private List<String> emails;
   private List<String> telephone_numbers;
 
+  public Contact() {
+
+  }
+
   public Contact(List<String> emails, List<String> telephone_numbers) {
     this.emails = emails;
     this.telephone_numbers = telephone_numbers;
