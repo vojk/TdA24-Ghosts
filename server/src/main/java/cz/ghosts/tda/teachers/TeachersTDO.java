@@ -11,16 +11,16 @@ import cz.ghosts.tda.teachers.conctacts.Contact;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
 
 public class TeachersTDO extends TeacherId<String> {
-  private String title_before;
+  private String title_before = null;
   private String first_name;
-  private String middle_name;
+  private String middle_name = null;
   private String last_name;
-  private String title_after;
-  private String picture_url;
-  private String location;
-  private String claim;
-  private String bio;
-  private List<TagsTDO> tags;
+  private String title_after = null;
+  private String picture_url = null;
+  private String location = null;
+  private String claim = null;
+  private String bio = null;
+  private List<TagsTDO> tags = null;
   private int price_per_hour;
   private Contact contact;
 
@@ -29,15 +29,33 @@ public class TeachersTDO extends TeacherId<String> {
   }
 
   public TeachersTDO(String id, String first_name, String last_name, Contact contact, List<TagsTDO> tags) {
-    super(UUID.randomUUID().toString());
+    super(id);
     this.first_name = first_name;
     this.last_name = last_name;
     this.contact = contact;
     this.tags = tags;
   }
 
+  public TeachersTDO(String id, String title_before, String first_name, String middle_name, String last_name,
+      String title_after, String picture_url, String location, String claim, String bio, List<TagsTDO> tags,
+      int price_per_hour, Contact contact) {
+    super(id);
+    this.title_before = title_before;
+    this.first_name = first_name;
+    this.middle_name = middle_name;
+    this.last_name = last_name;
+    this.title_after = title_after;
+    this.picture_url = picture_url;
+    this.location = location;
+    this.claim = claim;
+    this.bio = bio;
+    this.tags = tags;
+    this.price_per_hour = price_per_hour;
+    this.contact = contact;
+  }
+
   @JsonProperty("contact")
-  public Object getContact() {
+  public Contact getContact() {
     return contact;
   }
 

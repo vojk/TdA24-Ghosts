@@ -2,7 +2,6 @@ package cz.ghosts.tda;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import java.util.UUID;
 
 import cz.ghosts.tda.database.DbController;
 

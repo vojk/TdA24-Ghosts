@@ -3,14 +3,14 @@ package cz.ghosts.tda.teachers;
 import org.springframework.web.bind.annotation.RestController;
 
 import cz.ghosts.tda.database.DbController;
-import cz.ghosts.tda.teachers.conctacts.Contact;
-import cz.ghosts.tda.teachers.tags.TagsTDO;
+import cz.ghosts.tda.objects.return_objects.HTTPCodesTDO;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,33 +18,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/teachers")
 public class TeachersController {
-  @GetMapping("/")
-  public ResponseEntity<Object> getTeachers() {
+  @GetMapping(path = { "/", "/{id}" })
+  public ResponseEntity<Object> getTeachers(@PathVariable(required = false) String id) {
+    if (id == null) {
+      id = "";
+    }
     List<TeachersTDO> teachers = new ArrayList<>();
-    List<String> emails = new ArrayList<>();
-    List<String> telephone_numbers = new ArrayList<>();
-    List<TagsTDO> tags = new ArrayList<>();
-    tags.add(new TagsTDO("jfkfa-fasdf-vadfa", "tag1"));
-    emails.add("user@example.com");
-    telephone_numbers.add("123456789");
+    DbController dbController = new DbController();
 
-    teachers.add(new TeachersTDO("asjda-adf-dsfad", "Petr", "Novak", new Contact(emails, telephone_numbers), tags));
+    teachers = dbController.getAllTeachers(id);
 
-    emails.add("jenicek.as@asd.cz");
-    telephone_numbers.add("987654321");
-    teachers.add(new TeachersTDO("asjda-adf-asdf", "Pavel", "Novak", new Contact(emails, telephone_numbers), tags));
+    if (teachers == null || teachers.size() <= 0)
+      return ResponseEntity.status(404).body(new HTTPCodesTDO(404, "User not found"));
 
-    return ResponseEntity.ok(teachers);
+    if (id.length() <= 0)
+      return ResponseEntity.ok(teachers);
+
+    return ResponseEntity.ok(teachers.get(0));
+
   }
 
   @PostMapping("/")
   public ResponseEntity<TeachersTDO> postMethodName(@RequestBody TeachersTDO entity) {
     System.out.println(entity);
     DbController dbController = new DbController();
-    dbController.addTeacher(entity);
-    System.out.println(entity.getFirst_name());
-    System.out.println(entity.getLast_name());
-    return ResponseEntity.ok(entity);
+    String teacherId = dbController.addTeacher(entity);
+    return ResponseEntity.ok(dbController.getAllTeachers(teacherId).get(0));
   }
 
 }
