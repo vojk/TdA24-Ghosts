@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
+
 import cz.ghosts.tda.objects.TeacherId;
 import cz.ghosts.tda.teachers.conctacts.Contact;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
@@ -21,8 +24,15 @@ public class TeachersTDO extends TeacherId<String> {
   private String claim = null;
   private String bio = null;
   private List<TagsTDO> tags = null;
-  private int price_per_hour;
+  private int price_per_hour = 0;
   private Contact contact;
+
+  private String checkForEmptyString(String str) {
+    if (str == null || str.length() <= 0) {
+      return null;
+    }
+    return str;
+  }
 
   public TeachersTDO() {
     super(UUID.randomUUID().toString()); // Pass a default or null value for the parent constructor
@@ -36,19 +46,20 @@ public class TeachersTDO extends TeacherId<String> {
     this.tags = tags;
   }
 
-  public TeachersTDO(String id, String title_before, String first_name, String middle_name, String last_name,
+  public TeachersTDO(String id, String title_before, String first_name, String middle_name,
+      String last_name,
       String title_after, String picture_url, String location, String claim, String bio, List<TagsTDO> tags,
       int price_per_hour, Contact contact) {
     super(id);
-    this.title_before = title_before;
-    this.first_name = first_name;
-    this.middle_name = middle_name;
-    this.last_name = last_name;
-    this.title_after = title_after;
-    this.picture_url = picture_url;
-    this.location = location;
-    this.claim = claim;
-    this.bio = bio;
+    this.title_before = checkForEmptyString(title_before);
+    this.first_name = checkForEmptyString(first_name);
+    this.middle_name = checkForEmptyString(middle_name);
+    this.last_name = checkForEmptyString(last_name);
+    this.title_after = checkForEmptyString(title_after);
+    this.picture_url = checkForEmptyString(picture_url);
+    this.location = checkForEmptyString(location);
+    this.claim = checkForEmptyString(claim);
+    this.bio = checkForEmptyString(bio);
     this.tags = tags;
     this.price_per_hour = price_per_hour;
     this.contact = contact;

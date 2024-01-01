@@ -287,6 +287,119 @@ public class DbController implements DBInterface {
     return null;
   }
 
+  private void deleteUnusedTags(DbStatement dbStatement) throws SQLException {
+    String deleteUnusedTagsQuery = "DELETE FROM tags WHERE id NOT IN (SELECT id_tag FROM tags_ucitele)";
+    try (PreparedStatement deleteUnusedTagsStatement = dbStatement.connection.prepareStatement(deleteUnusedTagsQuery)) {
+      deleteUnusedTagsStatement.executeUpdate();
+    }
+  }
+
+  private void deleteUnusedTitles(DbStatement dbStatement) throws SQLException {
+    String deleteUnusedTitlesQuery = "DELETE FROM titles WHERE id NOT IN (SELECT id_title_before FROM ucitele) AND id NOT IN (SELECT id_title_after FROM ucitele)";
+    try (PreparedStatement deleteUnusedTitlesStatement = dbStatement.connection
+        .prepareStatement(deleteUnusedTitlesQuery)) {
+      deleteUnusedTitlesStatement.executeUpdate();
+    }
+  }
+
+  private void deleteUnusedEmails(DbStatement dbStatement) throws SQLException {
+    String deleteUnusedEmailsQuery = "DELETE FROM emails WHERE id NOT IN (SELECT id_email FROM email_ucitel)";
+    try (PreparedStatement deleteUnusedEmailsStatement = dbStatement.connection
+        .prepareStatement(deleteUnusedEmailsQuery)) {
+      deleteUnusedEmailsStatement.executeUpdate();
+    }
+  }
+
+  private void deleteUnusedTelephoneNumbers(DbStatement dbStatement) throws SQLException {
+    String deleteUnusedTelephoneNumbersQuery = "DELETE FROM telephone_nums WHERE id NOT IN (SELECT id_tel FROM telephone_ucitel)";
+    try (PreparedStatement deleteUnusedTelephoneNumbersStatement = dbStatement.connection
+        .prepareStatement(deleteUnusedTelephoneNumbersQuery)) {
+      deleteUnusedTelephoneNumbersStatement.executeUpdate();
+    }
+  }
+
+  private void deleteUnusedLocations(DbStatement dbStatement) throws SQLException {
+    String deleteUnusedLocationsQuery = "DELETE FROM location WHERE id NOT IN (SELECT id_location FROM ucitele)";
+    try (PreparedStatement deleteUnusedLocationsStatement = dbStatement.connection
+        .prepareStatement(deleteUnusedLocationsQuery)) {
+      deleteUnusedLocationsStatement.executeUpdate();
+    }
+  }
+
+  private void cleanDB(DbStatement dbStatement) throws SQLException {
+    deleteUnusedTags(dbStatement);
+    deleteUnusedTitles(dbStatement);
+    deleteUnusedEmails(dbStatement);
+    deleteUnusedTelephoneNumbers(dbStatement);
+    deleteUnusedLocations(dbStatement);
+  }
+
+  private void insertRelationEmailTeacher(DbStatement dbStatement, TeachersTDO teacher) {
+    teacher.getContact().getEmails().forEach((email) -> {
+      String insertEmailToTeacherQuery = ("INSERT OR IGNORE INTO email_ucitel (id_email, id_ucitel) SELECT (SELECT id FROM emails WHERE email = ?), ? WHERE NOT EXISTS (SELECT 1 FROM email_ucitel WHERE id_email = (SELECT id FROM emails WHERE email = ?) AND id_ucitel = ?)");
+      try (PreparedStatement insertEmailToTeacherStatement = dbStatement.connection
+          .prepareStatement(insertEmailToTeacherQuery)) {
+        insertEmailToTeacherStatement.setString(1, email);
+        insertEmailToTeacherStatement.setString(2, teacher.getId());
+        insertEmailToTeacherStatement.setString(3, email);
+        insertEmailToTeacherStatement.setString(4, teacher.getId());
+        insertEmailToTeacherStatement.executeUpdate();
+      } catch (Exception e) {
+        System.out.println("Error executing query");
+        System.out.println(e.getMessage());
+      }
+    });
+  }
+
+  private void insertTelephoneNumbers(DbStatement dbStatement, Contact contact) {
+    contact.getTelephoneNumbers().forEach(telephone_number -> {
+      String insertTelephonePrefixQuery = ("INSERT OR IGNORE INTO prefixes (tel_prefix) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM prefixes WHERE tel_prefix = ?)");
+      try (PreparedStatement insertTelephonePrefixStatement = dbStatement.connection
+          .prepareStatement(insertTelephonePrefixQuery)) {
+        insertTelephonePrefixStatement.setString(1, telephone_number.getPrefix());
+        insertTelephonePrefixStatement.setString(2, telephone_number.getPrefix());
+        insertTelephonePrefixStatement.executeUpdate();
+      } catch (Exception e) {
+        System.out.println("Error executing query");
+        System.out.println(e.getMessage());
+      }
+
+      String insertTelephoneNumberQuery = ("INSERT OR IGNORE INTO telephone_nums (id_prefix, telephone) SELECT (SELECT id FROM prefixes WHERE tel_prefix = ?), ? WHERE NOT EXISTS (SELECT 1 FROM telephone_nums WHERE telephone = ? AND id_prefix = (SELECT id FROM prefixes WHERE tel_prefix = ?))");
+      try (PreparedStatement insertTelephoneNumberStatement = dbStatement.connection
+          .prepareStatement(insertTelephoneNumberQuery)) {
+        insertTelephoneNumberStatement.setString(1, telephone_number.getPrefix());
+        insertTelephoneNumberStatement.setString(2, telephone_number.getNumber());
+        insertTelephoneNumberStatement.setString(3, telephone_number.getNumber());
+        insertTelephoneNumberStatement.setString(4, telephone_number.getPrefix());
+        insertTelephoneNumberStatement.executeUpdate();
+      } catch (Exception e) {
+        System.out.println("Error executing query");
+        System.out.println(e.getMessage());
+      }
+    });
+  }
+
+  private void insertRelationTelephoneTeacher(DbStatement dbStatement, TeachersTDO teacher) {
+    teacher.getContact().getTelephoneNumbers().forEach(telephone_number -> {
+      String insertTelephoneToTeacherQuery = ("INSERT OR IGNORE INTO telephone_ucitel (id_tel, id_ucitel) SELECT (SELECT id FROM telephone_nums WHERE telephone = ? AND id_prefix = (SELECT id FROM prefixes WHERE tel_prefix = ?)), ? WHERE NOT EXISTS (SELECT 1 FROM telephone_ucitel WHERE id_tel = (SELECT id FROM telephone_nums WHERE telephone = ? AND id_prefix = (SELECT id FROM prefixes WHERE tel_prefix = ?)) AND id_ucitel = ?)");
+      try (PreparedStatement insertTelephoneToTeacherStatement = dbStatement.connection
+          .prepareStatement(insertTelephoneToTeacherQuery)) {
+        insertTelephoneToTeacherStatement.setString(1, telephone_number.getNumber());
+        insertTelephoneToTeacherStatement.setString(2, telephone_number.getPrefix());
+        insertTelephoneToTeacherStatement.setString(3, teacher.getId());
+        insertTelephoneToTeacherStatement.setString(4, telephone_number.getNumber());
+        insertTelephoneToTeacherStatement.setString(5, teacher.getId());
+        insertTelephoneToTeacherStatement.setString(6, telephone_number.getPrefix());
+        insertTelephoneToTeacherStatement.executeUpdate();
+      } catch (Exception e) {
+        System.out.println("Error executing query");
+        System.out.println(e.getMessage());
+      }
+
+      System.out.println("Telephone number: " + telephone_number.toString());
+    });
+  }
+
   public String addTeacher(TeachersTDO teacher) {
     List<String> tagsIds = new ArrayList<>();
     System.out.println("Id ucitele: " + teacher.getId());
@@ -311,65 +424,11 @@ public class DbController implements DBInterface {
         insertTitle(new DbStatement(connection, statement), teacher.getTitle_after());
 
         insertEmails(new DbStatement(connection, statement), teacher.getContact());
-
+        insertTelephoneNumbers(new DbStatement(connection, statement), teacher.getContact());
         insertPlace(new DbStatement(connection, statement), teacher.getLocation());
 
-        teacher.getContact().getEmails().forEach((email) -> {
-          String insertEmailToTeacherQuery = ("INSERT OR IGNORE INTO email_ucitel (id_email, id_ucitel) SELECT (SELECT id FROM emails WHERE email = ?), ? WHERE NOT EXISTS (SELECT 1 FROM email_ucitel WHERE id_email = (SELECT id FROM emails WHERE email = ?) AND id_ucitel = ?)");
-          try (PreparedStatement insertEmailToTeacherStatement = connection
-              .prepareStatement(insertEmailToTeacherQuery)) {
-            insertEmailToTeacherStatement.setString(1, email);
-            insertEmailToTeacherStatement.setString(2, teacher.getId());
-            insertEmailToTeacherStatement.setString(3, email);
-            insertEmailToTeacherStatement.setString(4, teacher.getId());
-            insertEmailToTeacherStatement.executeUpdate();
-          } catch (Exception e) {
-            System.out.println("Error executing query");
-            System.out.println(e.getMessage());
-          }
-        });
-
-        teacher.getContact().getTelephoneNumbers().forEach(telephone_number -> {
-          String insertTelephonePrefixQuery = ("INSERT OR IGNORE INTO prefixes (tel_prefix) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM prefixes WHERE tel_prefix = ?)");
-          try (PreparedStatement insertTelephonePrefixStatement = connection
-              .prepareStatement(insertTelephonePrefixQuery)) {
-            insertTelephonePrefixStatement.setString(1, telephone_number.getPrefix());
-            insertTelephonePrefixStatement.setString(2, telephone_number.getPrefix());
-            insertTelephonePrefixStatement.executeUpdate();
-          } catch (Exception e) {
-            System.out.println("Error executing query");
-            System.out.println(e.getMessage());
-          }
-
-          String insertTelephoneNumberQuery = ("INSERT OR IGNORE INTO telephone_nums (id_prefix, telephone) SELECT (SELECT id FROM prefixes WHERE tel_prefix = ?), ? WHERE NOT EXISTS (SELECT 1 FROM telephone_nums WHERE telephone = ?)");
-          try (PreparedStatement insertTelephoneNumberStatement = connection
-              .prepareStatement(insertTelephoneNumberQuery)) {
-            insertTelephoneNumberStatement.setString(1, telephone_number.getPrefix());
-            insertTelephoneNumberStatement.setString(2, telephone_number.getNumber());
-            insertTelephoneNumberStatement.setString(3, telephone_number.getNumber());
-            insertTelephoneNumberStatement.executeUpdate();
-          } catch (Exception e) {
-            System.out.println("Error executing query");
-            System.out.println(e.getMessage());
-          }
-
-          String insertTelephoneToTeacherQuery = ("INSERT OR IGNORE INTO telephone_ucitel (id_tel, id_ucitel) SELECT (SELECT id FROM telephone_nums WHERE telephone = ? AND id_prefix = (SELECT id FROM prefixes WHERE tel_prefix = ?)), ? WHERE NOT EXISTS (SELECT 1 FROM telephone_ucitel WHERE id_tel = (SELECT id FROM telephone_nums WHERE telephone = ? AND id_prefix = (SELECT id FROM prefixes WHERE tel_prefix = ?)) AND id_ucitel = ?)");
-          try (PreparedStatement insertTelephoneToTeacherStatement = connection
-              .prepareStatement(insertTelephoneToTeacherQuery)) {
-            insertTelephoneToTeacherStatement.setString(1, telephone_number.getNumber());
-            insertTelephoneToTeacherStatement.setString(2, telephone_number.getPrefix());
-            insertTelephoneToTeacherStatement.setString(3, teacher.getId());
-            insertTelephoneToTeacherStatement.setString(4, telephone_number.getNumber());
-            insertTelephoneToTeacherStatement.setString(5, teacher.getId());
-            insertTelephoneToTeacherStatement.setString(6, telephone_number.getPrefix());
-            insertTelephoneToTeacherStatement.executeUpdate();
-          } catch (Exception e) {
-            System.out.println("Error executing query");
-            System.out.println(e.getMessage());
-          }
-
-          System.out.println("Telephone number: " + telephone_number.toString());
-        });
+        insertRelationEmailTeacher(new DbStatement(connection, statement), teacher);
+        insertRelationTelephoneTeacher(new DbStatement(connection, statement), teacher);
 
         for (String tagId : tagsIds) {
           String insertTeacherTagQuery = ("INSERT OR IGNORE INTO tags_ucitele (id_tag, id_ucitel) VALUES (?, ?)");
@@ -413,4 +472,130 @@ public class DbController implements DBInterface {
     }
   }
 
+  private void deleteRelationTags(DbStatement dbStatement, String id) throws SQLException {
+    String deleteRelationTagsQuery = "DELETE FROM tags_ucitele WHERE id_ucitel = ?";
+    try (PreparedStatement deleteRelationTagsStatement = dbStatement.connection
+        .prepareStatement(deleteRelationTagsQuery)) {
+      deleteRelationTagsStatement.setString(1, id);
+      deleteRelationTagsStatement.executeUpdate();
+    }
+  }
+
+  private void deleteRelationEmails(DbStatement dbStatement, String id) throws SQLException {
+    String deleteRelationEmailsQuery = "DELETE FROM email_ucitel WHERE id_ucitel = ?";
+    try (PreparedStatement deleteRelationEmailsStatement = dbStatement.connection
+        .prepareStatement(deleteRelationEmailsQuery)) {
+      deleteRelationEmailsStatement.setString(1, id);
+      deleteRelationEmailsStatement.executeUpdate();
+    }
+  }
+
+  private void deleteRelationPhones(DbStatement dbStatement, String id) throws SQLException {
+    String deleteRelationPhonesQuery = "DELETE FROM telephone_ucitel WHERE id_ucitel = ?";
+    try (PreparedStatement deleteRelationPhonesStatement = dbStatement.connection
+        .prepareStatement(deleteRelationPhonesQuery)) {
+      deleteRelationPhonesStatement.setString(1, id);
+      deleteRelationPhonesStatement.executeUpdate();
+    }
+  }
+
+  public String updateTeacher(TeachersTDO teachersTDO) {
+    System.out.println("Id ucitele: " + teachersTDO.getId());
+    try (Connection connection = DBInterface.getConnection();) {
+      try (Statement statement = connection.createStatement()) {
+        System.out.println("Telefony ucitele>>>> " + teachersTDO.getContact().getTelephone_numbers());
+        insertTitle(new DbStatement(connection, statement), teachersTDO.getTitle_before());
+        insertTitle(new DbStatement(connection, statement), teachersTDO.getTitle_after());
+        insertPlace(new DbStatement(connection, statement), teachersTDO.getLocation());
+
+        String updateTeacherQuery = "UPDATE ucitele SET first_name = ?, middle_name = ?, last_name = ?, picture_url = ?, claim = ?, bio = ?, price_per_hour = ?, id_title_before = ?, id_title_after = ?, id_location = ? WHERE uuid = ?";
+        try (PreparedStatement updateTeacherStatement = connection.prepareStatement(updateTeacherQuery)) {
+          updateTeacherStatement.setString(1, teachersTDO.getFirst_name());
+          updateTeacherStatement.setString(2, teachersTDO.getMiddle_name());
+          updateTeacherStatement.setString(3, teachersTDO.getLast_name());
+          updateTeacherStatement.setString(4, teachersTDO.getPicture_url());
+          updateTeacherStatement.setString(5, teachersTDO.getClaim());
+          updateTeacherStatement.setString(6, teachersTDO.getBio());
+          updateTeacherStatement.setInt(7, teachersTDO.getPrice_per_hour());
+          updateTeacherStatement.setString(8,
+              getTitleId(new DbStatement(connection, statement), teachersTDO.getTitle_before()));
+          updateTeacherStatement.setString(9, getTitleId(new DbStatement(connection, statement),
+              teachersTDO.getTitle_after()));
+          updateTeacherStatement.setString(10, getPlaceId(new DbStatement(connection, statement),
+              teachersTDO.getLocation()));
+          updateTeacherStatement.setString(11, teachersTDO.getId());
+          updateTeacherStatement.executeUpdate();
+        }
+
+        deleteRelationTags(new DbStatement(connection, statement), teachersTDO.getId());
+
+        List<String> tagsIds = new ArrayList<>();
+        for (TagsTDO tag : teachersTDO.getTags()) {
+          insertTags(new DbStatement(connection, statement), tag);
+          String selectTagQuery = "SELECT * FROM tags WHERE name = ?";
+          try (PreparedStatement selectTagStatement = connection.prepareStatement(selectTagQuery)) {
+            selectTagStatement.setString(1, tag.getName());
+            ResultSet result = selectTagStatement.executeQuery();
+            if (result.next()) {
+              tagsIds.add(result.getString("id"));
+              System.out.println("Tag id: " + tagsIds);
+            }
+          }
+        }
+
+        for (String tagId : tagsIds) {
+          String insertTeacherTagQuery = ("INSERT OR IGNORE INTO tags_ucitele (id_tag , id_ucitel) VALUES (?, ?)");
+          try (PreparedStatement insertTeacherTagStatement = connection.prepareStatement(insertTeacherTagQuery)) {
+            insertTeacherTagStatement.setString(1, tagId);
+            insertTeacherTagStatement.setString(2, teachersTDO.getId());
+            insertTeacherTagStatement.executeUpdate();
+          }
+        }
+
+        deleteRelationEmails(new DbStatement(connection, statement), teachersTDO.getId());
+
+        insertEmails(new DbStatement(connection, statement), teachersTDO.getContact());
+        insertRelationEmailTeacher(new DbStatement(connection, statement), teachersTDO);
+
+        deleteRelationPhones(new DbStatement(connection, statement), teachersTDO.getId());
+
+        insertTelephoneNumbers(new DbStatement(connection, statement), teachersTDO.getContact());
+        insertRelationTelephoneTeacher(new DbStatement(connection, statement), teachersTDO);
+
+        cleanDB(new DbStatement(connection, statement));
+
+      } catch (Exception e) {
+        System.out.println("Error executing query");
+        System.out.println(e.getMessage());
+        return null;
+      }
+    } catch (Exception e) {
+      System.out.println("Error adding teacher");
+      System.out.println(e.getMessage());
+      return null;
+    }
+    return teachersTDO.getId();
+  }
+
+  public boolean deleteTeacher(String uuid) {
+    String deleteTeacherQuerry = "DELETE FROM ucitele WHERE uuid = ?";
+    try (Connection connection = DBInterface.getConnection();) {
+      try (Statement statement = connection.createStatement()) {
+        deleteRelationEmails(new DbStatement(connection, statement), uuid);
+        deleteRelationPhones(new DbStatement(connection, statement), uuid);
+        deleteRelationTags(new DbStatement(connection, statement), uuid);
+
+        try (PreparedStatement deleteTeacherStatement = connection.prepareStatement(deleteTeacherQuerry)) {
+          deleteTeacherStatement.setString(1, uuid);
+          deleteTeacherStatement.executeUpdate();
+        }
+        cleanDB(new DbStatement(connection, statement));
+      }
+    } catch (Exception e) {
+      System.out.println("Error executing query");
+      System.out.println(e.getMessage());
+      return false;
+    }
+    return true;
+  }
 }
