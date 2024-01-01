@@ -2,9 +2,7 @@ package cz.ghosts.tda.database;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,7 +10,7 @@ import java.util.stream.Stream;
 public class InitDatabase implements DBInterface {
   public void checkExistenceOfDb() {
     System.out.println("Database URL: " + dburl);
-    System.out.println("Database init SQL: " + initsqlURL);
+    // System.out.println("Database init SQL: " + initsqlURL);
     File dbFile = new File(dburl.split(":")[2]);
     System.out.println("Database path: " + dburl.split(":")[2]);
     if (!dbFile.exists()) {
@@ -33,9 +31,8 @@ public class InitDatabase implements DBInterface {
   private String readInitSql() {
     String initSql = "";
     try {
-      Path initSqlFile = Paths.get(initsqlURL);
-      if (initSqlFile.toFile().exists()) {
-        BufferedReader reader = Files.newBufferedReader(initSqlFile);
+      if (!DBInterface.initsqlURL().equals(null)) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(DBInterface.initsqlURL()));
         Stream<String> lines = reader.lines();
         String data = lines.collect(Collectors.joining("\n"));
         lines.close();

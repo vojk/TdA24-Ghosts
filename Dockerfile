@@ -1,13 +1,14 @@
 FROM sitespeedio/node:ubuntu-22-04-nodejs-20.9.0
 LABEL authors="zalubo"
+LABEL team="Ghosts"
 
 
 RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    npm \
-    nginx \
-    findutils \
-    curl
+  openjdk-17-jdk \
+  npm \
+  nginx \
+  findutils \
+  curl
 
 WORKDIR /server
 
