@@ -501,12 +501,18 @@ public class DbController implements DBInterface {
 
   public String updateTeacher(TeachersTDO teachersTDO) {
     System.out.println("Id ucitele: " + teachersTDO.getId());
+    TeachersTDO teacher = getAllTeachers(teachersTDO.getId()).get(0);
     try (Connection connection = DBInterface.getConnection();) {
       try (Statement statement = connection.createStatement()) {
-        System.out.println("Telefony ucitele>>>> " + teachersTDO.getContact().getTelephone_numbers());
         insertTitle(new DbStatement(connection, statement), teachersTDO.getTitle_before());
         insertTitle(new DbStatement(connection, statement), teachersTDO.getTitle_after());
         insertPlace(new DbStatement(connection, statement), teachersTDO.getLocation());
+
+        System.out.println("-----Updated Bio Kapp------");
+        String bio = teacher.getBio();
+        System.out.println(teachersTDO.getBio());
+        System.out.println(bio);
+        System.out.println("------------------");
 
         String updateTeacherQuery = "UPDATE ucitele SET first_name = ?, middle_name = ?, last_name = ?, picture_url = ?, claim = ?, bio = ?, price_per_hour = ?, id_title_before = ?, id_title_after = ?, id_location = ? WHERE uuid = ?";
         try (PreparedStatement updateTeacherStatement = connection.prepareStatement(updateTeacherQuery)) {
@@ -515,7 +521,8 @@ public class DbController implements DBInterface {
           updateTeacherStatement.setString(3, teachersTDO.getLast_name());
           updateTeacherStatement.setString(4, teachersTDO.getPicture_url());
           updateTeacherStatement.setString(5, teachersTDO.getClaim());
-          updateTeacherStatement.setString(6, teachersTDO.getBio());
+          updateTeacherStatement.setString(6,
+              teachersTDO.getBio() == null ? bio : teachersTDO.getBio());
           updateTeacherStatement.setInt(7, teachersTDO.getPrice_per_hour());
           updateTeacherStatement.setString(8,
               getTitleId(new DbStatement(connection, statement), teachersTDO.getTitle_before()));

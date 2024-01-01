@@ -1,5 +1,8 @@
 package cz.ghosts.tda.teachers;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -23,15 +26,15 @@ public class TeachersTDO extends TeacherId<String> {
   private String location = null;
   private String claim = null;
   private String bio = null;
-  private List<TagsTDO> tags = null;
+  private List<TagsTDO> tags = new ArrayList<>();
   private int price_per_hour = 0;
   private Contact contact;
 
-  private String checkForEmptyString(String str) {
-    if (str == null || str.length() <= 0) {
-      return null;
+  private List<TagsTDO> checkForEmptyTags(List<TagsTDO> tags) {
+    if (tags == null || tags.size() <= 0) {
+      return Collections.emptyList();
     }
-    return str;
+    return tags;
   }
 
   public TeachersTDO() {
@@ -51,16 +54,16 @@ public class TeachersTDO extends TeacherId<String> {
       String title_after, String picture_url, String location, String claim, String bio, List<TagsTDO> tags,
       int price_per_hour, Contact contact) {
     super(id);
-    this.title_before = checkForEmptyString(title_before);
-    this.first_name = checkForEmptyString(first_name);
-    this.middle_name = checkForEmptyString(middle_name);
-    this.last_name = checkForEmptyString(last_name);
-    this.title_after = checkForEmptyString(title_after);
-    this.picture_url = checkForEmptyString(picture_url);
-    this.location = checkForEmptyString(location);
-    this.claim = checkForEmptyString(claim);
-    this.bio = checkForEmptyString(bio);
-    this.tags = tags;
+    this.title_before = title_before;
+    this.first_name = first_name;
+    this.middle_name = middle_name;
+    this.last_name = last_name;
+    this.title_after = title_after;
+    this.picture_url = picture_url;
+    this.location = location;
+    this.claim = claim;
+    this.bio = bio;
+    this.tags = checkForEmptyTags(tags);
     this.price_per_hour = price_per_hour;
     this.contact = contact;
   }

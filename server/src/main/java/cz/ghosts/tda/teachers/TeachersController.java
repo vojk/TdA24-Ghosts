@@ -57,8 +57,13 @@ public class TeachersController {
   @PutMapping("/{id}")
   public ResponseEntity<Object> updateTeacher(@RequestBody TeachersTDO entity, @PathVariable String id) {
     entity.setId(id);
-    System.out.println(entity);
     DbController dbController = new DbController();
+
+    List<TeachersTDO> teachers = dbController.getAllTeachers(id);
+
+    if ((teachers == null || teachers.size() <= 0))
+      return ResponseEntity.status(404).body(new HTTPCodesTDO(404, "User not found"));
+
     if (entity.getFirst_name() == null || entity.getFirst_name().length() <= 0 || entity.getLast_name() == null
         || entity.getLast_name().length() <= 0 || entity.getContact() == null || entity.getContact().getEmails() == null
         || entity.getContact().getEmails().size() <= 0 || entity.getContact().getTelephoneNumbers() == null
@@ -72,6 +77,12 @@ public class TeachersController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> deleteTeacher(@PathVariable String id) {
     DbController dbController = new DbController();
+
+    List<TeachersTDO> teachers = dbController.getAllTeachers(id);
+
+    if ((teachers == null || teachers.size() <= 0))
+      return ResponseEntity.status(404).body(new HTTPCodesTDO(404, "User not found"));
+
     if (dbController.deleteTeacher(id)) {
       return ResponseEntity.ok(new HTTPCodesTDO(200, "Teacher deleted"));
     }
