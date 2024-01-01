@@ -1,12 +1,14 @@
 FROM sitespeedio/node:ubuntu-22-04-nodejs-20.9.0
 LABEL authors="zalubo"
+LABEL team="Ghosts"
+
 
 RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    npm \
-    nginx \
-    findutils \
-    curl
+  openjdk-17-jdk \
+  npm \
+  nginx \
+  findutils \
+  curl
 
 WORKDIR /server
 
@@ -20,9 +22,6 @@ COPY ./server/src /server/src
 RUN ./gradlew build
 
 # Expose the application's port (adjust as needed)
-# EXPOSE 8080
-
-# Specify the command to run your Spring Boot application
 
 WORKDIR /client
 
@@ -34,9 +33,6 @@ RUN npm install
 
 # Copy the rest of the application code to the container
 COPY ./client/ .
-
-# Expose port 5000 for the application
-# EXPOSE 3000
 
 WORKDIR /etc/nginx/conf.d
 COPY ./nginx/default.conf .
