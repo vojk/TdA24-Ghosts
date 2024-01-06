@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
 
-import org.springframework.core.metrics.StartupStep.Tags;
-
 import java.util.ArrayList;
 
 import cz.ghosts.tda.teachers.TeachersTDO;

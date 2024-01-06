@@ -1,16 +1,12 @@
 package cz.ghosts.tda.teachers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
-
-import org.jetbrains.annotations.NotNull;
-import org.springframework.lang.NonNull;
 
 import cz.ghosts.tda.objects.TeacherId;
 import cz.ghosts.tda.teachers.conctacts.Contact;
