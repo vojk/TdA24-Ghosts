@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 
+
 export function Vizitka({ lecturerData }) {
   const name = lecturerData.first_name;
   const mid_name = lecturerData.middle_name;

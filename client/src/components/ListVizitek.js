@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Vizitka } from "../Vizitka";
+import { Vizitka } from "./Vizitka";
 
 export function ListVizitek() {
   const fakeAPI = [{
@@ -216,22 +216,31 @@ export function ListVizitek() {
     }
   }];
 
-  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    setData(fakeAPI);
-  }, []);
+ const [data, setData] = useState([]);
 
 
-  /* pro checkboxy tohle -> https://medium.com/@compmonk/react-multi-select-with-check-boxes-and-select-all-option-bd16941538f3 */
+ /*async fetch --- https://www.webtutpro.com/javascript-fetch-tutorial-send-http-requests-with-react-js-and-async-await-example-1443608c12fa */
+useEffect(() => {
+  async function fetchData() {
+    var data = await fetch("http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers").then(res => {
+      return res.json();
+    });
+
+    setData(data);
+    console.log(data);
+  }
+  fetchData();
+}, []);
+
+  /* pro checkboxy tohle -> https://medium.com/@compmonk/react-multi-select-with-check-boxes-and-select-all-option-bd16941538f3 ?*/
   /* filtr podle: https://route360.dev/en/post/filter-array-list/ */
   const [filterTags, setFilterTags] = useState([]);
   const [filterCities, setFilterCities] = useState([]);
   const filteredDATA = data.filter((node) => {
     const tagsMatch = (filterTags.length && 0) || filterTags.every((filterTag) => node.tags.map((tag) => tag.uuid).includes(filterTag));
     const citiesMatch = (filterCities.length && 0) || filterCities.every((filterCity) => node.location.includes(filterCity));
-
-    return tagsMatch && citiesMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */
+    return tagsMatch && citiesMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */ 
   }
   );
 
@@ -266,6 +275,7 @@ export function ListVizitek() {
           <input type="checkbox" onChange={filterHandlerTag} value="c20b98dd-f37e-4fa7-aac1-73300abf086e" id="c20b98dd-f37e-4fa7-aac1-73300abf086e" />
           <span className="text-jet text-xl">Prezentační dovednosti</span> {/* name z tagu */}
         </label>
+
         <span className="text-jet text-lg">Města</span>
         <label htmlFor="Brno">
           <input type="checkbox" onChange={filterHandlerCity} value="Brno" id="Brno" /> {/* value je uuid tagu, id taky (nazvy jsou s mezerami, takhle je to jednodušší)*/}
@@ -280,7 +290,7 @@ export function ListVizitek() {
 
       <div className='flex flex-wrap gap-3 p-2 justify-center'>
         {filteredDATA.map((data) => (
-          <Vizitka key={data.UUID} lecturerData={data} />))}
+          <a href={"/lecturer/"+data.uuid}><Vizitka key={data.uuid} lecturerData={data} /></a> ))}
       </div>
     </>
   );
