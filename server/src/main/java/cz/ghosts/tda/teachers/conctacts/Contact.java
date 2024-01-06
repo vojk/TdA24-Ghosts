@@ -17,11 +17,6 @@ public class Contact {
 
   public Contact(List<TelephoneNumbersTDO> telephone_numbers) {
     this.telephone_numbers = telephone_numbers;
-    /*
-     * for (TelephoneNumbersTDO telephone_number : telephone_numbers) {
-     * this.telephone_numbers.add(telephone_number);
-     * }
-     */
   }
 
   public Contact(List<String> emails, List<TelephoneNumbersTDO> telephone_numbers) {
@@ -29,11 +24,6 @@ public class Contact {
     this.telephone_numbers = telephone_numbers;
     System.out.print("Telephone numbers: ");
     System.out.println(this.telephone_numbers);
-    /*
-     * for (TelephoneNumbersTDO telephone_number : telephone_numbers) {
-     * this.telephone_numbers.add(telephone_number);
-     * }
-     */
   }
 
   @JsonProperty("telephone_numbers")

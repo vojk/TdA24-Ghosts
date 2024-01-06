@@ -3,6 +3,7 @@ package cz.ghosts.tda.database;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.List;
+
 import java.util.ArrayList;
 
 import cz.ghosts.tda.teachers.TeachersTDO;
@@ -28,6 +29,50 @@ public class DbController implements DBInterface {
   public void createDatabase() {
     InitDatabase initDatabase = new InitDatabase();
     initDatabase.checkExistenceOfDb();
+  }
+
+  public List<TagsTDO> getAllTags() {
+    List<TagsTDO> tagsList = new ArrayList<>();
+    try (Connection connection = DBInterface.getConnection();) {
+      try (Statement statement = connection.createStatement()) {
+        String selectTagQuery = "SELECT * FROM tags";
+
+        try (PreparedStatement selectTagStatement = connection.prepareStatement(selectTagQuery)) {
+          ResultSet result = selectTagStatement.executeQuery();
+
+          System.out.println("Tags:");
+          while (result.next()) {
+            tagsList.add(new TagsTDO(result.getString("id"), result.getString("name")));
+          }
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("Error adding teacher");
+      System.out.println(e.getMessage());
+    }
+    return tagsList.size() > 0 ? tagsList : new ArrayList<>();
+  }
+
+  public List<String> getAllLocations() {
+    List<String> locationsList = new ArrayList<>();
+    try (Connection connection = DBInterface.getConnection();) {
+      try (Statement statement = connection.createStatement()) {
+        String selectLocationQuery = "SELECT * FROM location";
+
+        try (PreparedStatement selectLocationStatement = connection.prepareStatement(selectLocationQuery)) {
+          ResultSet result = selectLocationStatement.executeQuery();
+
+          System.out.println("Locations:");
+          while (result.next()) {
+            locationsList.add(result.getString("city"));
+          }
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("Error adding teacher");
+      System.out.println(e.getMessage());
+    }
+    return locationsList.size() > 0 ? locationsList : new ArrayList<>();
   }
 
   private List<TagsTDO> getTags(String id) {
@@ -508,26 +553,28 @@ public class DbController implements DBInterface {
         insertTitle(new DbStatement(connection, statement), teachersTDO.getTitle_after());
         insertPlace(new DbStatement(connection, statement), teachersTDO.getLocation());
 
-        System.out.println("-----Updated Bio Kapp------");
-        String bio = teacher.getBio();
-        System.out.println(teachersTDO.getBio());
-        System.out.println(bio);
-        System.out.println("------------------");
-
         String updateTeacherQuery = "UPDATE ucitele SET first_name = ?, middle_name = ?, last_name = ?, picture_url = ?, claim = ?, bio = ?, price_per_hour = ?, id_title_before = ?, id_title_after = ?, id_location = ? WHERE uuid = ?";
         try (PreparedStatement updateTeacherStatement = connection.prepareStatement(updateTeacherQuery)) {
-          updateTeacherStatement.setString(1, teachersTDO.getFirst_name());
-          updateTeacherStatement.setString(2, teachersTDO.getMiddle_name());
-          updateTeacherStatement.setString(3, teachersTDO.getLast_name());
-          updateTeacherStatement.setString(4, teachersTDO.getPicture_url());
-          updateTeacherStatement.setString(5, teachersTDO.getClaim());
+          updateTeacherStatement.setString(1, teachersTDO.getFirst_name() == null ? teacher.getFirst_name()
+              : teachersTDO.getFirst_name());
+          updateTeacherStatement.setString(2, teachersTDO.getMiddle_name() == null ? teacher.getMiddle_name()
+              : teachersTDO.getMiddle_name());
+          updateTeacherStatement.setString(3, teachersTDO.getLast_name() == null ? teacher.getLast_name()
+              : teachersTDO.getLast_name());
+          updateTeacherStatement.setString(4, teachersTDO.getPicture_url() == null ? teacher.getPicture_url()
+              : teachersTDO.getPicture_url());
+          updateTeacherStatement.setString(5,
+              teachersTDO.getClaim() == null ? teacher.getClaim() : teachersTDO.getClaim());
           updateTeacherStatement.setString(6,
-              teachersTDO.getBio() == null ? bio : teachersTDO.getBio());
-          updateTeacherStatement.setInt(7, teachersTDO.getPrice_per_hour());
+              teachersTDO.getBio() == null ? teacher.getBio() : teachersTDO.getBio());
+          updateTeacherStatement.setInt(7, teachersTDO.getPrice_per_hour() == 0 ? teacher.getPrice_per_hour()
+              : teachersTDO.getPrice_per_hour());
           updateTeacherStatement.setString(8,
-              getTitleId(new DbStatement(connection, statement), teachersTDO.getTitle_before()));
+              getTitleId(new DbStatement(connection, statement), teachersTDO.getTitle_before()) == null
+                  ? getTitleId(new DbStatement(connection, statement), teacher.getTitle_before())
+                  : getTitleId(new DbStatement(connection, statement), teachersTDO.getTitle_before()));
           updateTeacherStatement.setString(9, getTitleId(new DbStatement(connection, statement),
-              teachersTDO.getTitle_after()));
+              teachersTDO.getTitle_after() == null ? teacher.getTitle_after() : teachersTDO.getTitle_after()));
           updateTeacherStatement.setString(10, getPlaceId(new DbStatement(connection, statement),
               teachersTDO.getLocation()));
           updateTeacherStatement.setString(11, teachersTDO.getId());
