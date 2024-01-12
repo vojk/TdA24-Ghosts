@@ -15,28 +15,28 @@ import {
 } from "react-router-dom";
 
 function Profil() {
-  const {UUID} = useParams();
+  const { UUID } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       try {
-      const response = await fetch("http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/"+UUID)
-      const result = await response.json()
-      setData(result)
-      setLoading(false)
+        const response = await fetch("http://127.0.0.1:8080/api/lecturers/" + UUID)
+        const result = await response.json()
+        setData(result)
+        setLoading(false)
       }
-     catch (error) {
-      console.error("fetch:", error)
-      setLoading(false)
-     };
+      catch (error) {
+        console.error("fetch:", error)
+        setLoading(false)
+      };
     }
     fetchData()
   }, []);
-  if (loading) {return <p>Loading...</p>}
-  if (!data) {return <p>Error</p>}
-  
+  if (loading) { return <p>Loading...</p> }
+  if (!data) { return <p>Error</p> }
+
   if (data) {
     const name = data.first_name;
     const mid_name = data.middle_name;
@@ -59,20 +59,20 @@ function Profil() {
           <img src={pic_url} alt={'Picture of ' + name} className="rounded-full m-auto" />
           <h1 className='text-4xl text-center text-prussian font-nadpis p-2'>{title_b} <br /> {name} {mid_name} {surname} <br /> {title_a}</h1>
         </div>
-  
+
         <div className="md:col-span-1 col-span-2">
           <h2 className="text-xl text-center"><span>Působí v: </span><span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
           <h2 className="text-xl text-center"><span>Cena: </span><span className="text-3xl text-sunglow font-nadpis">{cena}</span></h2>
           <h2 className='text-md italic text-prussian text-center'>{claim}</h2>
-  
-  
+
+
           <div dangerouslySetInnerHTML={{ __html: bio }} className='text-xl' /> {/* bude na spodu v rozbalovacím boxu? nebo proklik na samostatnou stránku. bude se loadit jen max délka textu v náhledu? */}
           {/* limitovat délku pomocí CSS */}
-  
-  
+
+
         </div>
-  
-  
+
+
         {/*  <div className=""> */}
         <div className="kontakty flex gap-1 flex-col col-span-2"> {/* zkoušel jsem tady udělat responzivitu, kde byl mail a telefon vedle sebe na desktopu, ale delší maily zlobí a když se nevejdou, tak je to otřesný, raději nechám samostatný řádku pro všechny obrazovky */}
           <div>
@@ -83,7 +83,7 @@ function Profil() {
                   {num}
                 </div>
               </div>
-  
+
             ))}
           </div>
           <div>
@@ -94,24 +94,25 @@ function Profil() {
                   {mail}
                 </div>
               </div>
-  
+
             ))}
           </div>
         </div>
-  
+
         <div className='tagy flex flex-wrap gap-0 col-span-2'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
           {tagy.map(tag => (
             <div key={tag.uuid} className='tag text-jet bg-sunglow m-1 p-1 w-fit h-fit rounded-md'> {/* nevim co ten key dělá ale radši ho tam dám, vypíše všechny tagy v samostatným divu s classou "tag" */}
               {tag.name}
             </div>
           ))}
-  
-  
+
+
         </div>
         {/*  </div> */}
       </div>
     );
-  }} 
+  }
+}
 
 
 
