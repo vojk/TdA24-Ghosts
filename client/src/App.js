@@ -1,8 +1,11 @@
 import "./App.css"
 import { useEffect, useState } from 'react';
 import { ListVizitek } from "./components/ListVizitek";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+/* import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; */
+/* import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons'; */
+import TdA_LOGO_white from "./TdA/TdA_LOGO/TeacherDigitalAgency_LOGO_white.svg";
+import TdA_konverzace_black from "./TdA/TdA_ikony/SVG/TdA_ikony_konverzace_black.svg";
+import TdA_studium_white from "./TdA/TdA_ikony/SVG/TdA_ikony_studium_white.svg";
 import ErrorPage from "./components/error";
 
 import {
@@ -22,7 +25,7 @@ function Profil() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("http://127.0.0.1:8080/api/lecturers/" + UUID)
+        const response = await fetch("http://127.0.0.1:8080/api/lecturers/" /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" */ + UUID)
         const result = await response.json()
         setData(result)
         setLoading(false)
@@ -52,65 +55,64 @@ function Profil() {
     const telephone_numbers = data.contact.telephone_numbers;
     const emails = data.contact.emails;
 
+    return (<>
+      <div className="flex bg-jet">
+        <div className="w-72 h-screen bg-sky relative hidden md:block">
+        <img src={TdA_LOGO_white} className="px-14 py-5"></img>
 
-    return (
-      <div key={data.UUID} className='vizitka p-5 m-auto overflow-hidden bg-sky rounded-lg grid md:grid-cols-2 grid-cols-1 md:grid-rows-[1fr_auto_auto] grid-rows-[500px_1fr_auto_auto] gap-2'>
-        <div className="md:col-span-1 col-span-1 w-max m-auto">
-          <img src={pic_url} alt={'Picture of ' + name} className="rounded-full m-auto" />
-          <h1 className='text-4xl text-center text-prussian font-nadpis p-2'>{title_b} <br /> {name} {mid_name} {surname} <br /> {title_a}</h1>
-        </div>
-
-        <div className="md:col-span-1 col-span-2">
-          <h2 className="text-xl text-center"><span>Působí v: </span><span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
-          <h2 className="text-xl text-center"><span>Cena: </span><span className="text-3xl text-sunglow font-nadpis">{cena}</span></h2>
-          <h2 className='text-md italic text-prussian text-center'>{claim}</h2>
-
-
-          <div dangerouslySetInnerHTML={{ __html: bio }} className='text-xl' /> {/* bude na spodu v rozbalovacím boxu? nebo proklik na samostatnou stránku. bude se loadit jen max délka textu v náhledu? */}
-          {/* limitovat délku pomocí CSS */}
-
+       <a href="/"> <div className="flex gap-3 justify-center"><img src={TdA_studium_white} alt="" className="w-8"></img><span className="text-white text-xl ">Seznam lektorů</span></div> </a>
 
         </div>
-
-
-        {/*  <div className=""> */}
-        <div className="kontakty flex gap-1 flex-col col-span-2"> {/* zkoušel jsem tady udělat responzivitu, kde byl mail a telefon vedle sebe na desktopu, ale delší maily zlobí a když se nevejdou, tak je to otřesný, raději nechám samostatný řádku pro všechny obrazovky */}
-          <div>
-            {telephone_numbers.map((num, index) => (
-              <div className="flex w-fit m-auto">
-                <FontAwesomeIcon icon={faPhone} className="my-auto m-2" />
-                <div className='num' key={index}>
-                  {num}
-                </div>
-              </div>
-
-            ))}
+        <div className="bg-white p-4 rounded-sm w-full m-auto max-w-screen-2xl grid max-h-full md:grid-cols-[auto_4fr] grid-cols-[1fr] md:grid-rows-[1fr_auto_1fr] grid-rows-[1fr_auto_auto_auto] gap-3">
+          <div className=" md:col-span-2">
+            <h1 className='text-4xl text-sunglow font-nadpis'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
+            <h2 className='text-xl italic text-sunglow font-nadpis'>{claim}</h2>
+            <h2 className="text-xl text-sunglow font-nadpis"><span className="text-3xl text-sunglow font-nadpis">{cena} Kč</span> za hodinu <span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
           </div>
-          <div>
-            {emails.map((mail, index) => (
-              <div className="flex w-fit m-auto">
-                <FontAwesomeIcon icon={faEnvelope} className="my-auto m-1" />
-                <div className='mail' key={index}> {/* prostě vypíše maily do samostatných divů s classou "mail" */}
-                  {mail}
-                </div>
-              </div>
-
-            ))}
+          <div className="md:col-span-1 md:row-span-2">
+            <img src={pic_url} alt={'Picture of ' + name} className="rounded-2xl m-auto" />
           </div>
-        </div>
+          <div className="">
+            <h1 className="text-3xl text-jet font-nadpis">Něco o mně:</h1>
+            <div className='[&>*]:text-xl text-xl [&>*]:text-jet text-jet' dangerouslySetInnerHTML={{ __html: bio }} />
+            <div className="flex gap-1 flex-col col-span-2 py-3 items-center md:items-start"> {/* zkoušel jsem tady udělat responzivitu, kde byl mail a telefon vedle sebe na desktopu, ale delší maily zlobí a když se nevejdou, tak je to otřesný, raději nechám samostatný řádku pro všechny obrazovky */}
+              <div className="flex gap-3"><img src={TdA_konverzace_black} alt="" className="w-8"></img><span className="text-jet text-xl font-nadpis"> E-mail</span></div>
+              
+              <div>
+                {telephone_numbers.map((num, index) => (
+                  <div className="flex w-fit [&>*]:text-jet">
+                    {/* <FontAwesomeIcon icon={faPhone} className="my-auto"  /> */}
+                    <div className='num' key={index}>
+                      {num}
+                    </div>
+                  </div>
 
-        <div className='tagy flex flex-wrap gap-0 col-span-2'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
-          {tagy.map(tag => (
-            <div key={tag.uuid} className='tag text-jet bg-sunglow m-1 p-1 w-fit h-fit rounded-md'> {/* nevim co ten key dělá ale radši ho tam dám, vypíše všechny tagy v samostatným divu s classou "tag" */}
-              {tag.name}
+                ))}
+              </div>
+              <div className="flex gap-3"><img src={TdA_konverzace_black} alt="" className="w-8"></img><span className="text-jet text-xl font-nadpis"> Telefon</span></div>
+              <div>
+                {emails.map((mail, index) => (
+                  <div className="flex w-fit [&>*]:text-jet">
+                    {/* <FontAwesomeIcon icon={faEnvelope} className="my-auto m-1" /> */}
+                    <div className='mail' key={index}> {/* prostě vypíše maily do samostatných divů s classou "mail" */}
+                      {mail}
+                    </div>
+                  </div>
+
+                ))}
+              </div>
             </div>
-          ))}
-
-
+          </div>
+          <div className=" flex flex-wrap md:gap-0">
+            {tagy.map(tag => (
+              <div key={tag.uuid} className='tag text-white font-nadpis bg-prussian m-1 p-1 w-fit h-fit rounded-md'> {/* nevim co ten key dělá ale radši ho tam dám, vypíše všechny tagy v samostatným divu s classou "tag" */}
+                {tag.name}
+              </div>
+            ))}
+          </div>
         </div>
-        {/*  </div> */}
       </div>
-    );
+    </>)
   }
 }
 
@@ -206,7 +208,7 @@ function ProfilExample() {
         <div>
           {telephone_numbers.map((num, index) => (
             <div className="flex w-fit m-auto">
-              <FontAwesomeIcon icon={faPhone} className="my-auto m-2" />
+              {/* <FontAwesomeIcon icon={faPhone} className="my-auto m-2" /> */}
               <div className='num' key={index}>
                 {num}
               </div>
@@ -217,7 +219,7 @@ function ProfilExample() {
         <div>
           {emails.map((mail, index) => (
             <div className="flex w-fit m-auto">
-              <FontAwesomeIcon icon={faEnvelope} className="my-auto m-1" />
+             {/*  <FontAwesomeIcon icon={faEnvelope} className="my-auto m-1" /> */}
               <div className='mail' key={index}> {/* prostě vypíše maily do samostatných divů s classou "mail" */}
                 {mail}
               </div>
@@ -246,9 +248,9 @@ function App() {
     <>
       <Router>
 
-        <Link to="/home" className="text-jet m-2 bg-sky p-1 text-center rounded-md" >Home</Link>
+{/*     <Link to="/home" className="text-jet m-2 bg-sky p-1 text-center rounded-md" >Home</Link>
 
-        <Link to="/lecturer" className="text-jet m-2 bg-sky p-1 text-center rounded-md">lecturer</Link>
+        <Link to="/lecturer" className="text-jet m-2 bg-sky p-1 text-center rounded-md">lecturer</Link> */}
 
 
 

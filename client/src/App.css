@@ -7,64 +7,11 @@
   color: white;
   font-family: 'Open Sans', sans-serif;
 }
-/* *{
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+
+:root {
+  background-color: rgb(51 51 51); /* color jet */
 }
 
-.vizitka {
-  text-align: center;
-  background-color: grey;
-  max-width: 15rem;
-  padding: 1%;
-  border-radius: .5rem;
-  transition: all 0.2s linear;
-  margin-block: 1%;
-    
-}
-.vizitka>* {
-  max-width: 100%;
-  overflow-wrap: break-word;
-}
-
-
-.vizitka>img {
-  padding: 5%;
-  height: 8rem;
-  width: 8rem;
-  border-radius: 50%;
-}
-
-.vizitka h4 {
-  text-transform: capitalize;
-}
-
-.vizitka:hover {
-  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
-}
-
-.nastenka {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1%;
-  margin-inline: 1%;
-}
-
-.tag {
-  background-color: aqua;
-  border-radius: 5px;
-  width:max-content;
-  padding: 1%;
-  font-size: 11px;
-  margin: 1%;
-}
-
-.tagy {
-  display: flex;
-  flex-wrap: wrap;
-}
- */
 .bio {
   height: 10ch; 
   display: inline-block;
@@ -86,9 +33,9 @@
 
 .shade { /* nezapomenout BG v tailwindu */
   height: 5ch;
-  width: 22rem;
+  /* nutno dodat width */
   -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0,0.1)), to(rgba(0, 0, 0))); /* idk jak to funguje */
   mask-image: linear-gradient(transparent, black);
   position: absolute;  
-  bottom: 0;
+  bottom: 0px;
 }
