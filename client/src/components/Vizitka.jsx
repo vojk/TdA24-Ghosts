@@ -73,13 +73,13 @@ export function Vizitka({ lecturerData }) {
   )
   return (
     <>
-      <div key={lecturerData.UUID} className="bg-jet border-4 overflow-hidden p-2 rounded-3xl grid min-h-[24rem] w-[20rem] lg:h-[23rem] lg:min-w-[45rem] grid-cols-[3fr_5fr]  grid-rows-[1fr_1fr_auto] lg:grid-rows-[1fr_2fr]">
+      <div className="bg-jet border-4 overflow-hidden p-2 rounded-3xl grid min-h-[24rem] w-[20rem] lg:h-[23rem] lg:min-w-[45rem] grid-cols-[3fr_5fr]  grid-rows-[1fr_1fr_auto] lg:grid-rows-[1fr_2fr]">
         <div className="bg-jet col-span-2 rounded-t-2xl">
-          <h1 className='text-4xl text-center text-sunglow font-nadpis p-2'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
+          <h1 className='text-4xl text-left text-sunglow font-nadpis p-2'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
 
-          <h2 className="text-xl text-center">Působí v: <span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
-          <h2 className="text-xl text-center">Cena: <span className="text-3xl text-sunglow font-nadpis">{cena}</span></h2>
-          <h2 className='text-md italic text-sunglow text-center'>{claim}</h2>
+          <h2 className="text-xl pl-2 text-left"><span className="text-3xl text-sunglow font-nadpis">{location}</span></h2>
+          <h2 className="text-xl pl-2 text-left"><span className="text-3xl text-sunglow font-nadpis">{cena}</span> za hodinu</h2>
+          <h2 className='text-md italic pl-2 text-sunglow text-left'>{claim}</h2>
 
 
         </div>
