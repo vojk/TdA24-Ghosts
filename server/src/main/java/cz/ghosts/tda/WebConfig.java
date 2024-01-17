@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry corsRegistry) {
-    corsRegistry.addMapping("/**");
+    corsRegistry.addMapping("/api/**").allowedOrigins("http://localhost:your_frontend_port") // Specify the correct frontend URL
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
   }
 }
