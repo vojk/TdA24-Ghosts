@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import cz.ghosts.tda.database.DbController;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
 
-@CrossOrigin(origins = "http://localhost:3030")
+@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/api/")
 public class MiscController {
