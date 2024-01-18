@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/api/lecturers")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TeachersController {
   @GetMapping(path = { "/", "", "/{id}" })
   public ResponseEntity<Object> getTeachers(@PathVariable(required = false) String id) {

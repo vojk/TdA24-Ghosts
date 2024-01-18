@@ -8,10 +8,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+  /*
+   * @Override
+   * public void addCorsMappings(CorsRegistry corsRegistry) {
+   * corsRegistry.addMapping("/**")
+   * .allowedOrigins("*") // Specify the correct frontend URL
+   * .allowedMethods("GET", "POST", "PUT", "DELETE");
+   * }
+   */
+
   @Override
-  public void addCorsMappings(CorsRegistry corsRegistry) {
-    corsRegistry.addMapping("/api/**")
-        .allowedOrigins("http://localhost") // Specify the correct frontend URL
-        .allowedMethods("GET", "POST", "PUT", "DELETE");
+  public void addCorsMappings(CorsRegistry registry) {
+    // registry.addMapping("/**")
+    // .allowedOrigins("*") // Add the origins you want to allow
+    // .allowedMethods("GET", "POST", "PUT", "DELETE")
+    // .allowedHeaders("*")
+    // .allowCredentials(true)
+    // .maxAge(3600);
   }
 }

@@ -32,7 +32,7 @@ function App() {
     <>
       <Router>
         <div className="md:flex">
-          <div className="min-w-[16rem] max-w-[20rem] w-full relative hidden md:block">
+          <div className="min-w-[15rem] w-[15.6%] relative text-white">
             <Navbar />
           </div>
           <div className="relative w-full">

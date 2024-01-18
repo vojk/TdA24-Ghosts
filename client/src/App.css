@@ -1,19 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lalezar&display=swap');
+
 * {
-  color: white;
   font-family: 'Open Sans', sans-serif;
 }
 
 :root {
-  background-color: rgb(51 51 51); /* color jet */
+  background-color: rgb(51 51 51);
+  /* color jet */
 }
 
 .bio {
-  height: 10ch; 
+  height: 10ch;
   display: inline-block;
   overflow-y: hidden;
   text-overflow: scroll;
@@ -22,20 +21,24 @@
 
 .to-be-continued {
   mask-image: linear-gradient(black, transparent);
-  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0.15))); /* idk jak to funguje */
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0)), to(rgba(0, 0, 0, 0.15)));
+  /* idk jak to funguje */
 }
 
 .shade-parent {
-  height: 10ch; /* jako bio */
+  height: 10ch;
+  /* jako bio */
   position: relative;
   overflow: hidden;
 }
 
-.shade { /* nezapomenout BG v tailwindu */
+.shade {
+  /* nezapomenout BG v tailwindu */
   height: 5ch;
   /* nutno dodat width */
-  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0,0.1)), to(rgba(0, 0, 0))); /* idk jak to funguje */
+  -webkit-mask-image: -webkit-gradient(linear, left top, left bottom, from(rgb(0, 0, 0, 0.1)), to(rgba(0, 0, 0)));
+  /* idk jak to funguje */
   mask-image: linear-gradient(transparent, black);
-  position: absolute;  
+  position: absolute;
   bottom: 0px;
 }

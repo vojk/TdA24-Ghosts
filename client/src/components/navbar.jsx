@@ -1,15 +1,30 @@
-import TdA_LOGO_white from "../TdA/TdA_LOGO/TeacherDigitalAgency_LOGO_white.svg";
-import TdA_studium_white from "../TdA/TdA_ikony/SVG/TdA_ikony_studium_white.svg";
-import TdA_nastaveni_white from "../TdA/TdA_ikony/SVG/TdA_ikony_nastaveni_white.svg";
-import Tda_napad_white from "../TdA/TdA_ikony/SVG/TdA_ikony_napad_white.svg"
+import React from "react";
+import { Link } from "react-router-dom";
+import { ReactComponent as TdALogo } from "./../TdA/TdA_LOGO/TeacherDigitalAgency_LOGO_white.svg";
+import { ReactComponent as TdAListLekt } from "./../TdA/TdA_ikony/SVG/TdA_ikony_studium_white.svg"
 
-export default function Navbar() {
-    return (
-        <div className="h-screen sticky top-0 bg-sky flex-col gap-12">
-            <div><img src={TdA_LOGO_white} alt="TdA logo" className="px-14 py-5 pb-16"></img></div>
-            <div className="p-2"><a href="/about"> <div className="flex gap-3 justify-center"><img src={Tda_napad_white} alt="" className="w-8"></img><span className="text-white text-xl ">O nás</span></div> </a></div>
-            <div className="p-2"><a href="/home"> <div className="flex gap-3 justify-center"><img src={TdA_nastaveni_white} alt="" className="w-8"></img><span className="text-white text-xl ">Přihlášení</span></div> </a></div>
-            <div className="p-2"><a href="/"> <div className="flex gap-3 justify-center"><img src={TdA_studium_white} alt="" className="w-8"></img><span className="text-white text-xl ">Seznam lektorů</span></div> </a></div>
+function MenuItem({ Icon, text, to }) {
+  return (
+    <div className="mx-8 gap-2 flex items-center">
+      <Icon className={"w-8"} />
+      <Link className="text-[1rem] font-bold font-odstavec" to={to}>{text}</Link>
+    </div>
+  )
+}
+
+export default function Menu() {
+  return (
+    <>
+      <div className={"min-w-[15rem] w-[15%] relative text-white"}>
+        <div className="bg-sky min-w-[15rem] w-[13.5%] h-screen fixed flex flex-col py-12">
+          <TdALogo className={"h-[88px] mb-12"} />
+          <div className="flex flex-col gap-3">
+            <MenuItem Icon={TdAListLekt} to={"/"} text={"Seznam lektoru"} />
+            <MenuItem Icon={TdAListLekt} to={"/about"} text={"O nas"} />
+          </div>
+
         </div>
-    )
+      </div>
+    </>
+  )
 }

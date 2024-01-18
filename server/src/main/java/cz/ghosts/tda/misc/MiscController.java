@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import cz.ghosts.tda.database.DbController;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
 
-@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/api/")
+// @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MiscController {
   @GetMapping(path = { "tag/", "tag" })
   public ResponseEntity<Object> getTags() {

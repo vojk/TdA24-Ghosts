@@ -20,7 +20,7 @@ export function ListVizitek() {
   /*async fetch --- https://www.webtutpro.com/javascript-fetch-tutorial-send-http-requests-with-react-js-and-async-await-example-1443608c12fa */
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch("http://localhost/api/lecturers/" /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" */).then(res => {
+      var data = await fetch("http://localhost:8080/api/lecturers/" /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" */).then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -34,7 +34,7 @@ export function ListVizitek() {
 
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch("http://localhost/api/tag" /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag" */).then(res => {
+      var data = await fetch("http://localhost:8080/api/tag"  /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag" */).then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -48,7 +48,7 @@ export function ListVizitek() {
 
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch("http://localhost/api/location" /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/location" */).then(res => {
+      var data = await fetch("http://localhost:8080/api/location" /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/location" */).then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -130,7 +130,7 @@ export function ListVizitek() {
 
           <div className='flex flex-wrap gap-10 justify-center my-10'>
             {filteredDATA.map((data) => (
-              <a href={"/lecturer/" + data.uuid}><Vizitka key={data.uuid} lecturerData={data} /></a>))}
+              <a href={"/lecturer/" + data.uuid} className='max-w-[45rem] w-full min-h-[20rem]'><Vizitka key={data.uuid} lecturerData={data} /></a>))}
           </div>
         </div>
       </div>
