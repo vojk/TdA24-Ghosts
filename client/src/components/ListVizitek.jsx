@@ -77,7 +77,7 @@ export function ListVizitek() {
   const filteredDATA = data.filter((node) => {
     const tagsMatch = (filterTags.length && 0) || filterTags.every((filterTag) => node.tags.map((tag) => tag.uuid).includes(filterTag.uuid));
     const citiesMatch = (filterCities.length !== 0) ? filterCities.some((filterCity) => node.location.includes(filterCity.name)) : filterCities.every((filterCity) => node.location.includes(filterCity.name));
-    const priceMatch = (!(filterPrice[1] < filterPrice[0]) && filterPrice[1] > filterPrice[0]) && filterPrice.every(() => node.price_per_hour <= (filterPrice[1]) && node.price_per_hour >= (filterPrice[0]));
+    const priceMatch = (!(filterPrice[1] <= filterPrice[0]) && filterPrice[1] >= filterPrice[0]) && filterPrice.every(() => node.price_per_hour <= (filterPrice[1]) && node.price_per_hour >= (filterPrice[0]));
     return tagsMatch && citiesMatch && priceMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */
   }
   );
