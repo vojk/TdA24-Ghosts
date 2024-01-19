@@ -1,8 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-
-
-
 export function Vizitka({ lecturerData }) {
   const name = lecturerData.first_name;
   const mid_name = lecturerData.middle_name;
@@ -20,7 +15,7 @@ export function Vizitka({ lecturerData }) {
 
   return (
     <>
-      <div className="bg-white p-2 rounded-lg max-w-[45rem] w-full h-full py-8 px-6 flex flex-col gap-1 flex-1">
+      <div className="bg-white p-2 rounded-lg max-w-[45rem] w-full h-full py-8 px-6 flex flex-col gap-1 flex-1 ">
         <div className="col-span-2 flex-[1]">
           <div>
             <h1 className='text-3xl text-left text-sunglow font-nadpis'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
@@ -32,7 +27,7 @@ export function Vizitka({ lecturerData }) {
           <h2 className='text-md text-sunglow text-left font-odstavec'>{claim}</h2>
         </div>
 
-        <div className="flex gap-3 w-full h-auto flex-[2]">
+        <div className="flex gap-3 w-full h-auto flex-[2] md:flex-col">
           <div className="aspect-square h-full">
             <img src={pic_url} alt={'Picture of ' + name} className="rounded-md w-full" />
           </div>
@@ -41,14 +36,14 @@ export function Vizitka({ lecturerData }) {
             <div className="w-full flex flex-col justify-between">
               <div>
                 <h2 className="text-jet font-nadpis text-2xl">Kontakt</h2>
-                <div className="flex gap-10 w-full">
+                <div className="flex gap-10 w-full md:flex-col">
                   <div className="flex flex-col">
                     <h2 className="text-jet font-nadpis text-xl">Telefon</h2>
                     {telephone_numbers.map((element, index) => {
                       return (
                         <>
                           {index < 2 && <span className="text-jet">{element}</span>}
-                          {index > 2 && <span className="text-sky">Zobrazit vsechny</span>}
+                          {index > 2 && <span className="text-sky relative">Zobrazit všechny</span>}
                         </>
                       )
                     })}
@@ -61,7 +56,7 @@ export function Vizitka({ lecturerData }) {
                       return (
                         <>
                           {index < 2 && <span className="text-jet">{element}</span>}
-                          {index > 2 && <span className="text-sky">Zobrazit vsechny</span>}
+                          {index > 2 && <span className="text-sky">Zobrazit všechny</span>}
                         </>
                       )
                     })}
@@ -77,7 +72,7 @@ export function Vizitka({ lecturerData }) {
                   <>
                     {index < 3 ? <div key={tag.uuid} className='tag text-white font-bold bg-prussian overflow-hidden px-2 py-1 w-fit max-h-8 rounded-md'>
                       {tag.name}
-                    </div> : (index === 4) && <div className="text-white bg-prussian font-bold px-2 py-1 aspect-square flex justify-center items-center w-[2rem] rounded-md">...</div>}
+                    </div> : (index === 3) && <div className="text-white bg-prussian font-bold px-2 py-1 aspect-square flex justify-center items-center w-[2rem] rounded-md">...</div>}
                   </>
                 )
               }

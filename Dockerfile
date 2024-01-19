@@ -34,6 +34,8 @@ RUN npm install
 # Copy the rest of the application code to the container
 COPY ./client/ .
 
+RUN npm run build
+
 WORKDIR /etc/nginx/conf.d
 COPY ./nginx/default.conf .
 COPY ./nginx/nginx.conf ./../

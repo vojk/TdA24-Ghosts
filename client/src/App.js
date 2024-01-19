@@ -31,18 +31,22 @@ function App() {
   return (
     <>
       <Router>
-        <div className="md:flex">
-          <Navbar />
-          <div className="relative w-full">
-            <div className="w-full bottom-0 fixed bg-sky h-20 z-50 md:hidden block">
-              <NavbarMobile />
-            </div>
+        <div className="flex">
+          <div className="md:hidden relative">
+            <Navbar />
+          </div>
+          <div className="w-full fixed bottom-0 bg-sky h-20 z-50 hidden md:block">
+            <NavbarMobile />
+          </div>
+
+          <div className="relative w-full md:mb-20">
+
             <div className="h-full">
               <Routes>
                 <Route path="/home" element={<ListVizitek />} ></Route>
                 <Route path="/login" element={<LoginPage />} ></Route>
-                <Route path="/about" element={<About />} ></Route>
-                <Route path="/" element={<ListVizitek />}></Route>
+                <Route path="/" index element={<About />} ></Route>
+                <Route path="/lecturers" element={<ListVizitek />}></Route>
                 <Route path="/lecturer" element={<ProfilExample />} ></Route>
                 <Route path="/lecturer" >
                   <Route path=":UUID" element={<Profil />} />

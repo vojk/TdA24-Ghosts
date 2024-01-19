@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export function Profil() {
   const { UUID } = useParams();
@@ -8,7 +8,7 @@ export function Profil() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(/*"http://localhost:8080/api/lecturers/" + UUID */ "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" + UUID);
+        const response = await fetch("http://localhost:8080/api/lecturers/" + UUID /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" + UUID*/);
         const result = await response.json();
         setData(result);
       }
@@ -37,9 +37,10 @@ export function Profil() {
     const emails = data.contact.emails;
 
     return (
-      <div className='h-screen w-full flex items-center justify-center'>
-        <div className="bg-white flex flex-col max-w-[90rem] min-h-[35rem] w-full px-12 py-16 rounded h-[80%] mx-6">
+      <div className='md:h-full h-screen w-full flex items-center justify-center my-6'>
+        <div className="bg-white flex flex-col max-w-[90rem] min-h-[35rem] w-full px-12 py-16 rounded h-[80%] md:h-[100%] mx-6">
 
+          <Link to={"/lecturers"} className='mb-5'>Zpět</Link>
           <div className="col-span-2 flex-[0] mb-6">
             <div>
               <h1 className='text-5xl text-left text-sunglow font-nadpis'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
@@ -58,7 +59,7 @@ export function Profil() {
 
             <div className="w-full h-full flex flex-col justify-between">
               <div className="w-full flex flex-col justify-between">
-                <h2 className="text-jet font-nadpis text-3xl">Neco o mne</h2>
+                <h2 className="text-jet font-nadpis text-3xl">Něco o mně</h2>
                 <div className='mb-4'>
                   <div dangerouslySetInnerHTML={{ __html: bio }}></div>
                 </div>
@@ -67,40 +68,44 @@ export function Profil() {
                   <div className="flex gap-10 flex-col">
                     <div className="flex flex-col">
                       <h2 className="text-jet font-nadpis text-xl">Telefon</h2>
-                      {telephone_numbers.map((element, index) => {
-                        return (
-                          <>
-                            {index < 2 && <span className="text-jet">{element}</span>}
-                            {index > 2 && <span className="text-sky">Zobrazit vsechny</span>}
-                          </>
-                        )
-                      })}
+                      <div className='flex gap-4 flex-wrap'>
+                        {telephone_numbers.map((element, index) => {
+                          return (
+                            <>
+                              {<span className="px-3 bg-prussian py-1 rounded text-white">{element}</span>}
+                            </>
+                          )
+                        })}
+                      </div>
+
 
                     </div>
 
                     <div className="flex flex-col">
                       <h2 className="text-jet font-nadpis text-xl">E-mail</h2>
-                      {emails.map((element, index) => {
-                        return (
-                          <>
-                            {index < 2 && <span className="text-jet">{element}</span>}
-                            {index > 2 && <span className="text-sky">Zobrazit vsechny</span>}
-                          </>
-                        )
-                      })}
+                      <div className='flex gap-4 flex-wrap'>
+                        {emails.map((element, index) => {
+                          return (
+                            <>
+                              {<span className="px-3 bg-prussian py-1 rounded text-white">{element}</span>}
+                            </>
+                          )
+                        })}
+                      </div>
+
                     </div>
                   </div>
                 </div>
 
               </div>
 
-              <div className='flex flex-wrap w-full gap-2 mt-3 self-end'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
+              <div className='flex flex-wrap w-full gap-2 mt-3 self-end md:mt-12'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
                 {tagy.map((tag, index) => {
                   return (
                     <>
-                      {index < 10 ? <div key={tag.uuid} className='tag text-white font-bold bg-prussian overflow-hidden px-2 py-1 w-fit max-h-8 rounded-md'>
+                      {index < 100 ? <div key={tag.uuid} className='tag text-white font-bold bg-prussian overflow-hidden px-2 py-1 w-fit max-h-8 rounded-md'>
                         {tag.name}
-                      </div> : (index === 10) && <div className="text-white bg-prussian font-bold px-2 py-1 aspect-square flex justify-center items-center w-[2rem] rounded-md">...</div>}
+                      </div> : (index === 100) && <div className="text-white bg-prussian font-bold px-2 py-1 aspect-square flex justify-center items-center w-[2rem] rounded-md">...</div>}
                     </>
                   )
                 }

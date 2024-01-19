@@ -2,7 +2,9 @@
 
 # Start the React.js frontend
 cd /client
-npm start &
+#npm start &
+npm install -g serve
+serve -s build &
 
 # Wait for the React.js application to be ready
 while ! curl -s http://localhost:3000 >/dev/null; do
