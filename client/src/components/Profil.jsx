@@ -8,7 +8,7 @@ export function Profil() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("http://localhost:8080/api/lecturers/" + UUID /* "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" + UUID*/);
+        const response = await fetch(/*"http://localhost:8080/api/lecturers/" + UUID */ "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" + UUID);
         const result = await response.json();
         setData(result);
       }
