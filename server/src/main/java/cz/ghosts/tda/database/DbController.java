@@ -15,17 +15,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
-class DbStatement {
-  public Connection connection;
-  public Statement statement;
 
-  public DbStatement(Connection connection, Statement statement) {
-    this.connection = connection;
-    this.statement = statement;
-  }
-}
 
 public class DbController implements DBInterface {
+  class DbStatement {
+    public Connection connection;
+    public Statement statement;
+    public DbStatement(Connection connection, Statement statement) {
+      this.connection = connection;
+      this.statement = statement;
+    }
+  }
+
   public void createDatabase() {
     InitDatabase initDatabase = new InitDatabase();
     initDatabase.checkExistenceOfDb();
