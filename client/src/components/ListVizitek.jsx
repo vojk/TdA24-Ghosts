@@ -4,6 +4,10 @@ import { Vizitka } from "./Vizitka";
 import { MultiSelect } from 'primereact/multiselect';
 import { InputNumber } from 'primereact/inputnumber';
 
+
+import { Autocomplete, TextField, Stack, Slider, Grid } from '@mui/material';
+
+
 export function ListVizitek() {
   const [data, setData] = useState([]);
   const [tags, setTags] = useState([]);
@@ -20,7 +24,7 @@ export function ListVizitek() {
     console.log(objectLocation)
     console.log(tags)
     return objectLocation
-  } /* ten multiselect chce objekty, locations jsou array, tak jim přidám "name": a je to v chillu*/
+  } /* ten multiselect chce objekty, locations jsou array, tak jim přidám "name": a je to v chillu -- edit: zmíněný multiselect nahrazen, ale stále využíváno*/
 
   /*async fetch --- https://www.webtutpro.com/javascript-fetch-tutorial-send-http-requests-with-react-js-and-async-await-example-1443608c12fa */
   useEffect(() => {
@@ -73,6 +77,9 @@ export function ListVizitek() {
   /* pro checkboxy tohle -> https://medium.com/@compmonk/react-multi-select-with-check-boxes-and-select-all-option-bd16941538f3 ?*/
   /* filtr podle: https://route360.dev/en/post/filter-array-list/ */
 
+  function valuetext(filterPriceRange) {
+    return `${filterPriceRange} Kč`;
+  }
 
   const filteredDATA = data.filter((node) => {
     const tagsMatch = (filterTags.length && 0) || filterTags.every((filterTag) => node.tags.map((tag) => tag.uuid).includes(filterTag.uuid));
@@ -91,29 +98,83 @@ export function ListVizitek() {
           <div className='min-h-[5rem] w-full md:flex justify-center items-center'>
 
             {data.length === 0 ? <div className='font-nadpis text-4xl text-white'>
-              <div className='font-nadpis'>Nebyl nalezen žádmý lektor</div>
+              <div className='font-nadpis'>Nebyl nalezen žádný lektor</div>
               <div className='font-nadpis text-center'>Omlouváme se</div>
             </div> :
               <>
                 <div className='p-4 w-full flex justify-center gap-9 md:px-0 px-16 2xl:flex-col'>
-                  <MultiSelect value={filterTags} onChange={(e) => { console.log(e.value); setFilterTags(e.value) }} options={tags} optionLabel="name"
-                    filter placeholder="Vyber tagy" maxSelectedLabels={3} className="w-full md:min-w-[30rem] min-w-[25rem]" />
 
-                  <MultiSelect value={filterCities} onChange={(e) => { console.log(e.value); setFilterCities(e.value) }} options={objectLocations()} optionLabel="name"
-                    filter placeholder="Vyber mesta" maxSelectedLabels={3} className="w-full md:min-w-[30rem] min-w-[25rem]" />
+                  <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                    <Autocomplete className='bg-white p-2 rounded-xl'
+                      multiple
+                      id="lectors-tags"
+                      options={tags}
+                      getOptionLabel={(option) => option.name}
+                      isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Vyberte tagy lektorů..."
+                          placeholder="Tagy"
+                        />
+                      )}
+                      onChange={(event, value) => {
+                        console.log(value);
+                        setFilterTags(value);
+                      }}
+                    />
+                  </Stack>
 
-                  <div className='flex w-full gap-4 bg-white justify-center md:min-w-[30rem] rounded-full py-1 min-w-[25rem]'>
-                    <div className='flex justify-center items-center gap-4'>
-                      <div className='text-jet'>Minimální cena</div>
-                      <InputNumber value={filterPrice[0]} defaultValue={filterPriceRange[0]} onChange={(e) => { setFilterPrice([e.value, filterPrice[1]]) }} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                  <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                    <Autocomplete className='bg-white p-2 rounded-xl'
+                      multiple
+                      id="lectors-cities"
+                      options={objectLocations()}
+                      getOptionLabel={(option) => option.name}
+                      isOptionEqualToValue={(option, value) => option.name === value.name}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Vyberte požadované lokace..."
+                          placeholder="Tagy"
+                        />
+                      )}
+                      onChange={(event, value) => {
+                        console.log(value);
+                        setFilterCities(value);
+                      }}
+                    />
+                  </Stack>
+
+                  <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] p-5">
+                    <Slider
+                      getAriaLabel={() => 'Škála ceny'}
+                      value={filterPrice}
+                      step={10}
+                      onChange={(event, newValue) => {
+                        setFilterPrice(newValue)
+                      }}
+                      valueLabelDisplay="on"
+                      getAriaValueText={valuetext}
+                      min={filterPriceRange[0]}
+                      max={filterPriceRange[1]}
+                    />
+                    <div className='flex w-full gap-4 sm:gap-1 bg-white justify-center md:min-w-[30rem] rounded-full py-1 min-w-[25rem] sm:min-w-[14rem] sm:flex-col'>
+                      <div className='flex justify-center items-center gap-4 sm:gap-1'>
+                        <div className='text-jet'>Minimální cena</div>
+                        <InputNumber value={filterPrice[0]} defaultValue={filterPriceRange[0]} onChange={(e) => { setFilterPrice([e.value, filterPrice[1]]) }} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                      </div>
+
+                      <div className='flex justify-center items-center gap-4 sm:gap-1'>
+                        <div className='text-jet'>Maximální  cena</div>
+                        <InputNumber value={filterPrice[1]} defaultValue={filterPriceRange[1]} onChange={(e) => setFilterPrice([filterPrice[0], e.value])} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                      </div>
+
                     </div>
+                  </Stack>
 
-                    <div className='flex justify-center items-center gap-4'>
-                      <div className='text-jet'>Maximální  cena</div>
-                      <InputNumber value={filterPrice[1]} defaultValue={filterPriceRange[1]} onChange={(e) => setFilterPrice([filterPrice[0], e.value])} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
-                    </div>
-
-                  </div>
                 </div>
               </>
             }

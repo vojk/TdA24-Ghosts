@@ -52,7 +52,7 @@ export function Profil() {
             <h2 className='text-md text-sunglow text-left font-odstavec'>{claim}</h2>
           </div>
 
-          <div className="flex gap-3 w-full flex-[2]">
+          <div className="flex gap-3 w-full flex-[2] md:flex-col">
             <div className="aspect-square h-full min-w-[15rem] w-[20%]">
               <img src={pic_url} alt={'Picture of ' + name} className="rounded-md w-full min-w-[15rem]" />
             </div>

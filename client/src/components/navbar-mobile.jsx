@@ -11,7 +11,7 @@ export default function NavbarMobile() {
           <img src={Tda_napad_white} alt="TdA ikona" className="w-12 m-auto p-1"></img>
         </div>
       </a>
-      <a href="/">
+      <a href="/lecturers">
         <div className="bg-sky border-white border-4 rounded-full w-20 h-20 mx-auto -my-5">
           <img src={TdA_studium_white} alt="TdA ikona" className="w-14 m-auto p-1"></img>
         </div>
