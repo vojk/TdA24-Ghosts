@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Vizitka } from "./Vizitka";
+import FadeInView from './FadeInView';
 
 import { MultiSelect } from 'primereact/multiselect';
 import { InputNumber } from 'primereact/inputnumber';
 
 
-import { Autocomplete, TextField, Stack, Slider, Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Autocomplete, TextField, Stack, Slider, Accordion, AccordionDetails, AccordionSummary, Fade, Button } from '@mui/material';
 
 
 export function ListVizitek() {
@@ -97,14 +100,17 @@ export function ListVizitek() {
           <div className='mt-10'><h1 className='font-nadpis text-4xl text-white'>Seznam lektorů</h1></div>
           <div className='min-h-[5rem] w-full md:flex justify-center items-center'>
 
-            {data.length === 0 ? <div className='font-nadpis text-4xl text-white'>
-              <div className='font-nadpis'>Nebyl nalezen žádný lektor</div>
-              <div className='font-nadpis text-center'>Omlouváme se</div>
-            </div> :
+            {data.length === 0 ?
+              <FadeInView>
+                <div className='font-nadpis text-4xl text-white'>
+                  <div className='font-nadpis text-center'>Nebyl nalezen žádný lektor.</div>
+                  <div className='font-nadpis text-center'>Omlouváme se.</div>
+                </div>
+              </FadeInView> :
               <>
                 <div className='p-4 w-full flex justify-center gap-9 md:px-0 px-16 2xl:flex-col'>
                   <Accordion className='w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] max-w-6xl'>
-                    <AccordionSummary><div className='flex w-full justify-center text-center font-nadpis text-xl'>Filtrování podle místa, ceny a tagů. <br></br> ⬇⬇⬇⬇ </div></AccordionSummary>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}><div className='flex w-full justify-center text-center font-nadpis text-xl'>Filtrujte podle místa, ceny a tagů!</div></AccordionSummary>
                     <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
                       <Autocomplete className='bg-white p-2 rounded-xl'
                         multiple
@@ -139,7 +145,7 @@ export function ListVizitek() {
                             {...params}
                             variant="standard"
                             label="Vyberte požadované lokace..."
-                            placeholder="Tagy"
+                            placeholder="Města"
                           />
                         )}
                         onChange={(event, value) => {
@@ -149,7 +155,7 @@ export function ListVizitek() {
                       />
                     </Stack>
 
-                    <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] p-5">
+                    <Stack className="m-auto mt-5 md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] lg:w-full w-[80%] p-5">
                       <Slider
                         getAriaLabel={() => 'Škála ceny'}
                         value={filterPrice}
@@ -184,8 +190,14 @@ export function ListVizitek() {
 
           <div className='flex flex-wrap gap-10 justify-center my-10'>
             {filteredDATA.map((data) => (
-              <a href={"/lecturer/" + data.uuid} className='max-w-[45rem] w-full min-h-[20rem]'><Vizitka key={data.uuid} lecturerData={data} /></a>))}
+              <a href={"/lecturer/" + data.uuid} className='max-w-[45rem] w-full min-h-[20rem]'><FadeInView><Vizitka key={data.uuid} lecturerData={data} /></FadeInView></a>))}
           </div>
+          {(filteredDATA.length === 0 && data.length != 0) ? <div className='font-nadpis text-4xl text-white'>
+            <FadeInView>
+              <div className='font-nadpis text-center'>Zadaným parametrům neodpovídá žádný lektor.</div>
+              <div className='font-nadpis text-center'>Omlouváme se.</div>
+            </FadeInView>
+          </div> : null}
         </div>
       </div>
     </>

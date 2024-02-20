@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from "react-router-dom";
+import { Button } from "@mui/material"
+import FadeInView from './FadeInView';
 
 export function Profil() {
   const { UUID } = useParams();
@@ -19,7 +21,7 @@ export function Profil() {
     fetchData();
   }, [UUID]);
 
-  if (!data) return <div>Not ready</div>
+  if (!data) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Vydržte, než se stránka připraví.</div></FadeInView> //zneužiju tenhle Fade efekt a hláška se ukáže zpožděně, tak aspoň nebude otravovat když je zpoždění <0.3s
 
   if (data) {
     const name = data.first_name;
@@ -37,10 +39,12 @@ export function Profil() {
     const emails = data.contact.emails;
 
     return (
-      <div className='md:h-full h-screen w-full flex items-center justify-center my-6'>
-        <div className="bg-white flex flex-col max-w-[90rem] min-h-[35rem] w-full px-12 py-16 rounded h-[80%] md:h-[100%] mx-6">
+      <FadeInView><div className='md:h-full min-h-screen w-full flex items-center justify-center my-0'>
+        <div className="bg-white flex flex-col max-w-[90rem] w-full px-12 py-16 rounded min-h-[80%] md:h-[100%] mx-6">
+          <div className='md:hidden block mb-8'>
+            <Button color='secondary' variant='outlined' size='small'><Link to={"/lecturers"}>Zpět</Link></Button>
+          </div>
 
-          <Link to={"/lecturers"} className='mb-5'>Zpět</Link>
           <div className="col-span-2 flex-[0] mb-6">
             <div>
               <h1 className='text-5xl text-left text-sunglow font-nadpis'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
@@ -117,7 +121,8 @@ export function Profil() {
 
           </div>
         </div>
-      </div>
+      </div></FadeInView>
+
     );
   }
 }

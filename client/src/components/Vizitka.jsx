@@ -87,7 +87,7 @@ export function Vizitka({ lecturerData }) {
 
 
 
-      </div >
+      </div>
     </>
   );
 }

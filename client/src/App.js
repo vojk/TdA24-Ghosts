@@ -19,10 +19,10 @@ import { Profil } from "./components/Profil";
 import { About } from "./components/About";
 import { LoginPage } from "./components/LoginPage";
 
-import '@fontsource/roboto/300.css';
+/* import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/700.css';  chtěl to mui ale stejně to nebude potřebovat*/
 
 import { createTheme, ThemeProvider } from "@mui/material";
 const theme = createTheme({
