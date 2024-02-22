@@ -32,7 +32,7 @@ export function ListVizitek() {
   /*async fetch --- https://www.webtutpro.com/javascript-fetch-tutorial-send-http-requests-with-react-js-and-async-await-example-1443608c12fa */
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch(/*"http://localhost:8080/api/lecturers/"*/ "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/").then(res => {
+      var data = await fetch("http://localhost:8080/api/lecturers/" /*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/"*/).then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -49,7 +49,7 @@ export function ListVizitek() {
 
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch(/*"http://localhost:8080/api/tag" */"http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag").then(res => {
+      var data = await fetch("http://localhost:8080/api/tag" /*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag"*/).then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -65,7 +65,7 @@ export function ListVizitek() {
 
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch(/*"http://localhost:8080/api/location" */"http://7d17dc13931b9d11.app.tourdeapp.cz/api/location").then(res => {
+      var data = await fetch("http://localhost:8080/api/location" /*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/location"*/).then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -96,96 +96,98 @@ export function ListVizitek() {
   return (
     <>
       <div className="flex min-h-full w-full px-8">
-        <div className='flex h-full w-full flex-col'>
-          <div className='mt-10'><h1 className='font-nadpis text-4xl text-white'>Seznam lektorů</h1></div>
-          <div className='min-h-[5rem] w-full md:flex justify-center items-center'>
+        <div className='flex h-full w-full flex-col items-center mt-6'>
+          <div className='mt-10 flex justify-between items-center w-3/4'>
+            <h1 className='font-nadpis text-4xl text-white'>Nasi lektori</h1>
+            <div>
+              {data.length === 0 ?
+                <FadeInView>
+                  <div className='font-nadpis text-4xl text-white'>
+                    <div className='font-nadpis text-center'>Nebyl nalezen žádný lektor.</div>
+                    <div className='font-nadpis text-center'>Omlouváme se.</div>
+                  </div>
+                </FadeInView> :
+                <>
+                  <div className='w-fit flex justify-center gap-9 md:px-0 2xl:flex-col'>
+                    <Accordion className='w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] max-w-6xl px-8'>
+                      <AccordionSummary expandIcon={<ExpandMoreIcon />}><div className='flex w-full font-nadpis text-xl'>Filtrujte podle místa, ceny a tagů!</div></AccordionSummary>
+                      <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                        <Autocomplete className='bg-white p-2 rounded-xl'
+                          multiple
+                          id="lectors-tags"
+                          options={tags}
+                          getOptionLabel={(option) => option.name}
+                          isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
+                          disableCloseOnSelect={true}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="standard"
+                              label="Vyberte tagy lektorů..."
+                              placeholder="Tagy"
+                            />
+                          )}
+                          onChange={(event, value) => {
+                            console.log(value);
+                            setFilterTags(value);
+                          }}
+                        />
+                      </Stack>
 
-            {data.length === 0 ?
-              <FadeInView>
-                <div className='font-nadpis text-4xl text-white'>
-                  <div className='font-nadpis text-center'>Nebyl nalezen žádný lektor.</div>
-                  <div className='font-nadpis text-center'>Omlouváme se.</div>
-                </div>
-              </FadeInView> :
-              <>
-                <div className='p-4 w-full flex justify-center gap-9 md:px-0 px-16 2xl:flex-col'>
-                  <Accordion className='w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] max-w-6xl'>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}><div className='flex w-full justify-center text-center font-nadpis text-xl'>Filtrujte podle místa, ceny a tagů!</div></AccordionSummary>
-                    <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
-                      <Autocomplete className='bg-white p-2 rounded-xl'
-                        multiple
-                        id="lectors-tags"
-                        options={tags}
-                        getOptionLabel={(option) => option.name}
-                        isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            variant="standard"
-                            label="Vyberte tagy lektorů..."
-                            placeholder="Tagy"
-                          />
-                        )}
-                        onChange={(event, value) => {
-                          console.log(value);
-                          setFilterTags(value);
-                        }}
-                      />
-                    </Stack>
+                      <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                        <Autocomplete className='bg-white p-2 rounded-xl'
+                          multiple
+                          id="lectors-cities"
+                          options={objectLocations()}
+                          getOptionLabel={(option) => option.name}
+                          isOptionEqualToValue={(option, value) => option.name === value.name}
+                          disableCloseOnSelect={true}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              variant="standard"
+                              label="Vyberte požadované lokace..."
+                              placeholder="Města"
+                            />
+                          )}
+                          onChange={(event, value) => {
+                            console.log(value);
+                            setFilterCities(value);
+                          }}
+                        />
+                      </Stack>
 
-                    <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
-                      <Autocomplete className='bg-white p-2 rounded-xl'
-                        multiple
-                        id="lectors-cities"
-                        options={objectLocations()}
-                        getOptionLabel={(option) => option.name}
-                        isOptionEqualToValue={(option, value) => option.name === value.name}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            variant="standard"
-                            label="Vyberte požadované lokace..."
-                            placeholder="Města"
-                          />
-                        )}
-                        onChange={(event, value) => {
-                          console.log(value);
-                          setFilterCities(value);
-                        }}
-                      />
-                    </Stack>
+                      <Stack className="m-auto mt-5 md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] lg:w-full w-[80%] p-5">
+                        <Slider
+                          getAriaLabel={() => 'Škála ceny'}
+                          value={filterPrice}
+                          step={10}
+                          onChange={(event, newValue) => {
+                            setFilterPrice(newValue)
+                          }}
+                          valueLabelDisplay="on"
+                          getAriaValueText={valuetext}
+                          min={filterPriceRange[0]}
+                          max={filterPriceRange[1]}
+                        />
+                        <div className='flex w-full gap-4 sm:gap-1 bg-white justify-center md:min-w-[30rem] rounded-full py-1 min-w-[25rem] sm:min-w-[14rem] sm:flex-col'>
+                          <div className='flex justify-center items-center gap-4 sm:gap-1'>
+                            <div className='text-jet'>Minimální cena</div>
+                            <InputNumber value={filterPrice[0]} defaultValue={filterPriceRange[0]} onChange={(e) => { setFilterPrice([e.value, filterPrice[1]]) }} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                          </div>
 
-                    <Stack className="m-auto mt-5 md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] lg:w-full w-[80%] p-5">
-                      <Slider
-                        getAriaLabel={() => 'Škála ceny'}
-                        value={filterPrice}
-                        step={10}
-                        onChange={(event, newValue) => {
-                          setFilterPrice(newValue)
-                        }}
-                        valueLabelDisplay="on"
-                        getAriaValueText={valuetext}
-                        min={filterPriceRange[0]}
-                        max={filterPriceRange[1]}
-                      />
-                      <div className='flex w-full gap-4 sm:gap-1 bg-white justify-center md:min-w-[30rem] rounded-full py-1 min-w-[25rem] sm:min-w-[14rem] sm:flex-col'>
-                        <div className='flex justify-center items-center gap-4 sm:gap-1'>
-                          <div className='text-jet'>Minimální cena</div>
-                          <InputNumber value={filterPrice[0]} defaultValue={filterPriceRange[0]} onChange={(e) => { setFilterPrice([e.value, filterPrice[1]]) }} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                          <div className='flex justify-center items-center gap-4 sm:gap-1'>
+                            <div className='text-jet'>Maximální  cena</div>
+                            <InputNumber value={filterPrice[1]} defaultValue={filterPriceRange[1]} onChange={(e) => setFilterPrice([filterPrice[0], e.value])} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                          </div>
+
                         </div>
-
-                        <div className='flex justify-center items-center gap-4 sm:gap-1'>
-                          <div className='text-jet'>Maximální  cena</div>
-                          <InputNumber value={filterPrice[1]} defaultValue={filterPriceRange[1]} onChange={(e) => setFilterPrice([filterPrice[0], e.value])} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
-                        </div>
-
-                      </div>
-                    </Stack>
-                  </Accordion>
-                </div>
-              </>
-            }
-          </div>
+                      </Stack>
+                    </Accordion>
+                  </div>
+                </>
+              }
+            </div></div>
 
 
           <div className='flex flex-wrap gap-10 justify-center my-10'>
