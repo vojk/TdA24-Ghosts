@@ -1,5 +1,6 @@
 import TDA_LOGO_white from "../TdA/TdA_LOGO/TeacherDigitalAgency_LOGO_colour-white.svg";
 import TDA_All_blue from "../TdA/TdA_ikony/SVG/TdA_ikony_celek_blue.svg";
+import { Button } from "@mui/material";
 
 export function About() {
 
@@ -26,7 +27,10 @@ export function About() {
             </div>
 
           </div>
-          <div><a href="/lecturers"><div className="w-52 p-2 bg-prussian text-white rounded-xl font-nadpis text-2xl text-center align-middle"> Naši lektoři </div></a></div>
+          
+          <a href="/lecturers">
+            <Button style={{width: '13rem', padding: '0.5rem'}} variant="contained" size="large" color="primary"><span className="font-bold">Přihlásit</span></Button>
+          </a>
         </div>
 
       </div>

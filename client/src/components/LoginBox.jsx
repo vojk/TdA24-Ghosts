@@ -41,7 +41,7 @@ const PasswordInput = ({ password, handlePassword }) => {
 export function LoginBox() {
     return (
         <Paper elevation={5} className="p-3 text-center font-semibold">
-        Přihlašte se a objevte svého vysněného lektora!
+        Přihlaste se a objevte svého vysněného lektora!
             <Stack className="my-2">
                 <TextField required label="E-Mail" type="email" id="E-Mail"></TextField>
             </Stack>

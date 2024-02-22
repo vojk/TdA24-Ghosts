@@ -18,16 +18,18 @@ function MenuItem({ Icon, text, to }) {
   )
 }
 
-export default function Menu() {
+export default function Footer() {
   return (
     <>
-      <div className={"h-screen w-fit flex top-0 sticky text-white justify-center"}>
-        <div className="w-[95%] top-0 h-[95%] sticky flex flex-col self-center py-12 bg-sky/20 backdrop-blur-sm rounded-md drop-shadow-sm px-16 items-center shadow-md">
-          <TdALogo className={"h-[64px] mb-12"} />
-          <div className="flex flex-col gap-2">
+      <div className={"w-full flex text-white mt-5 p-2"}>
+        <div className="w-full h-[95%] flex justify-between  py-8 bg-sky/20 backdrop-blur-sm rounded-md drop-shadow-sm shadow-md">
+          <TdALogo className={"h-[64px] mx-6"} />
+          <div className="flex flex-row gap-2">
             <MenuItem to={"/"} text={"O TdA"} />
             <MenuItem to={"/lecturers"} text={"Lektoři"} />
-            <MenuItem to={"/login"} text={"Přihlášení"} />
+            <div className="mx-4 ml-0 gap-2 flex items-center relative">
+            <p className="text-[1rem] font-bold font-odstavec">Copyright © Teacher Digital Agency 2024</p>
+            </div>
           </div>
 
         </div>

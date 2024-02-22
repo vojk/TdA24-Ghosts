@@ -19,6 +19,8 @@ import { Profil } from "./components/Profil";
 import { About } from "./components/About";
 import { LoginPage } from "./components/LoginPage";
 
+import Footer from "./components/footer";
+
 /* import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -70,9 +72,11 @@ function App() {
                   </Route>
                   <Route path="*" element={<ErrorPage />}></Route>
                 </Routes>
-              </div>
+               
+              </div> 
             </div>
           </div>
+          <Footer/>
         </Router>
       </>
     </ThemeProvider>
