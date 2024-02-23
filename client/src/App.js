@@ -49,6 +49,7 @@ function App() {
     <ThemeProvider theme={theme}> {/* ThemeProvider nastavuje MUI komponentům jejich font, nechám Open Sans podle zadání */}
       <>
         <Router>
+        <div className="flex flex-col">
           <div className="flex">
             <div className="md:hidden relative">
               <Navbar />
@@ -57,9 +58,9 @@ function App() {
               <NavbarMobile />
             </div>
 
-            <div className="relative w-full md:mb-20">
+            <div className="relative w-full flex flex-col justify-between md:mb-20 min-h-screen">
 
-              <div className="h-full">
+              <div className="h-fit">
                 <Routes>
                   <Route path="/home" element={<ListVizitek />} ></Route>
                   <Route path="/login" element={<LoginPage />} ></Route>
@@ -72,11 +73,16 @@ function App() {
                   </Route>
                   <Route path="*" element={<ErrorPage />}></Route>
                 </Routes>
-               
-              </div> 
+                
+              </div>
+              <Footer/>
             </div>
+
+            
           </div>
-          <Footer/>
+          
+          </div>
+          
         </Router>
       </>
     </ThemeProvider>

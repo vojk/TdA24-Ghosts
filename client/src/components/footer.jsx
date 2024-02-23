@@ -21,8 +21,8 @@ function MenuItem({ Icon, text, to }) {
 export default function Footer() {
   return (
     <>
-      <div className={"w-full flex text-white mt-5 p-2"}>
-        <div className="w-full h-[95%] flex justify-between  py-8 bg-sky/20 backdrop-blur-sm rounded-md drop-shadow-sm shadow-md">
+      <div className={"w-full flex text-white my-[1rem]"}>
+        <div className="w-full h-full flex justify-between py-8 bg-sky/20 backdrop-blur-sm rounded-md drop-shadow-sm shadow-md">
           <TdALogo className={"h-[64px] mx-6"} />
           <div className="flex flex-row gap-2">
             <MenuItem to={"/"} text={"O TdA"} />

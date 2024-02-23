@@ -6,7 +6,7 @@ export function About() {
 
   return (
     <>
-      <div className="h-screen w-full flex justify-center self-center">
+      <div className="min-h-fit w-full flex justify-center self-center mt-16">
         <div className="flex flex-col gap-10 w-[60%] items-center justify-center">
           <div className="w-full flex">
             <img src={TDA_LOGO_white} alt="TdA Logo" className="w-[15rem] pb-20"></img>
@@ -27,10 +27,11 @@ export function About() {
             </div>
 
           </div>
-          
+          <div className="w-full flex justify-end">
           <a href="/lecturers">
-            <Button style={{width: '13rem', padding: '0.5rem'}} variant="contained" size="large" color="primary"><span className="font-bold">Přihlásit</span></Button>
+            <Button style={{width: '13rem', padding: '0.5rem'}} variant="contained" size="large" color="primary"><span className="font-bold">Naši lektoři</span></Button>
           </a>
+          </div>
         </div>
 
       </div>
