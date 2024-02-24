@@ -13,8 +13,8 @@ public class DbControllerCredentials {
     }
   }
 
-  public String addCredentials(String username, String password) {
-    String id = "15ea865d-e4d4-4233-834a-72700bf01310";
+  public String addCredentials(String username, String password, String id) {
+  //  String id = "15ea865d-e4d4-4233-834a-72700bf01310";
     try (Connection connection = DBInterface.getConnection()) {
       try (Statement statement = connection.createStatement()) {
         if (credentialsExists(new DbStatement(connection, statement), id) == 400) {

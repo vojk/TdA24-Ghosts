@@ -4,7 +4,7 @@ import ch.qos.logback.core.net.SyslogOutputStream;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class CredentialsGenerator implements HashPassword {
-    public void generator(String lastName, String firstName){
+    public String generator(String lastName, String firstName){
         String username = "";
         if (lastName.length() < 5 ) {
             for (int i = 0; i < lastName.length(); i++) {
@@ -38,5 +38,7 @@ public class CredentialsGenerator implements HashPassword {
 
         String hashed = hashPassword(password);
         System.out.println(hashed);
+        return username+";"+hashed;
     }
+
 }

@@ -31,7 +31,18 @@ public class CredentialsController implements HashPassword {
         String password = credentialsTDO.getPassword();
         String hashedPassword = hashPassword(password);
 
-        if (dbControllerCredentials.addCredentials(username, hashedPassword).equals("200")) {
+        if (dbControllerCredentials.addCredentials(username, hashedPassword, "15ea865d-e4d4-4233-834a-72700bf01310").equals("200")) {
+            return ResponseEntity.status(200).body(new HTTPCodesTDO(200, "Uživatel správně vytvořen"));
+        }
+        else {
+            return ResponseEntity.status(400).body(new HTTPCodesTDO(400, "Uživatel již existuje"));
+        }
+
+    }
+
+    public ResponseEntity<Object> insertItemsCode(String username, String hashedPassword, String id) {
+        DbControllerCredentials dbControllerCredentials = new DbControllerCredentials();
+        if (dbControllerCredentials.addCredentials(username, hashedPassword, id).equals("200")) {
             return ResponseEntity.status(200).body(new HTTPCodesTDO(200, "Uživatel správně vytvořen"));
         }
         else {

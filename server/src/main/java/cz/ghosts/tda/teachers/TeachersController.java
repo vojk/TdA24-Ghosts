@@ -1,11 +1,15 @@
 package cz.ghosts.tda.teachers;
 
+import cz.ghosts.tda.database.DbControllerCredentials;
+import cz.ghosts.tda.teachers.credentials.CredentialsController;
 import cz.ghosts.tda.teachers.credentials.CredentialsGenerator;
+import cz.ghosts.tda.teachers.credentials.CredentialsTDO;
 import org.springframework.web.bind.annotation.RestController;
 
 import cz.ghosts.tda.database.DbController;
 import cz.ghosts.tda.objects.return_objects.HTTPCodesTDO;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -54,9 +58,12 @@ public class TeachersController {
     }
     String teacherId = dbController.addTeacher(entity);
 
+    CredentialsController credentialsController = new CredentialsController();
     CredentialsGenerator credentialsGenerator = new CredentialsGenerator();
     List<TeachersTDO> tempList = dbController.getAllTeachers(teacherId);
-    credentialsGenerator.generator(tempList.get(0).getFirst_name(), tempList.get(0).getLast_name());
+    String[] credentials = (credentialsGenerator.generator(tempList.get(0).getFirst_name(), tempList.get(0).getLast_name()).split(";"));
+
+    credentialsController.insertItemsCode(credentials[0], credentials[1], entity.getId());
 
     return ResponseEntity.ok(dbController.getAllTeachers(teacherId).get(0));
   }
