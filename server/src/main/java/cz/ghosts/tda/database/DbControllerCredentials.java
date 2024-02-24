@@ -29,6 +29,7 @@ public class DbControllerCredentials {
     }
   }
 
+
   public String getUsername(String username) {
     try (Connection connection = DBInterface.getConnection();) {
       try (Statement statement = connection.createStatement()) {
@@ -50,15 +51,6 @@ public class DbControllerCredentials {
     return null;
   }
 
-  private void ainsertCredentials(DbStatement dbStatement, String username, String password) throws SQLException {
-    String insertCredentialsQuery = ("INSERT OR IGNORE INTO usercredentials (username) SELECT ? WHERE NOT EXISTS (SELECT 1 FROM usercredentials WHERE username = ?)");
-    try (PreparedStatement insertCredentialsStatement = dbStatement.connection
-            .prepareStatement(insertCredentialsQuery)) {
-      insertCredentialsStatement.setString(1, username);
-      insertCredentialsStatement.setString(2, username);
-      insertCredentialsStatement.executeUpdate();
-    }
-  }
 
   private void insertCredentials(DbStatement dbStatement, String username, String password, String id) throws SQLException {
     String insertCredentialsQuery = ("INSERT OR IGNORE INTO usercredentials (uuid_ucitele, username, password) SELECT ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM usercredentials WHERE username = ?)");
@@ -87,21 +79,21 @@ public class DbControllerCredentials {
     }
   }
 
-  private String getPassword(String id) {
+  public boolean checkCredentials(String username, String password) {
     try (Connection connection = DBInterface.getConnection();) {
-      try (Statement statement = connection.createStatement()) {
-        String getPasswordQuery = "SELECT password FROM usercredentials WHERE uuid_ucitele = '" + id + "'";
+        String getPasswordQuery = "SELECT uuid_ucitele FROM usercredentials WHERE username = ? AND password = ?" ;
         try(PreparedStatement getPasswordStatement = connection.prepareStatement(getPasswordQuery)) {
+          getPasswordStatement.setString(1, username);
+          getPasswordStatement.setString(2, password);
           ResultSet resultSet = getPasswordStatement.executeQuery();
           while (resultSet.next()) {
-            return resultSet.getString("password");
+            return true;
           }
         }
-      }
-
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
-    return null;
+    return false;
   }
+
 }
