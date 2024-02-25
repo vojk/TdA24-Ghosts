@@ -1,6 +1,9 @@
 import { Button } from "@mui/material";
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+
 
 export function Vizitka({ lecturerData }) {
   const name = lecturerData.first_name;
@@ -31,10 +34,6 @@ export function Vizitka({ lecturerData }) {
             <div className="col-span-2 flex-[1]">
               <div>
                 <h1 className='text-3xl text-left text-jet font-nadpis'>{title_b} {name} {mid_name} {surname} {title_a}</h1>
-                <div className="flex gap-4">
-                  <h2 className="text-lg font-nadpis text-sunglow"><span className="text-2xl text-sunglow font-nadpis">{cena}</span> Kč/hodina</h2>
-                  <h2 className="text-lg text-left"><span className="text-2xl text-sunglow font-nadpis">{location}</span></h2>
-                </div>
               </div>
 
             </div>
@@ -44,32 +43,37 @@ export function Vizitka({ lecturerData }) {
                   <div>
 
                     <div className="flex flex-wrap justify-between gap-5 w-full md:flex-col">
-                      <div className="flex flex-col">
-                        {telephone_numbers.map((element, index) => {
-                          return (
-                            <>
-                              {index < 2 && <span className="text-jet"><LocalPhoneOutlinedIcon /><a href={'tel:' + element} className="underline">{element}</a></span>}
-                              {index > 2 && <span className="text-sky relative">Zobrazit všechny</span>}
-                            </>
-                          )
-                        })}
 
+                      <div className="flex flex-col gap-3">
+                        <div className="flex flex-col">
+                          {telephone_numbers.map((element, index) => {
+                            return (
+                              <>
+                                {index < 2 && <span className="text-jet"><LocalPhoneOutlinedIcon /> <a href={'tel:' + element} className="underline">{element}</a></span>}
+                                {index > 2 && <span className="text-sky relative">Zobrazit všechny</span>}
+                              </>
+                            )
+                          })}
+                        </div>
+                        <div className="flex flex-col">
+                          {emails.map((element, index) => {
+                            return (
+                              <>
+                                {index < 2 && <span className="text-jet"><EmailOutlinedIcon /> <a href={'mailto:' + element} className="underline">{element}</a></span>}
+                                {index > 2 && <span className="text-sky">Zobrazit všechny</span>}
+                              </>
+                            )
+                          })}
+
+                        </div>
                       </div>
-                      <div>
-                        <div className="flex flex-col"><span>test</span></div>
-                      </div>
-                      <div className="flex flex-col">
-                        {emails.map((element, index) => {
-                          return (
-                            <>
-                              {index < 2 && <span className="text-jet"><EmailOutlinedIcon /><a href={'mailto:' + element} className="underline">{element}</a></span>}
-                              {index > 2 && <span className="text-sky">Zobrazit všechny</span>}
-                            </>
-                          )
-                        })}
+                      <div className="flex flex-col gap-3">
+                        <div className="flex flex-col"><span><LocationOnOutlinedIcon/> {location}</span></div>
+                        <div className="flex flex-col"><span><PaymentsOutlinedIcon/> {cena} Kč / 60 min</span></div>
                       </div>
 
-                      <div className="flex flex-col"><span>test</span></div>
+
+
                     </div>
 
                   </div>

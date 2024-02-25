@@ -21,6 +21,8 @@ import { LoginPage } from "./components/LoginPage";
 
 import Footer from "./components/footer";
 
+import LektorAdmin from "./components/LektorAdmin";
+
 /* import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -66,6 +68,7 @@ function App() {
                   <Route path="/login" element={<LoginPage />} ></Route>
                   <Route path="/" index element={<About />} ></Route>
                   <Route path="/about" index element={<About />} ></Route>
+                  <Route path="/admin" index element={<LektorAdmin />} ></Route>
                   <Route path="/lecturers" element={<ListVizitek />}></Route>
                   <Route path="/lecturer" element={<ProfilExample />} ></Route>
                   <Route path="/lecturer" >

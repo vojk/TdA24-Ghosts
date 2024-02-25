@@ -1,7 +1,9 @@
 import { Paper, Stack, TextField, IconButton, InputAdornment, Button, } from "@mui/material"
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useState } from "react";
+import { useContext, useState } from "react";
+import bcrypt from 'bcryptjs';
+import axios from 'axios'
 
 /* https://medium.com/@sumsourabh14/how-i-created-toggle-password-visibility-with-material-ui-b3fb975b5ce4 */
 const PasswordInput = ({ password, handlePassword }) => {
@@ -37,6 +39,21 @@ const PasswordInput = ({ password, handlePassword }) => {
     );
 };
 
+const handleLogin = async() => {
+    const username = document.getElementById('E-Mail').value
+    const password = document.getElementById('Heslo').value;
+
+    try {
+      const response = await axios.post('/api/credentials/checkuser', {
+        username,
+        password: bcrypt.hashSync(password, 10)
+      });
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+    } catch (error) {
+      console.error('Login failed', error);
+    }
+  };
 
 export function LoginBox() {
     return (
@@ -65,7 +82,7 @@ export function LoginBox() {
                 </Button>
 
                 <Button variant="contained" size="large" color="primary" onClick={() => {
-                    alert('přihlaš mě s bcrypt('+document.getElementById('Heslo').value+') a '+document.getElementById('E-Mail').value)    
+                    alert('přihlaš mě s bcrypt('+document.getElementById('Heslo').value+') a '+document.getElementById('E-Mail').value);handleLogin()
                 }}>
                     <span  className="font-bold">Přihlásit</span>
                 </Button>
