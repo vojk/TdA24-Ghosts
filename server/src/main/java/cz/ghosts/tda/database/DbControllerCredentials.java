@@ -69,8 +69,10 @@ public class DbControllerCredentials {
     try (PreparedStatement checkCredentialsStatement = dbStatement.connection.prepareStatement(checkCredentialsQuery)) {
       ResultSet result = checkCredentialsStatement.executeQuery();
       if (result.next()) {
+        System.out.println(200);
         return 200;
       } else {
+        System.out.println(400);
         return 400;
       }
 

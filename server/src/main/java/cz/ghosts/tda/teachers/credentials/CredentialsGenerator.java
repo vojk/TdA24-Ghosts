@@ -3,7 +3,7 @@ package cz.ghosts.tda.teachers.credentials;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import org.apache.commons.lang3.RandomStringUtils;
 
-public class CredentialsGenerator implements HashPassword {
+public class CredentialsGenerator {
     public String generator(String lastName, String firstName){
         String username = "";
         if (lastName.length() < 5 ) {
@@ -36,9 +36,7 @@ public class CredentialsGenerator implements HashPassword {
         String password = RandomStringUtils.randomAlphanumeric(8);
         System.out.println(password);
 
-        String hashed = hashPassword(password);
-        System.out.println(hashed);
-        return username+";"+hashed;
+        return username+";"+password;
     }
 
 }

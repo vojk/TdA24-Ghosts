@@ -53,17 +53,10 @@ public class TeachersController {
     if (entity.getFirst_name() == null || entity.getFirst_name().length() <= 0 || entity.getLast_name() == null
         || entity.getLast_name().length() <= 0 || entity.getContact() == null || entity.getContact().getEmails() == null
         || entity.getContact().getEmails().size() <= 0 || entity.getContact().getTelephoneNumbers() == null
-        || entity.getContact().getTelephoneNumbers().size() <= 0) {
+        || entity.getContact().getTelephoneNumbers().size() <= 0 || entity.getUsername() == null || entity.getPassword() == null) {
       return ResponseEntity.status(400).body(new ArrayList<>());
     }
     String teacherId = dbController.addTeacher(entity);
-
-    CredentialsController credentialsController = new CredentialsController();
-    CredentialsGenerator credentialsGenerator = new CredentialsGenerator();
-    List<TeachersTDO> tempList = dbController.getAllTeachers(teacherId);
-    String[] credentials = (credentialsGenerator.generator(tempList.get(0).getFirst_name(), tempList.get(0).getLast_name()).split(";"));
-
-    credentialsController.insertItemsCode(credentials[0], credentials[1], entity.getId());
 
     return ResponseEntity.ok(dbController.getAllTeachers(teacherId).get(0));
   }
@@ -81,7 +74,7 @@ public class TeachersController {
     if (entity.getFirst_name() == null || entity.getFirst_name().length() <= 0 || entity.getLast_name() == null
         || entity.getLast_name().length() <= 0 || entity.getContact() == null || entity.getContact().getEmails() == null
         || entity.getContact().getEmails().size() <= 0 || entity.getContact().getTelephoneNumbers() == null
-        || entity.getContact().getTelephoneNumbers().size() <= 0) {
+        || entity.getContact().getTelephoneNumbers().size() <= 0 || entity.getPassword() == null || entity.getUsername() == null) {
       return ResponseEntity.status(400).body(new ArrayList<>());
     }
     String teacherId = dbController.updateTeacher(entity);

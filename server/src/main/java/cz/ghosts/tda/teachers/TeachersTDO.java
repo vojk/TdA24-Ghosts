@@ -22,6 +22,9 @@ public class TeachersTDO extends TeacherId<String> {
   private String location = null;
   private String claim = null;
   private String bio = null;
+  private String username=null;
+  private String password=null;
+
   private List<TagsTDO> tags = new ArrayList<>();
   private int price_per_hour = 0;
   private Contact contact;
@@ -113,4 +116,11 @@ public class TeachersTDO extends TeacherId<String> {
     return price_per_hour;
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
 }

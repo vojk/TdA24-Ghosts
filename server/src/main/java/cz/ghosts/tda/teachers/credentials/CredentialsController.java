@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/api/credentials")
-public class CredentialsController implements HashPassword {
+public class CredentialsController {
     @PostMapping(path = {"/username", "username"})
     public ResponseEntity<Object> checkLogin(@RequestBody CredentialsTDO credentialsTDO){
         DbControllerCredentials dbControllerCredentials = new DbControllerCredentials();
@@ -29,9 +29,7 @@ public class CredentialsController implements HashPassword {
         DbControllerCredentials dbControllerCredentials = new DbControllerCredentials();
         String username = credentialsTDO.getLoginName();
         String password = credentialsTDO.getPassword();
-        String hashedPassword = hashPassword(password);
-
-        if (dbControllerCredentials.addCredentials(username, hashedPassword, "15ea865d-e4d4-4233-834a-72700bf01310").equals("200")) {
+        if (dbControllerCredentials.addCredentials(username, password, "15ea865d-e4d4-4233-834a-72700bf01310").equals("200")) {
             return ResponseEntity.status(200).body(new HTTPCodesTDO(200, "Uživatel správně vytvořen"));
         }
         else {
@@ -56,8 +54,7 @@ public class CredentialsController implements HashPassword {
         DbControllerCredentials dbControllerCredentials = new DbControllerCredentials();
         String username = credentialsTDO.getLoginName();
         String password = credentialsTDO.getPassword();
-        String hashedPassword = hashPassword(password);
-        if (dbControllerCredentials.checkCredentials(username, hashedPassword)) {
+        if (dbControllerCredentials.checkCredentials(username, password)) {
             return ResponseEntity.status(200).body(new HTTPCodesTDO(200, "Správný login"));
         }
         return ResponseEntity.status(401).body(new HTTPCodesTDO(401, "Uživatel nebo heslo není správné"));

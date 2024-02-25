@@ -229,7 +229,7 @@ public class DbController implements DBInterface {
     }
     return null;
   }
-
+  //TODO vrátit username (+ password)
   public List<TeachersTDO> getAllTeachers(String id) {
     List<TeachersTDO> teachers = new ArrayList<>();
     try (Connection connection = DBInterface.getConnection();) {
@@ -475,6 +475,9 @@ public class DbController implements DBInterface {
 
         insertRelationEmailTeacher(new DbStatement(connection, statement), teacher);
         insertRelationTelephoneTeacher(new DbStatement(connection, statement), teacher);
+
+        DbControllerCredentials dbControllerCredentials = new DbControllerCredentials();
+        dbControllerCredentials.addCredentials(teacher.getUsername(), teacher.getPassword(), teacher.getId());
 
         for (String tagId : tagsIds) {
           String insertTeacherTagQuery = ("INSERT OR IGNORE INTO tags_ucitele (id_tag, id_ucitel) VALUES (?, ?)");
