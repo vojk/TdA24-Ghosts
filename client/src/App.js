@@ -29,6 +29,8 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';  chtěl to mui ale stejně to nebude potřebovat*/
 
 import { createTheme, ThemeProvider } from "@mui/material";
+import { csCZ } from '@mui/x-date-pickers/locales'
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -44,48 +46,51 @@ const theme = createTheme({
       'sans-serif',
     ].join(','),
   },
-});
+
+},
+  csCZ,
+);
 
 function App() {
   return (
     <ThemeProvider theme={theme}> {/* ThemeProvider nastavuje MUI komponentům jejich font, nechám Open Sans podle zadání */}
       <>
         <Router>
-        <div className="flex flex-col">
-          <div className="flex">
-            <div className="md:hidden relative">
-              <Navbar />
-            </div>
-            <div className="w-full fixed bottom-0 bg-sky h-20 z-50 hidden md:block">
-              <NavbarMobile />
-            </div>
-
-            <div className="relative w-full flex flex-col justify-between md:mb-20 min-h-screen">
-
-              <div className="h-fit">
-                <Routes>
-                  <Route path="/home" element={<ListVizitek />} ></Route>
-                  <Route path="/login" element={<LoginPage />} ></Route>
-                  <Route path="/" index element={<About />} ></Route>
-                  <Route path="/about" index element={<About />} ></Route>
-                  <Route path="/admin" index element={<LektorAdmin />} ></Route>
-                  <Route path="/lecturers" element={<ListVizitek />}></Route>
-                  <Route path="/lecturer" element={<ProfilExample />} ></Route>
-                  <Route path="/lecturer" >
-                    <Route path=":UUID" element={<Profil />} />
-                  </Route>
-                  <Route path="*" element={<ErrorPage />}></Route>
-                </Routes>
-                
+          <div className="flex flex-col">
+            <div className="flex">
+              <div className="md:hidden relative">
+                <Navbar />
               </div>
-              <Footer/>
+              <div className="w-full fixed bottom-0 bg-sky h-20 z-50 hidden md:block">
+                <NavbarMobile />
+              </div>
+
+              <div className="relative w-full flex flex-col justify-between md:mb-20 min-h-screen">
+
+                <div className="h-full">
+                  <Routes>
+                    <Route path="/home" element={<ListVizitek />} ></Route>
+                    <Route path="/login" element={<LoginPage />} ></Route>
+                    <Route path="/" index element={<About />} ></Route>
+                    <Route path="/about" index element={<About />} ></Route>
+                    <Route path="/admin" index element={<LektorAdmin />} ></Route>
+                    <Route path="/lecturers" element={<ListVizitek />}></Route>
+                    <Route path="/lecturer" element={<ProfilExample />} ></Route>
+                    <Route path="/lecturer" >
+                      <Route path=":UUID" element={<Profil />} />
+                    </Route>
+                    <Route path="*" element={<ErrorPage />}></Route>
+                  </Routes>
+
+                </div>
+                <Footer />
+              </div>
+
+
             </div>
 
-            
           </div>
-          
-          </div>
-          
+
         </Router>
       </>
     </ThemeProvider>

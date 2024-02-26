@@ -22,7 +22,7 @@ export default function Footer() {
   return (
     <>
       <div className={"w-full flex text-white my-[1rem]"}>
-        <div className="w-full h-full flex justify-between py-8 bg-sky/20 backdrop-blur-sm rounded-md drop-shadow-sm shadow-md">
+        <div className="w-full h-full flex justify-between sm:mr-0 mr-2 py-8 bg-prussian backdrop-blur-sm rounded-md drop-shadow-sm shadow-md">
           <TdALogo className={"h-[64px] mx-6"} />
           <div className="flex flex-row gap-2">
             <MenuItem to={"/"} text={"O TdA"} />

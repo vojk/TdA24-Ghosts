@@ -20,6 +20,11 @@ export function ListVizitek() {
   const [filterPrice, setFilterPrice] = useState([20, 700]);
   const [filterPriceRange, setFilterPriceRange] = useState([20, 700]);
 
+  //Ať se nám vrátí 1. stránka po filtrování
+  useEffect(()=> {
+    setPage(1)
+  }, [filterCities, filterPrice, filterTags])
+
 
   var fetchURL = "http://7d17dc13931b9d11.app.tourdeapp.cz/api"
   //ZMĚŇ PRO LOKÁLNÍ TESTOVÁNÍ NA LOCALHOST:8080
@@ -114,10 +119,10 @@ export function ListVizitek() {
 
   return (
     <>
-      <div className="flex h-fit w-full px-8">
+      <div className="flex h-full w-full px-8">
         <div className='flex h-full w-full flex-col items-center mt-6'>
           <div className='mt-10 mb-5 flex md:flex-col justify-between w-3/4 md:w-full flex-wrap'>
-            <div><h1 className='font-nadpis text-4xl text-white'>Naši lektoři</h1></div>
+            <div><h1 className='font-odstavec text-4xl text-white'>Vyhledat lektora</h1></div>
             
               {data.length === 0 ?
                 <FadeInView>
@@ -207,6 +212,7 @@ export function ListVizitek() {
                     </Stack>
                   </Accordion>
                 </div>
+                
                 </div>
 
               }
@@ -219,13 +225,15 @@ export function ListVizitek() {
               <div className='max-w-[45rem] w-full min-h-[20rem]'><FadeInView><Vizitka key={data.uuid} lecturerData={data} /></FadeInView></div>))}   
           
           </div>
-        <div className='[&_button]:bg-white'><Pagination count={Math.ceil(lectorCount/lectorsPerPage)} page={page} onChange={handleChange} showFirstButton showLastButton color="primary" variant="outlined" size='large'/></div>  
+
+          
           {(filteredDATA.length === 0 && data.length !== 0) ? <div className='font-nadpis text-4xl text-white'>
             <FadeInView>
               <div className='font-nadpis text-center'>Zadaným parametrům neodpovídá žádný lektor.</div>
               <div className='font-nadpis text-center'>Omlouváme se.</div>
             </FadeInView>
-          </div> : null}
+          </div> : <div className='[&_button]:bg-white'><Pagination count={Math.ceil(lectorCount/lectorsPerPage)} page={page} onChange={handleChange} showFirstButton showLastButton color="primary" variant="outlined" size='large'/></div>  
+}
         </div>
       </div>
     </>

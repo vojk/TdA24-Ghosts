@@ -22,7 +22,7 @@ export default function Menu() {
   return (
     <>
       <div className={"h-screen w-fit flex top-0 sticky text-white justify-center"}>
-        <div className="w-[95%] top-0 h-[calc(100%-2rem)] sticky flex flex-col self-center py-12 bg-sky/20 backdrop-blur-sm rounded-md drop-shadow-sm px-16 items-center shadow-md">
+        <div className="w-[95%] top-0 h-[calc(100%-2rem)] sticky flex flex-col self-center py-12 bg-sky backdrop-blur-sm rounded-md drop-shadow-sm px-16 items-center shadow-md">
           <TdALogo className={"h-[64px] mb-12"} />
           <div className="flex flex-col gap-2">
             <MenuItem to={"/"} text={"O TdA"} />

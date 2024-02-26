@@ -6,6 +6,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import ReserveBox from './ReserveBox'
 
 export function Profil() {
   const { UUID } = useParams();
@@ -35,7 +36,7 @@ export function Profil() {
     const title_a = data.title_after;
     const pic_url = data.picture_url;
     const cena = data.price_per_hour;
-    const tagy = data.tags;
+    const tags = data.tags;
     const location = data.location;
     const claim = data.claim;
     const bio = data.bio;
@@ -45,14 +46,14 @@ export function Profil() {
     return (
       <FadeInView>
         <div className='md:h-full min-h-screen w-full flex flex-col items-center justify-center my-0'>
-          <div className='max-w-[90rem] w-full items-center flex flex-col'>
+          <div className='max-w-[90rem] mt-4 w-full items-center flex flex-col'>
             <div className='md:hidden block mb-8 w-full mx-6'>
               <Button color='primary' variant="outlined" size='small'><Link to={"/lecturers"}>Zpět</Link></Button>
             </div>
 
-            <div className="bg-white flex flex-col max-w-[90rem] w-full px-20 py-16 rounded min-h-[80%] md:h-[100%] mx-6">
+            <div className="bg-white flex flex-col max-w-[90rem] w-full px-20 sm:px-5 py-16 rounded min-h-[80%] md:h-[100%] mx-6">
 
-              <div className='flex justify-between flex-wrap mb-6'>
+              <div className='flex justify-between flex-wrap mb-6 gap-2'>
                 <div className="col-span-2 justify-between flex flex-col gap-4">
 
                   <div>
@@ -66,7 +67,7 @@ export function Profil() {
                     </div>
 
                     <div className='flex flex-wrap w-full gap-2 self-end md:mt-12'> {/* div okolo všech tagů, ještě idk co s tím bude, třeba nějaký pozadí a stylování */}
-                      {tagy.map((tag, index) => {
+                      {tags.map((tag, index) => {
                         return (
                           <>
                             {index < 100 ? <div key={tag.uuid} className='tag text-white font-bold bg-prussian overflow-hidden px-2 py-1 w-fit max-h-8 rounded-md'>
@@ -110,7 +111,7 @@ export function Profil() {
 
 
                 </div>
-                <div className="aspect-square h-full min-w-[15rem] w-[20%]">
+                <div className="aspect-square h-full min-w-[15rem] w-[20%] lg:m-auto">
                   <img src={pic_url} alt={'Picture of ' + name} className="rounded-md mt-2 w-full min-w-[15rem]" />
                 </div>
 
@@ -142,7 +143,9 @@ export function Profil() {
                   <div dangerouslySetInnerHTML={{ __html: bio }}></div>
                 </div>
               </div>
-
+              <div className='max-w-2/3 self-center'>
+                <ReserveBox tags={tags} cena={cena} />
+              </div>
             </div>
           </div>
         </div></FadeInView>

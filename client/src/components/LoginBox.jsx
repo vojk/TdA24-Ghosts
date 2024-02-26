@@ -2,7 +2,6 @@ import { Paper, Stack, TextField, IconButton, InputAdornment, Button, } from "@m
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useContext, useState } from "react";
-import bcrypt from 'bcryptjs';
 import axios from 'axios'
 
 /* https://medium.com/@sumsourabh14/how-i-created-toggle-password-visibility-with-material-ui-b3fb975b5ce4 */
@@ -46,7 +45,7 @@ const handleLogin = async() => {
     try {
       const response = await axios.post('/api/credentials/checkuser', {
         username,
-        password: bcrypt.hashSync(password, 10)
+        password //přidat hash
       });
       const token = response.data.token;
       localStorage.setItem('token', token);
@@ -58,7 +57,7 @@ const handleLogin = async() => {
 export function LoginBox() {
     return (
         <Paper elevation={5} className="p-3 text-center font-semibold">
-        Přihlaste se a objevte svého vysněného lektora!
+        Přihlaste se začněte vyučovat!
             <Stack className="my-2">
                 <TextField required label="E-Mail" type="email" id="E-Mail"></TextField>
             </Stack>
