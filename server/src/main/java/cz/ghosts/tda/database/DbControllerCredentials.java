@@ -65,7 +65,7 @@ public class DbControllerCredentials {
   }
 
   private int credentialsExists(DbStatement dbStatement, String id) {
-    String checkCredentialsQuery = "SELECT * FROM usercredentials WHERE uuid_ucitele = '" + id + "'";
+    String checkCredentialsQuery = "SELECT * FROM ucitele WHERE uuid_ucitele = '" + id + "'";
     try (PreparedStatement checkCredentialsStatement = dbStatement.connection.prepareStatement(checkCredentialsQuery)) {
       ResultSet result = checkCredentialsStatement.executeQuery();
       if (result.next()) {
@@ -83,7 +83,7 @@ public class DbControllerCredentials {
 
   public boolean checkCredentials(String username, String password) {
     try (Connection connection = DBInterface.getConnection();) {
-        String getPasswordQuery = "SELECT uuid_ucitele FROM usercredentials WHERE username = ? AND password = ?" ;
+        String getPasswordQuery = "SELECT uuid FROM ucitele WHERE username = ? AND password = ?" ;
         try(PreparedStatement getPasswordStatement = connection.prepareStatement(getPasswordQuery)) {
           getPasswordStatement.setString(1, username);
           getPasswordStatement.setString(2, password);

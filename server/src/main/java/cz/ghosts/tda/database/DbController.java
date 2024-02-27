@@ -476,9 +476,6 @@ public class DbController implements DBInterface {
         insertRelationEmailTeacher(new DbStatement(connection, statement), teacher);
         insertRelationTelephoneTeacher(new DbStatement(connection, statement), teacher);
 
-        DbControllerCredentials dbControllerCredentials = new DbControllerCredentials();
-        dbControllerCredentials.addCredentials(teacher.getUsername(), teacher.getPassword(), teacher.getId());
-
         for (String tagId : tagsIds) {
           String insertTeacherTagQuery = ("INSERT OR IGNORE INTO tags_ucitele (id_tag, id_ucitel) VALUES (?, ?)");
           try (PreparedStatement insertTeacherTagStatement = connection.prepareStatement(insertTeacherTagQuery)) {
@@ -488,7 +485,7 @@ public class DbController implements DBInterface {
           }
         }
 
-        String insertTeacherQuery = "INSERT OR IGNORE INTO ucitele (uuid, first_name, middle_name, last_name, picture_url, claim, bio, price_per_hour, id_title_before, id_title_after, id_location) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertTeacherQuery = "INSERT OR IGNORE INTO ucitele (uuid, first_name, middle_name, last_name, picture_url, claim, bio, price_per_hour, id_title_before, id_title_after, id_location, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement insertTeacherStatement = connection.prepareStatement(insertTeacherQuery)) {
           insertTeacherStatement.setString(1, teacher.getId());
           insertTeacherStatement.setString(2, teacher.getFirst_name());
@@ -504,6 +501,8 @@ public class DbController implements DBInterface {
               teacher.getTitle_after()));
           insertTeacherStatement.setString(11, getPlaceId(new DbStatement(connection, statement),
               teacher.getLocation()));
+          insertTeacherStatement.setString(12, teacher.getUsername());
+          insertTeacherStatement.setString(13, teacher.getPassword());
           insertTeacherStatement.executeUpdate();
         }
 
