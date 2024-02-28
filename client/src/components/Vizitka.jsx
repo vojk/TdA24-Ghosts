@@ -4,7 +4,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-
+import DOMPurify from 'dompurify'
 
 export function Vizitka({ lecturerData }) {
   const name = lecturerData.first_name;
@@ -16,8 +16,8 @@ export function Vizitka({ lecturerData }) {
   const cena = lecturerData.price_per_hour;
   const tagy = lecturerData.tags;
   const location = lecturerData.location;
-  const claim = lecturerData.claim;
-  const bio = lecturerData.bio;
+  const claim = DOMPurify.purify(lecturerData.claim);
+  const bio = DOMPurify.purify(lecturerData.bio);
   const telephone_numbers = lecturerData.contact.telephone_numbers;
   const emails = lecturerData.contact.emails;
 

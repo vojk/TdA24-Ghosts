@@ -26,6 +26,8 @@ export default function ReserveBox({ tags, cena }) {
             setDuration(maxHour - time.hour()) //kdyz tu byl setDur(maxDur), tak byl o 1 stav opozden, asi race condition? nvm
         }
     }, [time])
+    
+    
 
     function getDuration(e) {
         setDuration(parseInt(e.target.value))
@@ -37,8 +39,6 @@ export default function ReserveBox({ tags, cena }) {
             alert('odešli formulář s' + document.getElementById('Telefon').value + ' a ' + document.getElementById('E-Mail').value);
         }}>
             <Paper elevation={5} className="p-3 text-center flex-col font-semibold flex lg:flex-col">
-
-
 
                 <div className="flex lg:block justify-between">
                     <div className="w-full">
@@ -60,7 +60,7 @@ export default function ReserveBox({ tags, cena }) {
 
                         <Autocomplete aria-required required className='bg-white p-2 rounded-xl'
                             multiple
-                            id="lector-tags"
+                            id="Lector-tags"
                             options={tags}
                             getOptionLabel={(option) => option.name}
                             isOptionEqualToValue={(option, value) => option.uuid === value.uuid}

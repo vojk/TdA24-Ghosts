@@ -7,10 +7,12 @@ import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import ReserveBox from './ReserveBox'
+import DOMPurify from 'dompurify'
 
 export function Profil() {
   const { UUID } = useParams();
   const [data, setData] = useState(null);
+  
 
   useEffect(() => {
     async function fetchData() {
@@ -38,10 +40,12 @@ export function Profil() {
     const cena = data.price_per_hour;
     const tags = data.tags;
     const location = data.location;
-    const claim = data.claim;
-    const bio = data.bio;
+    const claim = DOMPurify.sanitize(data.claim);
+    const bio = DOMPurify.sanitize(data.bio);
     const telephone_numbers = data.contact.telephone_numbers;
     const emails = data.contact.emails;
+
+    
 
     return (
       <FadeInView>

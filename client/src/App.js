@@ -18,6 +18,7 @@ import { Profil } from "./components/Profil";
 
 import { About } from "./components/About";
 import { LoginPage } from "./components/LoginPage";
+import { RegisterPage } from "./components/RegisterPage";
 
 import Footer from "./components/footer";
 
@@ -71,11 +72,12 @@ function App() {
                   <Routes>
                     <Route path="/home" element={<ListVizitek />} ></Route>
                     <Route path="/login" element={<LoginPage />} ></Route>
+                    <Route path="/register" element={<RegisterPage />} ></Route>
                     <Route path="/" index element={<About />} ></Route>
                     <Route path="/about" index element={<About />} ></Route>
                     <Route path="/admin" index element={<LektorAdmin />} ></Route>
                     <Route path="/lecturers" element={<ListVizitek />}></Route>
-                    <Route path="/lecturer" element={<ProfilExample />} ></Route>
+                    {/* <Route path="/lecturer" element={<ProfilExample />} ></Route> */}
                     <Route path="/lecturer" >
                       <Route path=":UUID" element={<Profil />} />
                     </Route>

@@ -30,9 +30,6 @@ export function ListVizitek() {
   //ZMĚŇ PRO LOKÁLNÍ TESTOVÁNÍ NA LOCALHOST:8080
 
 
-
-
-
   /*async fetch --- https://www.webtutpro.com/javascript-fetch-tutorial-send-http-requests-with-react-js-and-async-await-example-1443608c12fa */
   useEffect(() => {
     async function fetchData() {
@@ -46,7 +43,6 @@ export function ListVizitek() {
       setFilterPriceRange([Math.min(...price), Math.max(...price)])
       setFilterPrice([Math.min(...price), Math.max(...price)])
       setData(data);
-      console.log(data);
     }
     fetchData();
   }, []);
@@ -60,7 +56,7 @@ export function ListVizitek() {
       });
 
       setTags(data);
-      console.log(data);
+      
     }
     fetchData();
 
@@ -76,7 +72,6 @@ export function ListVizitek() {
       });
 
       setLocations(data);
-      console.log(data);
     }
     fetchData();
   }, []);
@@ -85,8 +80,6 @@ export function ListVizitek() {
     let objectLocation = locations.map(function (elem) {
       return { "name": elem };
     })
-    console.log(objectLocation)
-    console.log(tags)
     return objectLocation
   } /* ten multiselect chce objekty, locations jsou array, tak jim přidám "name": a je to v chillu -- edit: zmíněný multiselect nahrazen, ale stále využíváno*/
 
@@ -104,7 +97,6 @@ export function ListVizitek() {
     return tagsMatch && citiesMatch && priceMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */
   }
   );
-  console.log(filteredDATA)
 
 
   //MUI pagination
@@ -120,7 +112,7 @@ export function ListVizitek() {
   return (
     <>
       <div className="flex h-full w-full px-8">
-        <div className='flex h-full w-full flex-col items-center mt-6'>
+      {typeof data === 'undefined' ? 'Nejsou data' : <div className='flex h-full w-full flex-col items-center mt-6'>
           <div className='mt-10 mb-5 flex md:flex-col justify-between w-3/4 md:w-full flex-wrap'>
             <div><h1 className='font-odstavec text-4xl text-white'>Vyhledat lektora</h1></div>
             
@@ -234,7 +226,8 @@ export function ListVizitek() {
             </FadeInView>
           </div> : <div className='[&_button]:bg-white'><Pagination count={Math.ceil(lectorCount/lectorsPerPage)} page={page} onChange={handleChange} showFirstButton showLastButton color="primary" variant="outlined" size='large'/></div>  
 }
-        </div>
+        </div>}
+        
       </div>
     </>
   );
