@@ -23,8 +23,8 @@ public class TeachersTDO extends TeacherId<String> {
   private String location = null;
   private String claim = null;
   private String bio = null;
-  private String username=null;
-  private String password=null;
+  private String username = null;
+  private String password = null;
 
   private List<TagsTDO> tags = new ArrayList<>();
   private int price_per_hour = 0;
@@ -119,11 +119,16 @@ public class TeachersTDO extends TeacherId<String> {
   }
 
   public String getUsername() {
-    return first_name+middle_name+last_name;
+    return first_name + middle_name + last_name;
   }
 
-@JsonIgnore
+  @JsonIgnore
   public String getPassword() {
     return password;
+  }
+
+  @JsonProperty("password")
+  public void setPassword(String password) {
+    this.password = password;
   }
 }
