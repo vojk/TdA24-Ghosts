@@ -15,17 +15,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 
-class DbStatement {
-  public Connection connection;
-  public Statement statement;
 
-  public DbStatement(Connection connection, Statement statement) {
-    this.connection = connection;
-    this.statement = statement;
-  }
-}
 
 public class DbController implements DBInterface {
+  class DbStatement {
+    public Connection connection;
+    public Statement statement;
+    public DbStatement(Connection connection, Statement statement) {
+      this.connection = connection;
+      this.statement = statement;
+    }
+  }
+
   public void createDatabase() {
     InitDatabase initDatabase = new InitDatabase();
     initDatabase.checkExistenceOfDb();
@@ -228,7 +229,7 @@ public class DbController implements DBInterface {
     }
     return null;
   }
-
+  //TODO vrátit username (+ password)
   public List<TeachersTDO> getAllTeachers(String id) {
     List<TeachersTDO> teachers = new ArrayList<>();
     try (Connection connection = DBInterface.getConnection();) {
@@ -253,7 +254,7 @@ public class DbController implements DBInterface {
                 result.getString("picture_url"), getLocationName(result.getString("id_location")),
                 result.getString("claim"), result.getString("bio"),
                 getTags(result.getString("uuid")), result.getInt("price_per_hour"),
-                new Contact(getEmails(result.getString("uuid")), getTelephoneNumbers(result.getString("uuid")))));
+                new Contact(getEmails(result.getString("uuid")), getTelephoneNumbers(result.getString("uuid"))), result.getString("password")));
             System.out.print(result.getString("first_name") + " | ");
             System.out.println(result.getString("last_name"));
           }
@@ -484,7 +485,7 @@ public class DbController implements DBInterface {
           }
         }
 
-        String insertTeacherQuery = "INSERT OR IGNORE INTO ucitele (uuid, first_name, middle_name, last_name, picture_url, claim, bio, price_per_hour, id_title_before, id_title_after, id_location) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertTeacherQuery = "INSERT OR IGNORE INTO ucitele (uuid, first_name, middle_name, last_name, picture_url, claim, bio, price_per_hour, id_title_before, id_title_after, id_location, username, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement insertTeacherStatement = connection.prepareStatement(insertTeacherQuery)) {
           insertTeacherStatement.setString(1, teacher.getId());
           insertTeacherStatement.setString(2, teacher.getFirst_name());
@@ -500,6 +501,8 @@ public class DbController implements DBInterface {
               teacher.getTitle_after()));
           insertTeacherStatement.setString(11, getPlaceId(new DbStatement(connection, statement),
               teacher.getLocation()));
+          insertTeacherStatement.setString(12, teacher.getUsername());
+          insertTeacherStatement.setString(13, teacher.getPassword());
           insertTeacherStatement.executeUpdate();
         }
 
@@ -553,7 +556,7 @@ public class DbController implements DBInterface {
         insertTitle(new DbStatement(connection, statement), teachersTDO.getTitle_after());
         insertPlace(new DbStatement(connection, statement), teachersTDO.getLocation());
 
-        String updateTeacherQuery = "UPDATE ucitele SET first_name = ?, middle_name = ?, last_name = ?, picture_url = ?, claim = ?, bio = ?, price_per_hour = ?, id_title_before = ?, id_title_after = ?, id_location = ? WHERE uuid = ?";
+        String updateTeacherQuery = "UPDATE ucitele SET first_name = ?, middle_name = ?, last_name = ?, picture_url = ?, claim = ?, bio = ?, price_per_hour = ?, id_title_before = ?, id_title_after = ?, id_location = ?, password = ? WHERE uuid = ?";
         try (PreparedStatement updateTeacherStatement = connection.prepareStatement(updateTeacherQuery)) {
           updateTeacherStatement.setString(1, teachersTDO.getFirst_name() == null ? teacher.getFirst_name()
               : teachersTDO.getFirst_name());
@@ -577,7 +580,9 @@ public class DbController implements DBInterface {
               teachersTDO.getTitle_after() == null ? teacher.getTitle_after() : teachersTDO.getTitle_after()));
           updateTeacherStatement.setString(10, getPlaceId(new DbStatement(connection, statement),
               teachersTDO.getLocation()));
-          updateTeacherStatement.setString(11, teachersTDO.getId());
+          updateTeacherStatement.setString(11, teachersTDO.getPassword() == null ? teacher.getPassword()
+                  : teachersTDO.getPassword());
+          updateTeacherStatement.setString(12, teachersTDO.getId());
           updateTeacherStatement.executeUpdate();
         }
 

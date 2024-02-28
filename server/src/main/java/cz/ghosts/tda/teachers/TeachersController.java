@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,14 +43,17 @@ public class TeachersController {
   @PostMapping(path = { "/", "" })
   public ResponseEntity<Object> postMethodName(@RequestBody TeachersTDO entity) {
     System.out.println(entity);
+
     DbController dbController = new DbController();
     if (entity.getFirst_name() == null || entity.getFirst_name().length() <= 0 || entity.getLast_name() == null
         || entity.getLast_name().length() <= 0 || entity.getContact() == null || entity.getContact().getEmails() == null
         || entity.getContact().getEmails().size() <= 0 || entity.getContact().getTelephoneNumbers() == null
-        || entity.getContact().getTelephoneNumbers().size() <= 0) {
+        || entity.getContact().getTelephoneNumbers().size() <= 0
+        || entity.getPassword() == null) {
       return ResponseEntity.status(400).body(new ArrayList<>());
     }
     String teacherId = dbController.addTeacher(entity);
+
     return ResponseEntity.ok(dbController.getAllTeachers(teacherId).get(0));
   }
 
@@ -68,7 +70,7 @@ public class TeachersController {
     if (entity.getFirst_name() == null || entity.getFirst_name().length() <= 0 || entity.getLast_name() == null
         || entity.getLast_name().length() <= 0 || entity.getContact() == null || entity.getContact().getEmails() == null
         || entity.getContact().getEmails().size() <= 0 || entity.getContact().getTelephoneNumbers() == null
-        || entity.getContact().getTelephoneNumbers().size() <= 0) {
+        || entity.getContact().getTelephoneNumbers().size() <= 0 || entity.getPassword() == null) {
       return ResponseEntity.status(400).body(new ArrayList<>());
     }
     String teacherId = dbController.updateTeacher(entity);
