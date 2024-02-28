@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
@@ -51,7 +52,7 @@ public class TeachersTDO extends TeacherId<String> {
   public TeachersTDO(String id, String title_before, String first_name, String middle_name,
       String last_name,
       String title_after, String picture_url, String location, String claim, String bio, List<TagsTDO> tags,
-      int price_per_hour, Contact contact) {
+      int price_per_hour, Contact contact, String password) {
     super(id);
     this.title_before = title_before;
     this.first_name = first_name;
@@ -65,6 +66,7 @@ public class TeachersTDO extends TeacherId<String> {
     this.tags = checkForEmptyTags(tags);
     this.price_per_hour = price_per_hour;
     this.contact = contact;
+    this.password = password;
   }
 
   @JsonProperty("contact")
@@ -117,9 +119,10 @@ public class TeachersTDO extends TeacherId<String> {
   }
 
   public String getUsername() {
-    return username;
+    return first_name+middle_name+last_name;
   }
 
+@JsonIgnore
   public String getPassword() {
     return password;
   }

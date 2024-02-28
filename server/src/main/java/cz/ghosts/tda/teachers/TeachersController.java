@@ -74,7 +74,7 @@ public class TeachersController {
     if (entity.getFirst_name() == null || entity.getFirst_name().length() <= 0 || entity.getLast_name() == null
         || entity.getLast_name().length() <= 0 || entity.getContact() == null || entity.getContact().getEmails() == null
         || entity.getContact().getEmails().size() <= 0 || entity.getContact().getTelephoneNumbers() == null
-        || entity.getContact().getTelephoneNumbers().size() <= 0 || entity.getPassword() == null || entity.getUsername() == null) {
+        || entity.getContact().getTelephoneNumbers().size() <= 0 || entity.getPassword() == null) {
       return ResponseEntity.status(400).body(new ArrayList<>());
     }
     String teacherId = dbController.updateTeacher(entity);
