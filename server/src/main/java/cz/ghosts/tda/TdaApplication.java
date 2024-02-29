@@ -15,8 +15,6 @@ public class TdaApplication {
     DbController dbController = new DbController();
     System.out.println("Starting TDA application");
     dbController.createDatabase();
-    CredentialsGenerator credentialsGenerator = new CredentialsGenerator();
-    credentialsGenerator.generator("Ondřej","Motl");
     // dbController.addTeacher();
   }
 
