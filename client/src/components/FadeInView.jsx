@@ -1,12 +1,12 @@
 import { useRef } from "react";
 import { useInView } from "framer-motion";
 
-export default function FadeInView({ children }) {
+export default function FadeInView({ children, className }) {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true });
   
     return (
-      <section ref={ref}>
+      <section ref={ref} className={className}>
         <span
           style={{
             transform: isInView ? "none" : "translateX(-200px)",

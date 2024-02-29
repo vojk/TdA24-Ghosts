@@ -12,10 +12,12 @@ import DOMPurify from 'dompurify'
 export function Profil() {
   const { UUID } = useParams();
   const [data, setData] = useState(null);
-  
+  const [loading, setLoading] = useState(1);
+
 
   useEffect(() => {
     async function fetchData() {
+      let exception = false;
       try {
         const response = await fetch(/*"http://localhost:8080/api/lecturers/" + UUID */ "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" + UUID);
         const result = await response.json();
@@ -23,14 +25,22 @@ export function Profil() {
       }
       catch (error) {
         console.error("fetch:", error);
+        setLoading(2)
+        exception = true;
+      } if (!exception) {
+        setLoading(0)
       };
     }
     fetchData();
   }, [UUID]);
 
-  if (!data) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Vydržte, než se stránka připraví.</div></FadeInView> //zneužiju tenhle Fade efekt a hláška se ukáže zpožděně, tak aspoň nebude otravovat když je zpoždění <0.3s
+  console.log(data)
 
-  if (data) {
+  if (loading === 1) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Vydržte, než se stránka připraví.</div></FadeInView> //zneužiju tenhle Fade efekt a hláška se ukáže zpožděně, tak aspoň nebude otravovat když je zpoždění <0.3s
+  if (loading === 2) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Nepodařilo se nám získat data požadovaného lektora.</div></FadeInView>
+  //snad to bude fungovat
+
+  if (loading === 0) {
     const name = data.first_name;
     const mid_name = data.middle_name;
     const surname = data.last_name;
@@ -45,7 +55,7 @@ export function Profil() {
     const telephone_numbers = data.contact.telephone_numbers;
     const emails = data.contact.emails;
 
-    
+
 
     return (
       <FadeInView>

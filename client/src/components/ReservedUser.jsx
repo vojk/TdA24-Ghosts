@@ -8,10 +8,12 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import ConfirmDialog from './ConfirmDialog';
 
+import { VCALENDAR, VEVENT } from 'ics-js';
+
 export default function ReservedUser({ accepted }) {
     //data budou dodána podle zvoleného datumu
     const userData = {
-        date: '01-02-2024',
+        date: '2024-01-02',
         name: 'Jan',
         surname: 'Novák',
         email: 'example@example.com',
@@ -34,9 +36,29 @@ export default function ReservedUser({ accepted }) {
         setIsOpened(current => !current)
     }
 
+
+    
+   
+    const cal = new VCALENDAR();
+    cal.addProp('VERSION', 2) // Number(2) is converted to '2.0'
+    cal.addProp('PRODID', 'Teacher Digital Agency');
+
+    const event = new VEVENT();
+    event.addProp('UID')
+    event.addProp('DTSTAMP', dayjs(userData.date+' '+userData.min_time).toDate(), { VALUE: 'DATE-TIME' });
+    event.addProp('ATTENDEE', null, {
+        CN: userData.name+' '+userData.surname,
+        RSVP: 'TRUE:mailto:'+userData.email
+    })
+
+    cal.addComponent(event);
+    console.log(cal.toString())
+    const downloadFile = window.URL.createObjectURL(cal.toBlob())
+
     return (
 
         <>
+        <a href={downloadFile}>stáhnout to kalendáře (.ics)</a>
             <div className="bg-sky p-3 rounded-md flex flex-wrap flex-col max-w-xl w-full">
                 <div className='flex w-full flex-wrap justify-between gap-2'>
                     <div className='flex-1 min-w-full'>

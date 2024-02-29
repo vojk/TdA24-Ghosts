@@ -6,7 +6,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar, TimeClock } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import { Switch } from "@mui/material";
+
+
 import('dayjs/locale/cs')
+
 
 export default function ReserveBox({ tags, cena }) {
     //const today = dayjs();
@@ -26,12 +30,18 @@ export default function ReserveBox({ tags, cena }) {
             setDuration(maxHour - time.hour()) //kdyz tu byl setDur(maxDur), tak byl o 1 stav opozden, asi race condition? nvm
         }
     }, [time])
-    
-    
+
+
 
     function getDuration(e) {
         setDuration(parseInt(e.target.value))
     }
+
+    //Switch
+    const [checked, setChecked] = useState(true);
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
 
     return (
         <form onSubmit={(e) => {
@@ -56,6 +66,13 @@ export default function ReserveBox({ tags, cena }) {
 
                         <Stack className="my-2">
                             <TextField required label="Telefonní číslo" type="tel" id="Telefon"></TextField>
+                        </Stack>
+
+                        <Stack className="my-2">
+
+                            <Switch
+                                checked={checked}
+                                onChange={handleChange} />
                         </Stack>
 
                         <Autocomplete aria-required required className='bg-white p-2 rounded-xl'
@@ -114,7 +131,7 @@ export default function ReserveBox({ tags, cena }) {
                         <label htmlFor="Doba">Počet hodin:</label>
                         <input type="number" name="Doba" id="Doba" value={duration} onChange={getDuration} max={maxDuration} min={1} className="max-w-[3rem] text-center bg-sunglow rounded-md"></input>
                     </div>
-                    <p className="italic mb-3">Cena: { cena * duration}</p>
+                    <p className="italic mb-3">Cena: {cena * duration}</p>
                     <p className="text-2xl"> <span className="text-prussian">{date.$D}.{date.$M}. {date.$y}</span> <br /><span className="text-prussian">{time.hour()}:00</span> - <span className="text-prussian">{time.hour() + duration}:00</span></p>
                 </Stack>
 

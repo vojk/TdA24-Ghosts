@@ -11,13 +11,37 @@ import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import { Button } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Stack, TextField, Autocomplete, Accordion, AccordionSummary } from '@mui/material';
 
-import { Stack, TextField, Autocomplete } from '@mui/material';
+
+
+
 
 export default function LektorAdmin() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const [date, setDate] = useState(dayjs());
+    console.log(dayjs(date).toISOString().slice(0, 10))
+
+    //date je vybrané datum v kalendáři, bude použito k třídění studentských rezervací
+
     const tomorrow = dayjs().add(1, 'day');
-    console.log(date.$D, date.$M, date.$y)
+    //console.log(date.$D, date.$M, date.$y)
 
 
     //data pro test
@@ -57,8 +81,12 @@ export default function LektorAdmin() {
 
     const [value, setValue] = useState(tags); //tagy ve value se mohou poslat do db, zbytek přes form name/id ? 
 
+
+
+
     return (
         <>
+        
             <div className='mt-2 text-white text-center'><p className='text-3xl font-nadpis'>Vítejte na Vašem admin panelu</p><p className='text-sm'>Své údaje lze aktualizovat níže</p></div>
             <div className='text-white text-left text-3xl font-nadpis'>Lidé vidí váš profil takto:</div>
             <div className='min-h-[20rem] mr-2 bg-white rounded-lg p-2'>
@@ -134,72 +162,75 @@ export default function LektorAdmin() {
             </div>
 
             <div className='flex justify-center flex-col items-center mt-4'>
-            <p className='text-white text-3xl font-nadpis'>Upravte si své údaje podle potřeby</p>
-                <Stack className="my-2 max-w-lg w-full self mr-2 p-2 bg-white rounded-lg flex gap-2">
-                    <TextField required name='Name' label="Jméno" type="text" id="Name" defaultValue={name}></TextField>
-                    <TextField required name='Mid_name' label="Prostřední jméno" type="text" id="Mid_name" defaultValue={mid_name}></TextField>
-                    <TextField required name="Surname" label="Příjmení" type="text" id="Surname" defaultValue={surname}></TextField>
-                    <TextField required name='Title_b' label="Titul před jménem" type="text" id="Title_b" defaultValue={title_b}></TextField>
-                    <TextField required name='Title_a' label="Titul před jménem" type="text" id="Title_a" defaultValue={title_a}></TextField>
-                    <TextField required name='Pic_url' label="Adresa obrázku" type="url" id="Pic_url" defaultValue={pic_url}></TextField>
-                    <TextField required name='Price' InputProps={{ inputProps: { min: 0 } }} label="Cena za 60 minut" type="number" id="Price" defaultValue={cena}></TextField>
-                    <TextField required name='Location' label="Lokace" type="text" id="Location" defaultValue={location}></TextField>
-                    <TextField required name='Claim' label="Claim" type="text" id="Claim" defaultValue={claim}></TextField>
-                    <TextField required name='Bio' multiline maxRows={4} label="Bio" type="text" id="Bio" defaultValue={bio}></TextField>
+                <p className='text-white text-3xl font-nadpis text-center'>Upravte si své údaje podle potřeby</p>
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}><div className='flex w-full font-nadpis text-xl px-8'>Začněte upravovat rozbalením nabídky</div></AccordionSummary>
+                    <Stack className="my-2 max-w-lg w-full self mr-2 p-2 bg-white rounded-lg flex gap-2">
+                        <TextField required name='Name' label="Jméno" type="text" id="Name" defaultValue={name}></TextField>
+                        <TextField required name='Mid_name' label="Prostřední jméno" type="text" id="Mid_name" defaultValue={mid_name}></TextField>
+                        <TextField required name="Surname" label="Příjmení" type="text" id="Surname" defaultValue={surname}></TextField>
+                        <TextField required name='Title_b' label="Titul před jménem" type="text" id="Title_b" defaultValue={title_b}></TextField>
+                        <TextField required name='Title_a' label="Titul před jménem" type="text" id="Title_a" defaultValue={title_a}></TextField>
+                        <TextField required name='Pic_url' label="Adresa obrázku" type="url" id="Pic_url" defaultValue={pic_url}></TextField>
+                        <TextField required name='Price' InputProps={{ inputProps: { min: 0 } }} label="Cena za 60 minut" type="number" id="Price" defaultValue={cena}></TextField>
+                        <TextField required name='Location' label="Lokace" type="text" id="Location" defaultValue={location}></TextField>
+                        <TextField required name='Claim' label="Claim" type="text" id="Claim" defaultValue={claim}></TextField>
+                        <TextField required name='Bio' multiline maxRows={4} label="Bio" type="text" id="Bio" defaultValue={bio}></TextField>
 
-                    <Autocomplete aria-required required className='bg-white p-2 rounded-xl'
-                        multiple
-                        id="Lector-tags"
-                        name="Lector-tags"
-                        options={allTags}
-                        getOptionLabel={(option) => option.name}
-                        isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
-                        disableCloseOnSelect={true}
-                        value={value}
-                        defaultValue={tags}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                variant="standard"
-                                label="Vyberte tagy, o které máte zájem"
-                                placeholder="Tagy"
-                                inputProps={{
-                                    ...params.inputProps,
-                                    required: value.length === 0
-                                }}
-                                required={true}
-                            />
-                        )}
-                        onChange={(event, value) => {
-                            console.log(value);
-                            setValue(value)
+                        <Autocomplete aria-required required className='bg-white p-2 rounded-xl'
+                            multiple
+                            id="Lector-tags"
+                            name="Lector-tags"
+                            options={allTags}
+                            getOptionLabel={(option) => option.name}
+                            isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
+                            disableCloseOnSelect={true}
+                            value={value}
+                            defaultValue={tags}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    variant="standard"
+                                    label="Vyberte tagy, o které máte zájem"
+                                    placeholder="Tagy"
+                                    inputProps={{
+                                        ...params.inputProps,
+                                        required: value.length === 0
+                                    }}
+                                    required={true}
+                                />
+                            )}
+                            onChange={(event, value) => {
+                                console.log(value);
+                                setValue(value)
 
-                        }} />
+                            }} />
 
-                    <div className='flex w-full gap-4 flex-wrap'>
-                        {emails.map((element, index) => {
-                            return (
-                                <>
-                                    <TextField required name={'Email' + (index > 0 ? index : '')} label="Email" type="email" id={'Email' + (index > 0 ? index : '')} className='w-full' defaultValue={element}></TextField>
-                                </>
-                            )
-                        })}
-                    </div>
-                    <div className='flex w-full gap-4 flex-wrap'>
-                        {telephone_numbers.map((element, index) => {
-                            return (
-                                <>
-                                    <TextField required name={'tel' + (index > 0 ? index : '')} label="tel" type="tel" id={'tel' + (index > 0 ? index : '')} className='w-full' defaultValue={element}></TextField>
-                                </>
-                            )
-                        })}
-                    </div>
-                    <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-evenly"} className="my-2">
-                        <Button type="submit" variant="contained" size="large" color="primary" >
-                            <span className="font-bold">potvrdit</span>
-                        </Button>
+                        <div className='flex w-full gap-4 flex-wrap'>
+                            {emails.map((element, index) => {
+                                return (
+                                    <>
+                                        <TextField required name={'Email' + (index > 0 ? index : '')} label="Email" type="email" id={'Email' + (index > 0 ? index : '')} className='w-full' defaultValue={element}></TextField>
+                                    </>
+                                )
+                            })}
+                        </div>
+                        <div className='flex w-full gap-4 flex-wrap'>
+                            {telephone_numbers.map((element, index) => {
+                                return (
+                                    <>
+                                        <TextField required name={'tel' + (index > 0 ? index : '')} label="tel" type="tel" id={'tel' + (index > 0 ? index : '')} className='w-full' defaultValue={element}></TextField>
+                                    </>
+                                )
+                            })}
+                        </div>
+                        <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-evenly"} className="my-2">
+                            <Button type="submit" variant="contained" size="large" color="primary" >
+                                <span className="font-bold">potvrdit</span>
+                            </Button>
+                        </Stack>
                     </Stack>
-                </Stack>
+                </Accordion>
             </div>
 
             <div className='mt-2 text-white text-center'><p className='text-3xl font-nadpis'>Vaši studenti již čekají na schválení!</p><p className='text-sm'>Po schválení či zamítnutí budou studenti obeznámeni.</p> <p className='text-sm'>Zvolte požadované datum v kalendáři níže.</p></div>
