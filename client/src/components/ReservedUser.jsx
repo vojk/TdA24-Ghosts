@@ -19,8 +19,8 @@ export default function ReservedUser({userData }) {
       surname: 'Novák',
       email: 'example@example.com',
       tel: '123 123 123',
-      min_time: '17:00',
-      max_time: '19:00',
+      min_time: '17',
+      max_time: '19',
       location: 'online',
       tags: [{ 'name': 'Hudba', "uuid": "332e1d6d-f5cb-4e54-97a1-43aeb4b778de" }, { 'name': 'Jsem tag', "uuid": "52fd7f2b-45ef-427a-9087-d2f12f1f7fb4" }, { "name": "Hráč", "uuid": "712644db-89ac-46ef-ac99-783cfae35266" }]
     } */
@@ -52,6 +52,7 @@ export default function ReservedUser({userData }) {
     CN: userData.firstName + ' ' + userData.lastName,
     RSVP: 'TRUE:mailto:' + userData.email
   })
+  event.addProp('LOCATION', userData.location)
 
   cal.addComponent(event);
   console.log(cal.toString())
