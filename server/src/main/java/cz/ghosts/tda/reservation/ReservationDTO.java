@@ -9,6 +9,8 @@ import java.util.Collections;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import cz.ghosts.tda.objects.TeacherId;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
 
@@ -17,7 +19,7 @@ public class ReservationDTO extends TeacherId<String> {
   private String firstName;
   private String middleName;
     private String lastName;
-  @JsonFormat(pattern = "yyyy-mm-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date date_of_reserv;
   private int from_time;
   private int to_time;
@@ -42,34 +44,6 @@ public class ReservationDTO extends TeacherId<String> {
     return tags;
   }
 
-  /*public ReservationDTO(String id, Date date_of_reserv, int from_time, int to_time,
-                        String location, List<TagsTDO> tags, int potvrzen) {
-    super(id);
-    this.date_of_reserv = date_of_reserv;
-    this.from_time = from_time;
-    this.to_time = to_time;
-    this.location = location;
-    this.tags = checkForEmptyTags(tags);
-    this.potvrzen = potvrzen;
-
-  }
-
-  public ReservationDTO(String id, String teacher_id, Date date_of_reserv, int from_time, int to_time,
-                        String location, List<TagsTDO> tags, int potvrzen) {
-
-    super(id);
-
-    this.teacher_id = teacher_id;
-    this.date_of_reserv = date_of_reserv;
-    this.from_time = from_time;
-    this.to_time = to_time;
-    this.location = location;
-    this.tags = checkForEmptyTags(tags);
-    this.potvrzen = potvrzen;
-
-  }*/
-
-
 
   public ReservationDTO(String id, String teacher_id, Date date_of_reserv, int from_time, int to_time,
                         String location, List<TagsTDO> tags, String email, int prefix, int telephone, String firstName, String middleName, String lastName,  int souhlas) {
@@ -86,13 +60,13 @@ public class ReservationDTO extends TeacherId<String> {
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
+    this.potvrzeno = potvrzeno;
     this.souhlas = souhlas;
   }
 
   public ReservationDTO(String id, int souhlas){
     super(id);
     this.souhlas = souhlas;
-
   }
 
   public String getTeacher_id() {
