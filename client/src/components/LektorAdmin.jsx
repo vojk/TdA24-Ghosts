@@ -66,7 +66,7 @@ export default function LektorAdmin() {
 
   }, [])
 
-
+  // console.log(dayjs(date).toISOString().slice(0, 10))
 
   //data pro test
   const data = {
@@ -105,6 +105,16 @@ export default function LektorAdmin() {
 
   const [value, setValue] = useState(tags); //tagy ve value se mohou poslat do db, zbytek přes form name/id ? 
 
+  const stringdate = dayjs(date).toISOString().slice(0, 10);
+
+  const filteredDATA = userReservations.filter((node) => {
+    console.log(node);
+    return node.date_of_reserv === stringdate;
+  }
+  );
+
+  console.log(filteredDATA)
+  console.log(stringdate)
 
 
   return (
@@ -260,7 +270,7 @@ export default function LektorAdmin() {
       <div className='mt-4 flex flex-row md:flex-col-reverse justify-between gap-2 flex-wrap-reverse'>
         <div className='flex flex-1 items-center flex-col gap-2'>
 
-          {userReservations.length === 0 ? null : userReservations.map((index, data) => (
+          {userReservations.length === 0 ? null : filteredDATA.map((index, data) => (
             <div><FadeInView><ReservedUser userData={data} key={index} /></FadeInView></div>))}
 
 
