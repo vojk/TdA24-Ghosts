@@ -40,6 +40,12 @@ const theme = createTheme({
     secondary: {
       main: '#333333',
     },
+    success: {
+      main: '#00384D',
+    },
+    text: {
+      main: '#ffffff'
+    },
   },
   typography: {
     fontFamily: [

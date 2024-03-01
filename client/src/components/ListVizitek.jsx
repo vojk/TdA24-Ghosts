@@ -8,7 +8,7 @@ import { InputNumber } from 'primereact/inputnumber';
 
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Autocomplete, TextField, Stack, Slider, Accordion, AccordionDetails, AccordionSummary, Fade, Button, Pagination } from '@mui/material';
+import { Autocomplete, TextField, Stack, Slider, Accordion, AccordionDetails, AccordionSummary, Fade, Button, Pagination, Input, FormControl, InputLabel, Select, MenuItem, Chip, Box } from '@mui/material';
 
 
 export function ListVizitek() {
@@ -26,7 +26,8 @@ export function ListVizitek() {
   }, [filterCities, filterPrice, filterTags])
 
 
-  var fetchURL = "http://7d17dc13931b9d11.app.tourdeapp.cz/api"
+  //var fetchURL = "http://7d17dc13931b9d11.app.tourdeapp.cz/api"
+  var fetchURL = "http://localhost:8080/api"
   //ZMĚŇ PRO LOKÁLNÍ TESTOVÁNÍ NA LOCALHOST:8080
 
 
@@ -93,10 +94,14 @@ export function ListVizitek() {
   }
 
   const filteredDATA = data.filter((node) => {
+    console.log(node);
     const tagsMatch = (filterTags.length && 0) || filterTags.every((filterTag) => node.tags.map((tag) => tag.uuid).includes(filterTag.uuid));
-    const citiesMatch = (filterCities.length !== 0) ? filterCities.some((filterCity) => node.location.includes(filterCity.name)) : filterCities.every((filterCity) => node.location.includes(filterCity.name));
-    const priceMatch = (!(filterPrice[1] <= filterPrice[0]) && filterPrice[1] >= filterPrice[0]) && filterPrice.every(() => node.price_per_hour <= (filterPrice[1]) && node.price_per_hour >= (filterPrice[0]));
-    return tagsMatch && citiesMatch && priceMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */
+    console.log(filterCities);
+    console.log(locations);
+    const citiesMatch = (filterCities.length && 0) || filterCities.every((filterCity) => node.location === (filterCity));
+    console.log(citiesMatch);
+    //const priceMatch = (!(filterPrice[1] <= filterPrice[0]) && filterPrice[1] >= filterPrice[0]) && filterPrice.every(() => node.price_per_hour <= (filterPrice[1]) && node.price_per_hour >= (filterPrice[0]));
+    return tagsMatch && citiesMatch //&& priceMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */
   }
   );
 
@@ -113,126 +118,139 @@ export function ListVizitek() {
   console.log(data)
   return (
     <>
-      <div className="flex h-full w-full px-8">
-        {data.length === 0 ? 
-        <FadeInView className="self-center w-full">
-          <div className='font-nadpis text-4xl text-white'>
-            <div className='font-nadpis text-center'>Nebyl nalezen žádný lektor.</div>
-            <div className='font-nadpis text-center'>Omlouváme se.</div>
-          </div>
-        </FadeInView> : <div className='flex h-full w-full flex-col items-center mt-6 pb-6'>
-          <div className='mt-10 mb-5 flex md:flex-col justify-between w-3/4 md:w-full flex-wrap'>
-            <div><h1 className='font-odstavec text-4xl text-white'>Vyhledat lektora</h1></div>
+      <div className="flex h-full w-full px-10">
+        {data.length === 0 ?
+          <FadeInView className="self-center w-full">
+            <div className='font-nadpis text-4xl text-white'>
+              <div className='font-nadpis text-center'>Nebyl nalezen žádný lektor.</div>
+              <div className='font-nadpis text-center'>Omlouváme se.</div>
+            </div>
+          </FadeInView> : <div className='flex h-full w-full flex-col items-center mt-6 pb-6'>
+            <div className='mt-10 mb-5 flex flex-col justify-between w-full md:w-full flex-wrap'>
+              <div><h1 className='font-odstavec text-4xl text-white'>Vyhledat lektora</h1></div>
 
-            <div className='md:min-w-[20rem] sm:min-w-[10rem] min-w-[30rem] max-w-6xl relative'>
+              <div className='md:min-w-[20rem] sm:min-w-[10rem] min-w-[30rem] max-w-6xl relative flex gap-8'>
 
-              <div className='absolute left-0 sm:relative'>
-                <Accordion className='w-full' >
-                  <AccordionSummary expandIcon={<ExpandMoreIcon />}><div className='flex w-full font-nadpis text-xl px-8'>Filtrujte podle místa, ceny a tagů!</div></AccordionSummary>
-                  <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]" >
-                    <Autocomplete className='bg-white p-2 rounded-xl'
-                      multiple
-                      id="lectors-tags"
-                      options={tags}
-                      getOptionLabel={(option) => option.name}
-                      isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
-                      disableCloseOnSelect={true}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="standard"
-                          label="Vyberte tagy lektorů..."
-                          placeholder="Tagy"
-                        />
-                      )}
-                      onChange={(event, value) => {
-                        console.log(value);
-                        setFilterTags(value);
-                      }}
-                    />
-                  </Stack>
+                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]" >
+                  <FormControl variant='filled' fullWidth className='bg-white p-2 rounded-md'>
+                    <InputLabel id={"lokalita_label"}>Lokalita</InputLabel>
+                    <Select labelId='lokalita_label' id='lokalita_select' multiple value={filterCities} onChange={(event) => {
+                      const {
+                        target: { value },
+                      } = event;
+                      setTags(
+                        // On autofill we get a stringified value.
+                        typeof value === 'string' ? value.split(',') : value.name,
+                      );
 
-                  <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
-                    <Autocomplete className='bg-white p-2 rounded-xl'
-                      multiple
-                      id="lectors-cities"
-                      options={objectLocations()}
-                      getOptionLabel={(option) => option.name}
-                      isOptionEqualToValue={(option, value) => option.name === value.name}
-                      disableCloseOnSelect={true}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          variant="standard"
-                          label="Vyberte požadované lokace..."
-                          placeholder="Města"
-                        />
-                      )}
-                      onChange={(event, value) => {
-                        console.log(value);
-                        setFilterCities(value);
-                      }}
-                    />
-                  </Stack>
+                    }} renderValue={(selected) => (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map((value) => (
+                          <Chip key={value} label={value.name} />
+                        ))}
+                      </Box>
+                    )}>
+                      {tags.map((location) => {
+                        return <MenuItem value={location.uuid}>{location.name}</MenuItem>
+                      })}
+                    </Select>
+                  </FormControl>
+                  <Autocomplete className='bg-white p-2 rounded-md'
+                    multiple
+                    id="lectors-tags"
+                    options={tags}
+                    getOptionLabel={(option) => option.name}
+                    isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
+                    disableCloseOnSelect={true}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="standard"
+                        label="Vyberte tagy lektorů..."
+                        placeholder="Tagy"
+                      />
+                    )}
+                    onChange={(event, value) => {
+                      console.log(value);
+                      setFilterTags(value);
+                    }}
+                  />
+                </Stack>
 
-                  <Stack className="m-auto mt-5 md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] lg:w-full w-[80%] p-5">
-                    <Slider
-                      getAriaLabel={() => 'Škála ceny'}
-                      value={filterPrice}
-                      step={10}
-                      onChange={(event, newValue) => {
-                        setFilterPrice(newValue)
-                      }}
-                      valueLabelDisplay="on"
-                      getAriaValueText={valuetext}
-                      min={filterPriceRange[0]}
-                      max={filterPriceRange[1]}
-                    />
-                    <div className='flex w-full gap-4 self-center sm:gap-1 bg-white md:min-w-[30rem] rounded-full py-1 min-w-[25rem] sm:min-w-[14rem] sm:flex-col'>
-                      <div className='flex justify-center items-center gap-4 sm:gap-1'>
-                        <div className='text-jet'>Minimální cena</div>
-                        <InputNumber value={filterPrice[0]} defaultValue={filterPriceRange[0]} onChange={(e) => { setFilterPrice([e.value, filterPrice[1]]) }} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
-                      </div>
+                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                  <FormControl variant='filled' fullWidth className='bg-white p-2 rounded-md'>
+                    <InputLabel id={"lokalita_label"}>Lokalita</InputLabel>
+                    <Select labelId='lokalita_label' id='lokalita_select' multiple value={filterCities} onChange={(event) => {
+                      const {
+                        target: { value },
+                      } = event;
+                      setFilterCities(
+                        // On autofill we get a stringified value.
+                        typeof value === 'string' ? value.split(',') : value,
+                      );
 
-                      <div className='flex justify-center items-center gap-4 sm:gap-1'>
-                        <div className='text-jet'>Maximální  cena</div>
-                        <InputNumber value={filterPrice[1]} defaultValue={filterPriceRange[1]} onChange={(e) => setFilterPrice([filterPrice[0], e.value])} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
-                      </div>
+                    }} renderValue={(selected) => (
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                        {selected.map((value) => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    )}>
+                      {locations.map((location) => {
+                        return <MenuItem value={location}>{location}</MenuItem>
+                      })}
+                    </Select>
+                  </FormControl>
+                </Stack>
 
-                    </div>
-                  </Stack>
-                </Accordion>
+                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                  <TextField className='bg-white p-2 rounded-md'
+                    size='medium'
+                    variant="filled"
+                    label="Cena od"
+                  />
+                </Stack>
+
+                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                  <TextField
+                    className='bg-white p-2 rounded-md'
+                    size='medium'
+                    variant="filled"
+                    label="Cena do"
+                  />
+                </Stack>
               </div>
+
 
             </div>
 
 
-          </div>
+            <div className='flex flex-wrap gap-10 justify-evenly w-full my-10 h-full'>
+
+              {paging.map((data) => (
+                <div className='h-fit w-[calc(50%-2rem)]'><FadeInView><Vizitka key={data.uuid} lecturerData={data} /></FadeInView></div>))}
+
+            </div>
 
 
-          <div className='flex flex-wrap gap-10 justify-center my-10'>
+            <div className='mb-8'>
+              {(filteredDATA.length === 0 && data.length !== 0) ? <div className='font-nadpis text-4xl text-white'>
+                <FadeInView>
+                  <div className='font-nadpis text-center'>Zadaným parametrům neodpovídá žádný lektor.</div>
+                  <div className='font-nadpis text-center'>Omlouváme se.</div>
+                </FadeInView>
+              </div> : <div className='[&_button]:bg-white'><Pagination count={Math.ceil(lectorCount / lectorsPerPage)} page={page} onChange={handleChange} showFirstButton showLastButton color="primary" variant="outlined" size='large' /></div>
+              }
+            </div>
 
-            {paging.map((data) => (
-              <div className='max-w-[45rem] w-full min-h-[20rem]'><FadeInView><Vizitka key={data.uuid} lecturerData={data} /></FadeInView></div>))}
-
-          </div>
-
-
-          {(filteredDATA.length === 0 && data.length !== 0) ? <div className='font-nadpis text-4xl text-white'>
-            <FadeInView>
-              <div className='font-nadpis text-center'>Zadaným parametrům neodpovídá žádný lektor.</div>
-              <div className='font-nadpis text-center'>Omlouváme se.</div>
-            </FadeInView>
-          </div> : <div className='[&_button]:bg-white'><Pagination count={Math.ceil(lectorCount / lectorsPerPage)} page={page} onChange={handleChange} showFirstButton showLastButton color="primary" variant="outlined" size='large' /></div>
-          }
-        </div>}
+          </div>}
 
       </div>
     </>
   );
 }
 
-
+//max-w-[45rem] w-full min-h-[20rem]
 /*
 <MultiRangeSlider min={0} max={2000} onChange={({ min, max }) => { const price = [min, max]; setFilterPrice(price); }} />
 */

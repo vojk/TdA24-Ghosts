@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
@@ -16,8 +16,8 @@ export function Vizitka({ lecturerData }) {
   const cena = lecturerData.price_per_hour;
   const tagy = lecturerData.tags;
   const location = lecturerData.location;
-  const claim = DOMPurify.purify(lecturerData.claim);
-  const bio = DOMPurify.purify(lecturerData.bio);
+  const claim = lecturerData.claim
+  const bio = lecturerData.bio
   const telephone_numbers = lecturerData.contact.telephone_numbers;
   const emails = lecturerData.contact.emails;
 
@@ -69,8 +69,8 @@ export function Vizitka({ lecturerData }) {
                         </div>
                       </div>
                       <div className="flex flex-col gap-3">
-                        <div className="flex flex-col"><span><PaymentsOutlinedIcon/> {cena} Kč / 60 min</span></div>
-                        <div className="flex flex-col"><span><LocationOnOutlinedIcon/> {location}</span></div>
+                        <div className="flex flex-col"><span><PaymentsOutlinedIcon /> {cena} Kč / 60 min</span></div>
+                        <div className="flex flex-col"><span><LocationOnOutlinedIcon /> {location}</span></div>
                       </div>
 
 
@@ -85,9 +85,7 @@ export function Vizitka({ lecturerData }) {
                   {tagy.map((tag, index) => {
                     return (
                       <>
-                        {index < 3 ? <div key={tag.uuid} className='tag text-white font-bold bg-prussian overflow-hidden px-2 py-1 w-fit max-h-8 rounded-md'>
-                          {tag.name}
-                        </div> : (index === 3) && <div className="text-white bg-prussian font-bold px-2 py-1 aspect-square flex justify-center items-center w-[2rem] rounded-md">...</div>}
+                        <Chip key={tag.uuid} label={tag.name} color="success" />
                       </>
                     )
                   }
@@ -100,7 +98,7 @@ export function Vizitka({ lecturerData }) {
 
         <div className="flex justify-end">
           <a href={"/lecturer/" + lecturerData.uuid}>
-            <Button style={{ width: '6rem', padding: '0.5rem', gap:'.5rem' }} variant="contained" size="large" color="primary"><span className="font-bold">Více </span><ArrowForwardIosIcon fontSize="small"/></Button>
+            <Button style={{ width: '6rem', padding: '0.5rem', gap: '.5rem' }} variant="contained" size="large" color="primary"><span className="font-bold">Více </span><ArrowForwardIosIcon fontSize="small" /></Button>
           </a>
         </div>
 
