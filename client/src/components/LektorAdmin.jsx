@@ -16,8 +16,6 @@ import { Stack, TextField, Autocomplete, Accordion, AccordionSummary } from '@mu
 import axios from 'axios';
 import FadeInView from './FadeInView';
 
-
-
 export default function LektorAdmin() {
 
   const [date, setDate] = useState(dayjs());
@@ -70,7 +68,7 @@ export default function LektorAdmin() {
   // console.log(dayjs(date).toISOString().slice(0, 10))
 
   //data pro test
-  const [data, setData] = useState([])
+  const [data, setData] = useState(null)
   const [loading, setLoading] = useState(1);
 
   useEffect(() => {

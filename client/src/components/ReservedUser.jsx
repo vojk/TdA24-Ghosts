@@ -61,7 +61,7 @@ export default function ReservedUser({userData }) {
   return (
 
     <>
-      <a href={downloadFile}>stáhnout to kalendáře (.ics)</a>
+      <a href={downloadFile}>stáhnout do kalendáře (.ics)</a>
 
       <div className="bg-white max-w-2xl min-w-[20rem] p-3 px-10 rounded-md flex flex-wrap flex-col w-full">
         <div className='flex w-full flex-wrap justify-between gap-2'>
