@@ -19,9 +19,6 @@ public class ReservationController {
   @Autowired
   EmailSender emailSender;
 
-@RestController
-@RequestMapping("/api/reservation")
-public class ReservationController {
   @PostMapping("/{id}")
   public ResponseEntity<Object> getReservationForTeacher(@PathVariable String id,
       @RequestBody ReservationDTO entity) {
@@ -37,14 +34,12 @@ public class ReservationController {
     emailSender.sendEmailInfoAboutPreReserveInformativeClient(entity.getEmail(), "Předběžné potvrzení schůzky", entity.getFirstName(),
             entity.getMiddleName(), entity.getLastName(), teacher.getLast_name(), entity.getDate_of_reserv().getDate() + ". " + (entity.getDate_of_reserv().getMonth()+1) + ". " + df.format(entity.getDate_of_reserv()),
             entity.getFrom_time() + ":00", entity.getTo_time()+ ":00");
-    return ResponseEntity.ok().body(entity);
-  }
 
     System.out.println("Potvrzeno: " + entity.getSouhlas());
     dbReservation.createReservation(entity);
     return ResponseEntity.ok().body(entity);
   }
-  
+
   @PutMapping("/updateTeacher")
   public int updateReservation(@RequestBody ReservationConfirmDTO entity){
     System.out.println("funguji");

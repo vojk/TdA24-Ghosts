@@ -41,7 +41,7 @@ public class DbReservation {
                 + reservationDTO.getId() + "', '" + reservationDTO.getDate_of_reserv()
                 + "', " + reservationDTO.getFrom_time() + ", " + reservationDTO.getTo_time() + ", '" + reservationDTO.getLocation()
                 + "', '" + reservationDTO.getEmail() + "', " + reservationDTO.getPrefix() + ", '" + reservationDTO.getTelephone() + "'" + ", '"
-                + reservationDTO.getFirstName() + "'" + ", '" + reservationDTO.getMiddleName() + "'" + ", '" + reservationDTO.getLastName()  + "' , " + reservationDTO.getSouhlas() + ")";
+                + reservationDTO.getFirstName() + "'" + ", '" + reservationDTO.getMiddleName() + "'" + ", '" + reservationDTO.getLastName() + "' , " + reservationDTO.getSouhlas() + ")";
         System.out.println(reservationDTO.getSouhlas());
 
         String sql_to_reservation_ucitele = "INSERT INTO reservation_ucitele (uuid_ucitele, uuid_reservation) VALUES ('"
@@ -258,18 +258,16 @@ public class DbReservation {
         String update = "UPDATE reservation SET potvrzeno = ? WHERE uuid = ?";
         try (Connection connection = DBInterface.getConnection();) {
             try (Statement statement = connection.createStatement();) {
-                try (PreparedStatement updateStatement = connection.prepareStatement(update)){
+                try (PreparedStatement updateStatement = connection.prepareStatement(update)) {
                     updateStatement.setInt(1, reservationDTO.getSouhlas());
                     updateStatement.setString(2, reservationDTO.getId());
                     updateStatement.executeUpdate();
                     return 200;
                 }
-                }
             }
-
-         catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
 
         }
     }
-
+}
