@@ -32,6 +32,25 @@ public class DbController implements DBInterface {
     initDatabase.checkExistenceOfDb();
   }
 
+  public String getTeacherId(String token) {
+    try (Connection connection = DBInterface.getConnection();) {
+      try (Statement statement = connection.createStatement()) {
+        String selectTeacherIdQuery = "SELECT user_id FROM seasson_user WHERE seasson_token = ?";
+        try (PreparedStatement selectTeacherIdStatement = connection.prepareStatement(selectTeacherIdQuery)) {
+          selectTeacherIdStatement.setString(1, token);
+          ResultSet result = selectTeacherIdStatement.executeQuery();
+          if (result.next()) {
+            return result.getString("user_id");
+          }
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("Error adding teacher");
+      System.out.println(e.getMessage());
+    }
+    return null;
+  }
+
   public List<TagsTDO> getAllTags() {
     List<TagsTDO> tagsList = new ArrayList<>();
     try (Connection connection = DBInterface.getConnection();) {
@@ -155,7 +174,7 @@ public class DbController implements DBInterface {
     return telephone_numbers.size() > 0 ? telephone_numbers : null;
   }
 
-  private List<String> getEmails(String uuid) {
+  public List<String> getEmails(String uuid) {
     List<String> emails = new ArrayList<>();
     try (Connection connection = DBInterface.getConnection();) {
       try (Statement statement = connection.createStatement()) {

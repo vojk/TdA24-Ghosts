@@ -38,7 +38,7 @@ function CheckBox({ label, count, onChange, onSelect, onRemove, id }) {
 export default function FilterMenu({ setFilterPrice, filterPriceRange }) {
   return (
     <>
-      <div className="max-w-[25rem] w-full relative">
+      <div className="max-w-[25rem] w-full relative px-6">
         <div className="rounded-full flex bg-white">
           <div className="py-3 flex-[2] px-8">Cena</div>
           <div className="py-3 px-6 pr-8">+</div>
