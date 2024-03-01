@@ -34,7 +34,7 @@ export function ListVizitek() {
   /*async fetch --- https://www.webtutpro.com/javascript-fetch-tutorial-send-http-requests-with-react-js-and-async-await-example-1443608c12fa */
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch(fetchURL + "/lecturers/" /*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/"*/).then(res => {
+      var data = await fetch(fetchURL + "/lecturers/").then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -52,7 +52,7 @@ export function ListVizitek() {
 
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch(fetchURL + "/tag" /*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag"*/).then(res => {
+      var data = await fetch(fetchURL + "/tag").then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -68,7 +68,7 @@ export function ListVizitek() {
 
   useEffect(() => {
     async function fetchData() {
-      var data = await fetch(fetchURL + "/location" /*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/location"*/).then(res => {
+      var data = await fetch(fetchURL + "/location").then(res => {
         return res.json();
       }).catch((error) => {
         console.log(error);
@@ -94,14 +94,10 @@ export function ListVizitek() {
   }
 
   const filteredDATA = data.filter((node) => {
-    console.log(node);
     const tagsMatch = (filterTags.length && 0) || filterTags.every((filterTag) => node.tags.map((tag) => tag.uuid).includes(filterTag.uuid));
-    console.log(filterCities);
-    console.log(locations);
-    const citiesMatch = (filterCities.length && 0) || filterCities.every((filterCity) => node.location === (filterCity));
-    console.log(citiesMatch);
-    //const priceMatch = (!(filterPrice[1] <= filterPrice[0]) && filterPrice[1] >= filterPrice[0]) && filterPrice.every(() => node.price_per_hour <= (filterPrice[1]) && node.price_per_hour >= (filterPrice[0]));
-    return tagsMatch && citiesMatch //&& priceMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */
+    const citiesMatch = (filterCities.length !== 0) ? filterCities.some((filterCity) => node.location.includes(filterCity.name)) : filterCities.every((filterCity) => node.location.includes(filterCity.name));
+    const priceMatch = (!(filterPrice[1] <= filterPrice[0]) && filterPrice[1] >= filterPrice[0]) && filterPrice.every(() => node.price_per_hour <= (filterPrice[1]) && node.price_per_hour >= (filterPrice[0]));
+    return tagsMatch && citiesMatch && priceMatch; /* chatgpt trochu helpnul s returnováním obou filtrů naráz 💪 */
   }
   );
 
@@ -129,101 +125,89 @@ export function ListVizitek() {
             <div className='mt-10 mb-5 flex flex-col justify-between w-full md:w-full flex-wrap'>
               <div><h1 className='font-odstavec text-4xl text-white'>Vyhledat lektora</h1></div>
 
-              <div className='md:min-w-[20rem] sm:min-w-[10rem] min-w-[30rem] max-w-6xl relative flex gap-8'>
+              <div className='md:min-w-[20rem] sm:min-w-[10rem] min-w-[30rem] max-w-6xl relative gap-8'>
 
-                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]" >
-                  <FormControl variant='filled' fullWidth className='bg-white p-2 rounded-md'>
-                    <InputLabel id={"lokalita_label"}>Lokalita</InputLabel>
-                    <Select labelId='lokalita_label' id='lokalita_select' multiple value={filterCities} onChange={(event) => {
-                      const {
-                        target: { value },
-                      } = event;
-                      setTags(
-                        // On autofill we get a stringified value.
-                        typeof value === 'string' ? value.split(',') : value.name,
-                      );
+              <div className='absolute left-0 sm:relative'>
+                <Accordion className='w-full' >
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}><div className='flex w-full font-nadpis text-xl px-8'>Filtrujte podle místa, ceny a tagů!</div></AccordionSummary>
+                  <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]" >
+                    <Autocomplete className='bg-white p-2 rounded-xl'
+                      multiple
+                      id="lectors-tags"
+                      options={tags}
+                      getOptionLabel={(option) => option.name}
+                      isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
+                      disableCloseOnSelect={true}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Vyberte tagy lektorů..."
+                          placeholder="Tagy"
+                        />
+                      )}
+                      onChange={(event, value) => {
+                        console.log(value);
+                        setFilterTags(value);
+                      }}
+                    />
+                  </Stack>
 
-                    }} renderValue={(selected) => (
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((value) => (
-                          <Chip key={value} label={value.name} />
-                        ))}
-                      </Box>
-                    )}>
-                      {tags.map((location) => {
-                        return <MenuItem value={location.uuid}>{location.name}</MenuItem>
-                      })}
-                    </Select>
-                  </FormControl>
-                  <Autocomplete className='bg-white p-2 rounded-md'
-                    multiple
-                    id="lectors-tags"
-                    options={tags}
-                    getOptionLabel={(option) => option.name}
-                    isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
-                    disableCloseOnSelect={true}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        variant="standard"
-                        label="Vyberte tagy lektorů..."
-                        placeholder="Tagy"
-                      />
-                    )}
-                    onChange={(event, value) => {
-                      console.log(value);
-                      setFilterTags(value);
-                    }}
-                  />
-                </Stack>
+                  <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
+                    <Autocomplete className='bg-white p-2 rounded-xl'
+                      multiple
+                      id="lectors-cities"
+                      options={objectLocations()}
+                      getOptionLabel={(option) => option.name}
+                      isOptionEqualToValue={(option, value) => option.name === value.name}
+                      disableCloseOnSelect={true}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="standard"
+                          label="Vyberte požadované lokace..."
+                          placeholder="Města"
+                        />
+                      )}
+                      onChange={(event, value) => {
+                        console.log(value);
+                        setFilterCities(value);
+                      }}
+                    />
+                  </Stack>
 
-                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
-                  <FormControl variant='filled' fullWidth className='bg-white p-2 rounded-md'>
-                    <InputLabel id={"lokalita_label"}>Lokalita</InputLabel>
-                    <Select labelId='lokalita_label' id='lokalita_select' multiple value={filterCities} onChange={(event) => {
-                      const {
-                        target: { value },
-                      } = event;
-                      setFilterCities(
-                        // On autofill we get a stringified value.
-                        typeof value === 'string' ? value.split(',') : value,
-                      );
+                  <Stack className="m-auto mt-5 md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem] lg:w-full w-[80%] p-5">
+                    <Slider
+                      getAriaLabel={() => 'Škála ceny'}
+                      value={filterPrice}
+                      step={10}
+                      onChange={(event, newValue) => {
+                        setFilterPrice(newValue)
+                      }}
+                      valueLabelDisplay="on"
+                      getAriaValueText={valuetext}
+                      min={filterPriceRange[0]}
+                      max={filterPriceRange[1]}
+                    />
+                    <div className='flex w-full gap-4 self-center sm:gap-1 bg-white md:min-w-[30rem] rounded-full py-1 min-w-[25rem] sm:min-w-[14rem] sm:flex-col'>
+                      <div className='flex justify-center items-center gap-4 sm:gap-1'>
+                        <div className='text-jet'>Minimální cena</div>
+                        <InputNumber value={filterPrice[0]} defaultValue={filterPriceRange[0]} onChange={(e) => { setFilterPrice([e.value, filterPrice[1]]) }} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                      </div>
 
-                    }} renderValue={(selected) => (
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((value) => (
-                          <Chip key={value} label={value} />
-                        ))}
-                      </Box>
-                    )}>
-                      {locations.map((location) => {
-                        return <MenuItem value={location}>{location}</MenuItem>
-                      })}
-                    </Select>
-                  </FormControl>
-                </Stack>
+                      <div className='flex justify-center items-center gap-4 sm:gap-1'>
+                        <div className='text-jet'>Maximální  cena</div>
+                        <InputNumber value={filterPrice[1]} defaultValue={filterPriceRange[1]} onChange={(e) => setFilterPrice([filterPrice[0], e.value])} className='px-1 py-2 bg-jet text-white rounded' allowEmpty={true} min={0} placeholder='?' />
+                      </div>
 
-                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
-                  <TextField className='bg-white p-2 rounded-md'
-                    size='medium'
-                    variant="filled"
-                    label="Cena od"
-                  />
-                </Stack>
-
-                <Stack className="w-full md:min-w-[30rem] sm:min-w-[14rem] min-w-[20rem]">
-                  <TextField
-                    className='bg-white p-2 rounded-md'
-                    size='medium'
-                    variant="filled"
-                    label="Cena do"
-                  />
-                </Stack>
+                    </div>
+                  </Stack>
+                </Accordion>
               </div>
-
 
             </div>
 
+            </div>
 
             <div className='flex flex-wrap gap-10 justify-evenly w-full my-10 h-full'>
 
@@ -231,7 +215,6 @@ export function ListVizitek() {
                 <div className='h-fit w-[calc(50%-2rem)]'><FadeInView><Vizitka key={data.uuid} lecturerData={data} /></FadeInView></div>))}
 
             </div>
-
 
             <div className='mb-8'>
               {(filteredDATA.length === 0 && data.length !== 0) ? <div className='font-nadpis text-4xl text-white'>

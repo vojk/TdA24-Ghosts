@@ -62,6 +62,7 @@ export default function LektorAdmin() {
         console.error(error);
       }
     }
+
     fetchData();
 
   }, [])
@@ -69,20 +70,29 @@ export default function LektorAdmin() {
   // console.log(dayjs(date).toISOString().slice(0, 10))
 
   //data pro test
-  const data = {
-    "title_before": null,
-    "first_name": "Karel",
-    "middle_name": null,
-    "last_name": "Kreslíř",
-    "title_after": null,
-    "picture_url": "https://odevzdavani.tourdeapp.cz/app/assets/K.jpg",
-    "location": "Svobodný svět",
-    "claim": "Odraz energie vesmíru se odráží v každé barvě a tvaru."
-    , "bio": "<p>Jsem Karel Kreslíř, umělec, který vnímá svět skrze barvy a energii. Moje práce jsou hluboké reflexe mého vnitřního světa a jeho spojení s vesmírnou energií. V každém díle se snažím přenést kus své duše a přitom zachovat harmonii mezi světlem a stínem, přičemž každý detail má svůj význam. Nevěřili byste, jakou sílu má naše aura!</p><p>Moje nejnovější dílo je kombinace abstraktního umění a skrytých významů, kde každý stín a každá linie reprezentuje část mé cesty a vnímání světa. Podívejte se! [<a href='https://odevzdavani.tourdeapp.cz/app/assets/vesmir_1.jpg'>1</a>, <a href='https://odevzdavani.tourdeapp.cz/app/assets/vesmir_2.jpg'>2</a>, <a href='https://odevzdavani.tourdeapp.cz/app/assets/vesmir_3.jpg'>3</a>, <a href='https://www.youtube.com/watch?v=xvFZjo5PgG0'>4</a>] Jsem fascinován možností propojení hmatatelného a neuchopitelného, což se snažím vyjádřit v každém tahu svého štětce. A přiznám se, je pro mě fascinující vidět, jak se +- jako lidstvo pomalu přibližujeme ke dni, kdy nám začnou všechny ty barvy dávat smysl [&lt;.&gt;]</p>"
-    , "username": "KarelnullKreslíř"
-    , "tags": [{ "name": "Umění", "uuid": "c11dcc8e-45e7-45b1-a35e-edb6186e9114" }, { "name": "Ezoterika", "uuid": "1a087794-c7e3-4cfb-89fb-42b9552cb3f0" }, { "name": "Energie", "uuid": "4707cd83-6cd4-438d-a631-022d319bd0a1" }, { "name": "Barvy", "uuid": "b63b7b02-7d7a-486b-8c22-fe4d83ea63f6" }, { "name": "Vesmír", "uuid": "57b508c9-4418-43a8-b581-2526998f20ff" }], "price_per_hour": 50, "uuid": "24a11d79-d09d-4b4d-9034-74d33990cc96"
-    , "contact": { "emails": ["karel.kreslir@tdagency.cz"], "telephone_numbers": ["+420 737 407 354"] }
-  }
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(1);
+
+  useEffect(() => {
+    async function fetchData() {
+      let exception = false;
+      try {
+        const response = await fetch("http://localhost:8080/api/lecturers/" + userId);
+        const result = await response.json();
+        setData(result);
+      }
+      catch (error) {
+        console.error("fetch:", error);
+        setLoading(2)
+        exception = true;
+      } if (!exception) {
+        setLoading(0)
+      };
+    }
+    fetchData();
+  }, [userId]);
+
+
 
   //přibylo username
   const name = data.first_name;
@@ -96,14 +106,29 @@ export default function LektorAdmin() {
   const location = data.location;
   const claim = DOMPurify.sanitize(data.claim);
   const bio = DOMPurify.sanitize(data.bio);
-  const telephone_numbers = data.contact.telephone_numbers;
-  const emails = data.contact.emails;
-
   const username = data.username;
-
-  const allTags = data.tags //bude potřeba ukázat všechny tagy na výběr, popř přidat nové
-
+  //const allTags = data.tags //bude potřeba ukázat všechny tagy na výběr, popř přidat nové
+  const [allTags, setAllTags] = useState(data.tags)
   const [value, setValue] = useState(tags); //tagy ve value se mohou poslat do db, zbytek přes form name/id ? 
+
+  useEffect(() => {
+    async function fetchData() {
+      let exception = false;
+      try {
+        const response = await fetch("http://localhost:8080/api/tag");
+        const result = await response.json();
+        setAllTags(result);
+      }
+      catch (error) {
+        console.error("fetch:", error);
+        setLoading(2)
+        exception = true;
+      } if (!exception) {
+        setLoading(0)
+      };
+    }
+    fetchData();
+  }, [userId]);
 
   const stringdate = dayjs(date).toISOString().slice(0, 10);
 
@@ -116,6 +141,13 @@ export default function LektorAdmin() {
   console.log(filteredDATA)
   console.log(stringdate)
 
+  if (loading === 1) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Vydržte, než se stránka připraví.</div></FadeInView> //zneužiju tenhle Fade efekt a hláška se ukáže zpožděně, tak aspoň nebude otravovat když je zpoždění <0.3s
+  if (loading === 2) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Nepodařilo se nám získat data.</div></FadeInView>
+
+  
+  if (loading === 0) {
+    const telephone_numbers = data.contact.telephone_numbers;
+    const emails = data.contact.emails;
 
   return (
     <div className='mx-10'>
@@ -280,7 +312,7 @@ export default function LektorAdmin() {
         </LocalizationProvider>}
       </div>
     </div>
-  )
+  )}
 }
 
 

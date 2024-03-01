@@ -19,6 +19,7 @@ const PasswordInput = ({ password, handlePassword }) => {
       label="Heslo"
       id="password"
       value={password}
+      autoComplete="current-password"
       onChange={handlePassword}
       required={true}
       InputProps={{
@@ -79,7 +80,7 @@ export function LoginBox() {
       //alert('přihlaš mě s bcrypt(' + document.getElementById('Heslo').value + ') a ' + document.getElementById('Username').value);
       handleLogin();
     }}>
-      <Paper elevation={5} className="p-3 text-center font-semibold">
+      <Paper elevation={5} className="p-3 text-center font-semibold md:max-w-md m-auto">
         Přihlaste se začněte vyučovat!
         <Stack className="my-2">
           <TextField required label="Username" type="tex" id="loginName"></TextField>
@@ -88,13 +89,17 @@ export function LoginBox() {
         <Stack className="my-2">
           <PasswordInput />
         </Stack>
-        <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"center"} className="my-2">
+
+        {/* "zapomněl jsem heslo" a registrace */}
+
+{/*         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"center"} className="my-2">
           <Button size="small" color="secondary" onClick={() => {
             alert('no tak to seš v ******')
           }}>
             <span className="italic">Zapomněl jsem heslo</span>
           </Button>
-        </Stack>
+        </Stack> */  }
+
         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-evenly"} className="my-2" gap={1}>
 
 {/*       <Button variant="contained" size="large" color="secondary" href="/register">
