@@ -69,6 +69,8 @@ public class ReservationDTO extends TeacherId<String> {
 
   }*/
 
+
+
   public ReservationDTO(String id, String teacher_id, Date date_of_reserv, int from_time, int to_time,
                         String location, List<TagsTDO> tags, String email, int prefix, int telephone, String firstName, String middleName, String lastName,  int souhlas) {
     super(id);
@@ -85,6 +87,12 @@ public class ReservationDTO extends TeacherId<String> {
     this.middleName = middleName;
     this.lastName = lastName;
     this.souhlas = souhlas;
+  }
+
+  public ReservationDTO(String id, int souhlas){
+    super(id);
+    this.souhlas = souhlas;
+
   }
 
   public String getTeacher_id() {

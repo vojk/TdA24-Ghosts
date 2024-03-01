@@ -19,6 +19,16 @@ public class ReservationController {
     dbReservation.createReservation(entity);
     return ResponseEntity.ok().body(entity);
   }
+  @PutMapping("/updateTeacher")
+  public int updateReservation(@RequestBody ReservationConfirmDTO entity){
+    System.out.println("funguji");
+    DbReservation dbReservation = new DbReservation();
+    System.out.println(entity.getSouhlas());
+    if (dbReservation.updateReservation(entity) == 200) {
+      return 200;
+    }
+    return 400;
+  }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Object> deleteReservation(@PathVariable String id) {
@@ -33,5 +43,6 @@ public class ReservationController {
     DbReservation dbReservation = new DbReservation();
     return ResponseEntity.ok().body(dbReservation.getReservation(id));
   }
+
 
 }

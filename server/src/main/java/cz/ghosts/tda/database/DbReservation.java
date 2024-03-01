@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
+import cz.ghosts.tda.reservation.ReservationConfirmDTO;
 import cz.ghosts.tda.reservation.ReservationDTO;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
 
@@ -212,4 +213,22 @@ public class DbReservation {
         return reservation;
     }
 
+    public int updateReservation(ReservationConfirmDTO reservationDTO) {
+        String update = "UPDATE reservation SET potvrzeno = ? WHERE uuid = ?";
+        try (Connection connection = DBInterface.getConnection();) {
+            try (Statement statement = connection.createStatement();) {
+                try (PreparedStatement updateStatement = connection.prepareStatement(update)){
+                    updateStatement.setInt(1, reservationDTO.getSouhlas());
+                    updateStatement.setString(2, reservationDTO.getId());
+                    updateStatement.executeUpdate();
+                    return 200;
+                }
+                }
+            }
+
+         catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        }
+    }
 }
