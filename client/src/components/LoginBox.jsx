@@ -97,9 +97,9 @@ export function LoginBox() {
         </Stack>
         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-evenly"} className="my-2" gap={1}>
 
-          <Button variant="contained" size="large" color="secondary" href="/register">
+{/*       <Button variant="contained" size="large" color="secondary" href="/register">
             Registrace
-          </Button>
+          </Button> */}
 
           <Button variant="contained" type="submit" size="large" color="primary">
             <span className="font-bold">Přihlásit</span>

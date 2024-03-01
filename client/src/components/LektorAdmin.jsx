@@ -14,8 +14,7 @@ import { Button } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Stack, TextField, Autocomplete, Accordion, AccordionSummary } from '@mui/material';
 import axios from 'axios';
-
-
+import FadeInView from './FadeInView';
 
 
 
@@ -26,6 +25,7 @@ export default function LektorAdmin() {
 
 
   const [userId, setUserId] = useState("");
+  const [userReservations, setUserReservations] = useState([]);
   //date je vybrané datum v kalendáři, bude použito k třídění studentských rezervací
 
   const tomorrow = dayjs().add(1, 'day');
@@ -51,6 +51,7 @@ export default function LektorAdmin() {
             }
           );
           console.log(responsen.data)
+          setUserReservations(responsen.data)
           //setUserId(response.data);
         } catch (error) {
           console.error(error);
@@ -103,7 +104,6 @@ export default function LektorAdmin() {
   const allTags = data.tags //bude potřeba ukázat všechny tagy na výběr, popř přidat nové
 
   const [value, setValue] = useState(tags); //tagy ve value se mohou poslat do db, zbytek přes form name/id ? 
-
 
 
 
@@ -257,19 +257,17 @@ export default function LektorAdmin() {
       </div>
 
       <div className='mt-2 text-white text-center'><p className='text-3xl font-nadpis'>Vaši studenti již čekají na schválení!</p><p className='text-sm'>Po schválení či zamítnutí budou studenti obeznámeni.</p> <p className='text-sm'>Zvolte požadované datum v kalendáři níže.</p></div>
-      <div className='mt-4 flex max-w-6xl m-auto flex-row md:flex-col-reverse justify-between gap-2 flex-wrap'>
-        <div className='flex items-center flex-col gap-2'>
-          <ReservedUser accepted={false} />
-          <ReservedUser accepted={true} />
-          <ReservedUser />
-          <ReservedUser />
-          <ReservedUser />
-          <ReservedUser />
-          <ReservedUser />
+      <div className='mt-4 flex flex-row md:flex-col-reverse justify-between gap-2 flex-wrap-reverse'>
+        <div className='flex flex-1 items-center flex-col gap-2'>
+
+          {userReservations.length === 0 ? null : userReservations.map((index, data) => (
+            <div><FadeInView><ReservedUser userData={data} key={index} /></FadeInView></div>))}
+
+
         </div>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="cs">
-          <div>    <DateCalendar maxDate={dayjs().add(12, 'month')} value={date} onChange={(newDate) => setDate(newDate)} className="bg-sky rounded-lg sticky top-4 md:relative md:top-0" /></div>
-        </LocalizationProvider>
+        {userReservations.length === 0 ? null : <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="cs">
+          <div>    <DateCalendar maxDate={dayjs().add(12, 'month')} value={date} onChange={(newDate) => setDate(newDate)} className="bg-sky rounded-lg sticky top-4 md:relative md:top-0 w-fit" /></div>
+        </LocalizationProvider>}
       </div>
     </div>
   )

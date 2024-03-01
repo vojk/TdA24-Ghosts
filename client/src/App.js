@@ -78,7 +78,7 @@ function App() {
                   <Routes>
                     <Route path="/home" element={<ListVizitek />} ></Route>
                     <Route path="/login" element={<LoginPage />} ></Route>
-                    <Route path="/register" element={<RegisterPage />} ></Route>
+                   {/*  <Route path="/register" element={<RegisterPage />} ></Route> */}
                     <Route path="/" index element={<About />} ></Route>
                     <Route path="/about" index element={<About />} ></Route>
                     <Route path="/admin" index element={<LektorAdmin />} ></Route>
