@@ -12,6 +12,7 @@ import cz.ghosts.tda.database.DbReservation;
 import org.springframework.http.ResponseEntity;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservation")
@@ -30,11 +31,14 @@ public class ReservationController {
 
     DbController dbController = new DbController();
     TeachersTDO teacher = dbController.getAllTeachers(id).get(0);
+    String Email_lektora = dbController.getEmails(id).get(0);
     SimpleDateFormat df = new SimpleDateFormat("yyyy");
     emailSender.sendEmailInfoAboutPreReserveInformativeClient(entity.getEmail(), "Předběžné potvrzení schůzky", entity.getFirstName(),
             entity.getMiddleName(), entity.getLastName(), teacher.getLast_name(), entity.getDate_of_reserv().getDate() + ". " + (entity.getDate_of_reserv().getMonth()+1) + ". " + df.format(entity.getDate_of_reserv()),
             entity.getFrom_time() + ":00", entity.getTo_time()+ ":00");
-
+    emailSender.sendEmailInfoPreReservDeclineLecturer(
+            Email_lektora, "Předběžné potvrzení schůzky", entity.getFirstName(), entity.getMiddleName(), entity.getLastName(), teacher.getFirst_name(), teacher.getMiddle_name(), teacher.getLast_name(), entity.getDate_of_reserv().getDate() + ". " + (entity.getDate_of_reserv().getMonth()+1) + ". " + df.format(entity.getDate_of_reserv()),
+            entity.getFrom_time() + ":00", entity.getTo_time()+ ":00", Integer.toString(entity.getTelephone()), entity.getEmail());
     System.out.println("Potvrzeno: " + entity.getSouhlas());
     dbReservation.createReservation(entity);
     return ResponseEntity.ok().body(entity);
@@ -44,8 +48,15 @@ public class ReservationController {
   public int updateReservation(@RequestBody ReservationConfirmDTO entity){
     System.out.println("funguji");
     DbReservation dbReservation = new DbReservation();
-    System.out.println(entity.getSouhlas());
+    DbController dbController = new DbController();
+    System.out.println(entity.getId());
+    SimpleDateFormat df = new SimpleDateFormat("yyyy");
+    ReservationDTO reservationDTO = dbReservation.getReservationByReservationId(entity.getId());
+    TeachersTDO teacher = dbController.getAllTeachers(reservationDTO.getTeacher_id()).get(0);
     if (dbReservation.updateReservation(entity) == 200) {
+      emailSender.sendEmailInfoAboutPConfirmationReserveInformativeClient(reservationDTO.getEmail(), "Potvrzení schůzky", reservationDTO.getFirstName(),
+              reservationDTO.getMiddleName(), reservationDTO.getLastName(), teacher.getFirst_name(), teacher.getMiddle_name(), teacher.getLast_name(), reservationDTO.getDate_of_reserv().getDate() + ". " + (reservationDTO.getDate_of_reserv().getMonth()+1) + ". " + df.format(reservationDTO.getDate_of_reserv()),
+              reservationDTO.getFrom_time() + ":00", reservationDTO.getTo_time()+ ":00");
       return 200;
     }
     return 400;
@@ -60,11 +71,15 @@ public class ReservationController {
     DbController dbController = new DbController();
     ReservationDTO rezervace = dbReservation.getReservationByReservationId(id);
     TeachersTDO teacher = dbController.getAllTeachers(rezervace.getTeacher_id()).get(0);
+    String Email_lektora = dbController.getEmails(rezervace.getTeacher_id()).get(0);
     SimpleDateFormat df = new SimpleDateFormat("yyyy");
     emailSender.sendEmailInfoAboutReservDeclineClient(rezervace.getEmail(), "Zrušení schůzky", rezervace.getFirstName(),
         rezervace.getMiddleName(), rezervace.getLastName(), teacher.getFirst_name(), rezervace.getDate_of_reserv().getDate() + ". " + (rezervace.getDate_of_reserv().getMonth()+1) + ". " + df.format(rezervace.getDate_of_reserv()),
         rezervace.getFrom_time() + ":00", rezervace.getTo_time()+ ":00");
 
+    emailSender.sendEmailInfoAboutReservDeclineLecturer(
+            Email_lektora, "Zrušení schůzky", rezervace.getFirstName(), rezervace.getMiddleName(), rezervace.getLastName(), teacher.getFirst_name(), teacher.getMiddle_name(), teacher.getLast_name(), rezervace.getDate_of_reserv().getDate() + ". " + (rezervace.getDate_of_reserv().getMonth()+1) + ". " + df.format(rezervace.getDate_of_reserv()),
+            rezervace.getFrom_time() + ":00", rezervace.getTo_time()+ ":00");
     dbReservation.deleteReservation(id);
     return ResponseEntity.ok().body(id);
   }

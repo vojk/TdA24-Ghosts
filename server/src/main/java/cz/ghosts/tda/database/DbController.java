@@ -174,7 +174,7 @@ public class DbController implements DBInterface {
     return telephone_numbers.size() > 0 ? telephone_numbers : null;
   }
 
-  private List<String> getEmails(String uuid) {
+  public List<String> getEmails(String uuid) {
     List<String> emails = new ArrayList<>();
     try (Connection connection = DBInterface.getConnection();) {
       try (Statement statement = connection.createStatement()) {
