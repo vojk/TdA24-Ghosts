@@ -7,7 +7,7 @@ import java.sql.*;
 
 public interface DBInterface {
   // String dburl = "JDBC:sqlite:/server/tda.db";
-  String dburl = "JDBC:sqlite:server/src/main/resources/tda.db";
+  String dburl = "JDBC:sqlite:src/main/resources/tda.db";
   // String dburl = Dotenv.load().get("DBURL");
   // String initsqlURL = Dotenv.load().get("INITSQL");
 

@@ -8,7 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.google.common.hash.Hashing;
 import cz.ghosts.tda.objects.TeacherId;
 import cz.ghosts.tda.teachers.conctacts.Contact;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
@@ -129,6 +132,13 @@ public class TeachersTDO extends TeacherId<String> {
 
   @JsonProperty("password")
   public void setPassword(String password) {
-    this.password = password;
+    Pattern pattern = Pattern.compile("/[0-9a-f]{64}/i");
+    Matcher matcher = pattern.matcher(password);
+    if (matcher.matches()) {
+      this.password = password;
+    } else {
+      this.password = Hashing.sha256().hashString(password, java.nio.charset.StandardCharsets.UTF_8).toString();
+    }
+
   }
 }

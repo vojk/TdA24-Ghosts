@@ -14,11 +14,19 @@ import cz.ghosts.tda.teachers.tags.TagsTDO;
 
 public class ReservationDTO extends TeacherId<String> {
   private String teacher_id;
+  private String firstName;
+  private String middleName;
+    private String lastName;
   @JsonFormat(pattern = "yyyy-mm-dd")
   private Date date_of_reserv;
   private int from_time;
   private int to_time;
-  private int id_location;
+  private String location;
+  private String email;
+  private int prefix;
+  private int telephone;
+  private int potvrzeno;
+
   private List<TagsTDO> tags = new ArrayList<>();
 
   public ReservationDTO() {
@@ -34,24 +42,46 @@ public class ReservationDTO extends TeacherId<String> {
   }
 
   public ReservationDTO(String id, Date date_of_reserv, int from_time, int to_time,
-      int id_location, List<TagsTDO> tags) {
+                        String location, List<TagsTDO> tags, int potvrzeno) {
     super(id);
     this.date_of_reserv = date_of_reserv;
     this.from_time = from_time;
     this.to_time = to_time;
-    this.id_location = id_location;
+    this.location = location;
     this.tags = checkForEmptyTags(tags);
+    this.potvrzeno = potvrzeno;
+
   }
 
   public ReservationDTO(String id, String teacher_id, Date date_of_reserv, int from_time, int to_time,
-      int id_location, List<TagsTDO> tags) {
+                        String location, List<TagsTDO> tags, int potvrzeno) {
     super(id);
     this.teacher_id = teacher_id;
     this.date_of_reserv = date_of_reserv;
     this.from_time = from_time;
     this.to_time = to_time;
-    this.id_location = id_location;
+    this.location = location;
     this.tags = checkForEmptyTags(tags);
+    this.potvrzeno = potvrzeno;
+
+  }
+
+  public ReservationDTO(String id, String teacher_id, Date date_of_reserv, int from_time, int to_time,
+                        String location, List<TagsTDO> tags, String email, int prefix, int telephone, String firstName, String middleName, String lastName, int potvrzeno) {
+    super(id);
+    this.teacher_id = teacher_id;
+    this.date_of_reserv = date_of_reserv;
+    this.from_time = from_time;
+    this.to_time = to_time;
+    this.location = location;
+    this.tags = checkForEmptyTags(tags);
+    this.email = email;
+    this.prefix = prefix;
+    this.telephone = telephone;
+    this.firstName = firstName;
+    this.middleName = middleName;
+    this.lastName = lastName;
+    this.potvrzeno = potvrzeno;
   }
 
   public String getTeacher_id() {
@@ -78,8 +108,35 @@ public class ReservationDTO extends TeacherId<String> {
     return to_time;
   }
 
-  public int getId_location() {
-    return id_location;
+  public String getLocation() {
+    return location;
   }
 
+  public String getEmail() {
+    return email;
+  }
+
+  public int getPrefix() {
+    return prefix;
+  }
+
+  public int getTelephone() {
+    return telephone;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public String getMiddleName() {
+    return middleName;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public int isPotvrzeno() {
+    return potvrzeno;
+  }
 }

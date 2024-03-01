@@ -1,14 +1,19 @@
 package cz.ghosts.tda.objects.return_objects;
 
-public class TokenObject {
-    private final String secret;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public TokenObject(String secret) {
-        this.secret = secret;
+public class TokenObject {
+    private String token;
+
+    public TokenObject() {
+    }
+    public TokenObject(String token) {
+        this.token = token;
     }
 
-    public String getSecret() {
-        System.out.println("Secret: " + secret);
-        return secret;
+    @JsonProperty("token")
+    public String getToken() {
+        System.out.println("Secret: " + token);
+        return token;
     }
 }
