@@ -17,7 +17,7 @@ public class ReservationDTO extends TeacherId<String> {
   private String firstName;
   private String middleName;
     private String lastName;
-  @JsonFormat(pattern = "yyyy-mm-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date date_of_reserv;
   private int from_time;
   private int to_time;

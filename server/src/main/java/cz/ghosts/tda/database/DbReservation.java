@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cz.ghosts.tda.reservation.ReservationDTO;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
@@ -29,6 +30,7 @@ public class DbReservation {
 
     public void createReservation(ReservationDTO reservationDTO) {
 
+        System.out.println(reservationDTO.getDate_of_reserv());
         String sql_to_main_db = "INSERT INTO reservation (uuid, date_of_reserv, from_time, to_time, location, email, prefix, telephone, first_name, middle_name, last_name, potvrzeno) VALUES ('"
                 + reservationDTO.getId() + "', '" + reservationDTO.getDate_of_reserv()
                 + "', " + reservationDTO.getFrom_time() + ", " + reservationDTO.getTo_time() + ", '" + reservationDTO.getLocation()
@@ -174,26 +176,26 @@ public class DbReservation {
     }
 
     public List<ReservationDTO> getReservation(String id) {
-        String sql = "SELECT reservation.uuid, reservation.first_name, reservation.last_name, reservation.midlle_name, reservation.date_of_reserv, reservation.from_time, reservation.to_time, reservation.email, reservation.prefix, reservation.telephone, reservation.potvrzeno, reservation_ucitele.uuid_ucitele, location.city " +
+        String sql = "SELECT reservation.uuid, reservation.location, reservation.first_name, reservation.last_name, reservation.middle_name, reservation.date_of_reserv, reservation.from_time, reservation.to_time, reservation.email, reservation.prefix, reservation.telephone, reservation.potvrzeno, reservation_ucitele.uuid_ucitele " +
                 "FROM reservation " +
                 "JOIN reservation_ucitele ON reservation_ucitele.uuid_reservation = reservation.uuid " +
-                "JOIN location ON location_id = reservation.date_of_reserv" +
                 "WHERE reservation_ucitele.uuid_ucitele = '"
                 + id + "'";
 
         List<ReservationDTO> reservation = new ArrayList<>();
 
         String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
         try (Connection connection = DBInterface.getConnection();) {
             try (Statement statement = connection.createStatement();) {
                 try (PreparedStatement selectStatement = connection.prepareStatement(sql)) {
                     ResultSet result = selectStatement.executeQuery();
                     while (result.next()) {
+                        Date utilDate = formatter.parse(result.getString("date_of_reserv"));
                         System.out.println(result.getString("uuid_ucitele"));
                         reservation.add(new ReservationDTO(result.getString("uuid"), result.getString("uuid_ucitele"),
-                                null, // TODO: fix date format
+                                utilDate, // TODO: fix date format
                                 result.getInt("from_time"), result.getInt("to_time"), result.getString("location"),
                                 getTags(result.getString("uuid")), result.getString("email"), result.getInt("prefix"), result.getInt("telephone"), result.getString("first_name"), result.getString("middle_name"), result.getString("last_name"), result.getInt("potvrzeno")));
                     }
@@ -208,6 +210,39 @@ public class DbReservation {
         }
 
         return reservation;
+    }
+
+    public ReservationDTO getReservationByReservationId(String id) {
+        String sql = "SELECT reservation.uuid, reservation.first_name, reservation.last_name, reservation.middle_name, reservation.date_of_reserv, reservation.from_time, reservation.to_time, reservation.email, reservation.prefix, reservation.telephone, reservation.potvrzeno, reservation_ucitele.uuid_ucitele, reservation.location " +
+                "FROM reservation " +
+                "JOIN reservation_ucitele ON reservation_ucitele.uuid_reservation = reservation.uuid " +
+                "WHERE reservation.uuid = '"
+                + id + "'";
+
+        ReservationDTO reservation = null;
+
+
+        try (Connection connection = DBInterface.getConnection();) {
+            try (Statement statement = connection.createStatement();) {
+                try (PreparedStatement selectStatement = connection.prepareStatement(sql)) {
+                    ResultSet result = selectStatement.executeQuery();
+                    SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+                    while (result.next()) {
+                        Date utilDate = formatter.parse(result.getString("date_of_reserv"));
+                        System.out.println(result.getString("uuid_ucitele"));
+                        reservation = (new ReservationDTO(result.getString("uuid"), result.getString("uuid_ucitele"),
+                                utilDate, // TODO: fix date format
+                                result.getInt("from_time"), result.getInt("to_time"), result.getString("location"),
+                                getTags(result.getString("uuid")), result.getString("email"), result.getInt("prefix"), result.getInt("telephone"), result.getString("first_name"), result.getString("middle_name"), result.getString("last_name"), result.getInt("potvrzeno")));
+                    }
+                    System.out.println("id ucitele" + reservation.getTeacher_id());
+                    return reservation;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
