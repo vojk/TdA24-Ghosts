@@ -60,7 +60,7 @@ public class ReservationDTO extends TeacherId<String> {
     this.firstName = firstName;
     this.middleName = middleName;
     this.lastName = lastName;
-    this.potvrzeno = potvrzeno;
+    this.potvrzen = potvrzen;
     this.souhlas = souhlas;
   }
 
