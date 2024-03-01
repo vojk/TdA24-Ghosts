@@ -1,5 +1,6 @@
 package cz.ghosts.tda.reservation;
 
+import java.nio.Buffer;
 import java.util.Date;
 import java.util.UUID;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import cz.ghosts.tda.objects.TeacherId;
@@ -25,7 +27,8 @@ public class ReservationDTO extends TeacherId<String> {
   private String email;
   private int prefix;
   private int telephone;
-  private int potvrzeno;
+  private int potvrzen;
+  private int souhlas;
 
   private List<TagsTDO> tags = new ArrayList<>();
 
@@ -41,33 +44,9 @@ public class ReservationDTO extends TeacherId<String> {
     return tags;
   }
 
-  public ReservationDTO(String id, Date date_of_reserv, int from_time, int to_time,
-                        String location, List<TagsTDO> tags, int potvrzeno) {
-    super(id);
-    this.date_of_reserv = date_of_reserv;
-    this.from_time = from_time;
-    this.to_time = to_time;
-    this.location = location;
-    this.tags = checkForEmptyTags(tags);
-    this.potvrzeno = potvrzeno;
-
-  }
 
   public ReservationDTO(String id, String teacher_id, Date date_of_reserv, int from_time, int to_time,
-                        String location, List<TagsTDO> tags, int potvrzeno) {
-    super(id);
-    this.teacher_id = teacher_id;
-    this.date_of_reserv = date_of_reserv;
-    this.from_time = from_time;
-    this.to_time = to_time;
-    this.location = location;
-    this.tags = checkForEmptyTags(tags);
-    this.potvrzeno = potvrzeno;
-
-  }
-
-  public ReservationDTO(String id, String teacher_id, Date date_of_reserv, int from_time, int to_time,
-                        String location, List<TagsTDO> tags, String email, int prefix, int telephone, String firstName, String middleName, String lastName, int potvrzeno) {
+                        String location, List<TagsTDO> tags, String email, int prefix, int telephone, String firstName, String middleName, String lastName,  int souhlas) {
     super(id);
     this.teacher_id = teacher_id;
     this.date_of_reserv = date_of_reserv;
@@ -82,6 +61,12 @@ public class ReservationDTO extends TeacherId<String> {
     this.middleName = middleName;
     this.lastName = lastName;
     this.potvrzeno = potvrzeno;
+    this.souhlas = souhlas;
+  }
+
+  public ReservationDTO(String id, int souhlas){
+    super(id);
+    this.souhlas = souhlas;
   }
 
   public String getTeacher_id() {
@@ -136,7 +121,9 @@ public class ReservationDTO extends TeacherId<String> {
     return firstName;
   }
 
-  public int isPotvrzeno() {
-    return potvrzeno;
+  public int isPotvrzeno() {return potvrzen;}
+
+  public int getSouhlas() {
+    return souhlas;
   }
 }

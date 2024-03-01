@@ -15,7 +15,7 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
     httpSecurity.csrf().disable()
-        .authorizeHttpRequests((request) -> request.requestMatchers(HttpMethod.POST).permitAll().requestMatchers(HttpMethod.GET).permitAll().requestMatchers(HttpMethod.DELETE).permitAll());
+        .authorizeHttpRequests((request) -> request.requestMatchers(HttpMethod.POST).permitAll().requestMatchers(HttpMethod.GET).permitAll().requestMatchers(HttpMethod.PUT).permitAll().requestMatchers(HttpMethod.POST, "/api/lecturers").hasRole("ADMIN")..requestMatchers(HttpMethod.POST, "/api/lecturers/").hasRole("ADMIN"));
 
     return httpSecurity.build();
   }

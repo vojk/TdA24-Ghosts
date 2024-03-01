@@ -20,10 +20,4 @@ public class TdaApplication {
         dbController.createDatabase();
         // dbController.addTeacher();
     }
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void sendEmail() {
-        System.out.println("Sending email...");
-    }
-
 }

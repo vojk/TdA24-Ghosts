@@ -1,5 +1,8 @@
 package cz.ghosts.tda.database;
 
+
+import java.awt.desktop.SystemSleepEvent;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.ResultSet;
@@ -12,8 +15,12 @@ import java.time.LocalDate;
 
 import java.util.List;
 import java.util.ArrayList;
+
 import java.util.Locale;
 
+
+
+import cz.ghosts.tda.reservation.ReservationConfirmDTO;
 import cz.ghosts.tda.reservation.ReservationDTO;
 import cz.ghosts.tda.teachers.tags.TagsTDO;
 
@@ -30,12 +37,12 @@ public class DbReservation {
 
     public void createReservation(ReservationDTO reservationDTO) {
 
-        System.out.println(reservationDTO.getDate_of_reserv());
         String sql_to_main_db = "INSERT INTO reservation (uuid, date_of_reserv, from_time, to_time, location, email, prefix, telephone, first_name, middle_name, last_name, potvrzeno) VALUES ('"
                 + reservationDTO.getId() + "', '" + reservationDTO.getDate_of_reserv()
                 + "', " + reservationDTO.getFrom_time() + ", " + reservationDTO.getTo_time() + ", '" + reservationDTO.getLocation()
                 + "', '" + reservationDTO.getEmail() + "', " + reservationDTO.getPrefix() + ", '" + reservationDTO.getTelephone() + "'" + ", '"
-                + reservationDTO.getFirstName() + "'" + ", '" + reservationDTO.getMiddleName() + "'" + ", '" + reservationDTO.getLastName()  + "' , " + reservationDTO.isPotvrzeno() + ")";
+                + reservationDTO.getFirstName() + "'" + ", '" + reservationDTO.getMiddleName() + "'" + ", '" + reservationDTO.getLastName()  + "' , " + reservationDTO.getSouhlas() + ")";
+        System.out.println(reservationDTO.getSouhlas());
 
         String sql_to_reservation_ucitele = "INSERT INTO reservation_ucitele (uuid_ucitele, uuid_reservation) VALUES ('"
                 + reservationDTO.getTeacher_id() + "', '" + reservationDTO.getId()
@@ -184,14 +191,15 @@ public class DbReservation {
 
         List<ReservationDTO> reservation = new ArrayList<>();
 
-        String pattern = "EEE MMM dd HH:mm:ss zzz yyyy";
         SimpleDateFormat formatter = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+
 
         try (Connection connection = DBInterface.getConnection();) {
             try (Statement statement = connection.createStatement();) {
                 try (PreparedStatement selectStatement = connection.prepareStatement(sql)) {
                     ResultSet result = selectStatement.executeQuery();
                     while (result.next()) {
+
                         Date utilDate = formatter.parse(result.getString("date_of_reserv"));
                         System.out.println(result.getString("uuid_ucitele"));
                         reservation.add(new ReservationDTO(result.getString("uuid"), result.getString("uuid_ucitele"),
@@ -245,4 +253,23 @@ public class DbReservation {
         return null;
     }
 
-}
+
+    public int updateReservation(ReservationConfirmDTO reservationDTO) {
+        String update = "UPDATE reservation SET potvrzeno = ? WHERE uuid = ?";
+        try (Connection connection = DBInterface.getConnection();) {
+            try (Statement statement = connection.createStatement();) {
+                try (PreparedStatement updateStatement = connection.prepareStatement(update)){
+                    updateStatement.setInt(1, reservationDTO.getSouhlas());
+                    updateStatement.setString(2, reservationDTO.getId());
+                    updateStatement.executeUpdate();
+                    return 200;
+                }
+                }
+            }
+
+         catch (SQLException e) {
+            throw new RuntimeException(e);
+
+        }
+    }
+
