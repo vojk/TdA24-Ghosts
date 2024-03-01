@@ -78,7 +78,7 @@ export default function ReserveBox({ tags, cena }) {
       };
 
       // Make the Axios POST request
-      const response = await axios.post(`http://localhost:8080/api/reservation/${teacher_id}`, payload, {
+      const response = await axios.post(`http://7d17dc13931b9d11.app.tourdeapp.cz//api/reservation/${teacher_id}`, payload, {
         headers: {
           'Content-Type': 'application/json',
         },

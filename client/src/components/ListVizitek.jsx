@@ -26,8 +26,8 @@ export function ListVizitek() {
   }, [filterCities, filterPrice, filterTags])
 
 
-  //var fetchURL = "http://7d17dc13931b9d11.app.tourdeapp.cz/api"
-  var fetchURL = "http://localhost:8080/api"
+  var fetchURL = "http://7d17dc13931b9d11.app.tourdeapp.cz/api"
+  //var fetchURL = "http://localhost:8080/api"
   //ZMĚŇ PRO LOKÁLNÍ TESTOVÁNÍ NA LOCALHOST:8080
 
 

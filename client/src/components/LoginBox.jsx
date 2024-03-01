@@ -53,7 +53,7 @@ const handleLogin = async () => {
     const response = await axios(
       {
         method: 'post',
-        url: 'http://localhost:8080/api/credentials/login',
+        url: 'http://7d17dc13931b9d11.app.tourdeapp.cz/api/credentials/login',
         data: {
           loginName: username,
           password: password
@@ -92,7 +92,7 @@ export function LoginBox() {
 
         {/* "zapomněl jsem heslo" a registrace */}
 
-{/*         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"center"} className="my-2">
+        {/*         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"center"} className="my-2">
           <Button size="small" color="secondary" onClick={() => {
             alert('no tak to seš v ******')
           }}>
@@ -102,7 +102,7 @@ export function LoginBox() {
 
         <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-evenly"} className="my-2" gap={1}>
 
-{/*       <Button variant="contained" size="large" color="secondary" href="/register">
+          {/*       <Button variant="contained" size="large" color="secondary" href="/register">
             Registrace
           </Button> */}
 
