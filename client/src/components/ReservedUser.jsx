@@ -9,8 +9,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import ConfirmDialog from './ConfirmDialog';
 
 import { VCALENDAR, VEVENT } from 'ics-js';
+import axios from 'axios';
 
-export default function ReservedUser({userData }) {
+export default function ReservedUser({ userData }) {
+
+  const UserData = userData;
+
+  const [potvrzeno, setPotvrzeno] = useState(userData.souhlas)
   //data budou dodána podle zvoleného datumu
 
   /*   const userData = {
@@ -31,7 +36,9 @@ export default function ReservedUser({userData }) {
   const [confirmOpen, setConfirmOpen] = useState(false)
 
   function deleteUser() {
-    alert('smazat')
+    axios.delete('http://7d17dc13931b9d11.app.tourdeapp.cz/api/reservation/' + userData.uuid)
+    document.getElementById(userData.uuid).remove()
+    //window.location.reload()
   }
 
   /*   const toggleIsOpened = () => {
@@ -56,11 +63,12 @@ export default function ReservedUser({userData }) {
 
   cal.addComponent(event);
   console.log(cal.toString())
+  console.log(UserData)
   const downloadFile = window.URL.createObjectURL(cal.toBlob())
 
   return (
 
-    <>
+    <div id={userData.uuid}>
       <a href={downloadFile}>stáhnout do kalendáře (.ics)</a>
 
       <div className="bg-white max-w-2xl min-w-[20rem] p-3 px-10 rounded-md flex flex-wrap flex-col w-full">
@@ -73,11 +81,11 @@ export default function ReservedUser({userData }) {
 
           <div className={'[&>*]:text-jet [&>div]:text-center flex gap-5 w-full'}>
             <div className='underline underline-offset-2'> <a href={'mailto:' + userData.email}>{userData.email}</a></div>
-            <div className='underline underline-offset-2'> <a href={'tel:'+ userData.prefix + userData.telephone}>+{userData.prefix} {userData.telephone}</a></div>
+            <div className='underline underline-offset-2'> <a href={'tel:' + userData.prefix + userData.telephone}>+{userData.prefix} {userData.telephone}</a></div>
           </div>
 
           <div className='flex gap-2 w-full flex-wrap'>
-            {userData.tags.map((tag, index) => {
+            {userData.tags ? userData.tags.map((tag, index) => {
               return (
                 <>
                   {<div key={tag.uuid} className='tag text-white text-xs bg-prussian overflow-hidden px-1 w-fit p-1 rounded-md'>
@@ -86,13 +94,18 @@ export default function ReservedUser({userData }) {
                 </>
               )
             }
-            )}
+            ) : <></>}
           </div>
 
 
 
           <div className='flex flex-row gap-2 flex-wrap items-end justify-end w-full'>
-            {!userData.potvrzeno ? <p className='text-center m-auto font-bold text-white'>Schůzka potvrzena!</p> : <Button size="large" className='' variant='contained' color="primary">potvrdit</Button>}
+            {potvrzeno === 1 ? <p className='text-center m-auto font-bold text-jet'>Schůzka potvrzena!</p> : <Button size="large" className='' variant='contained' color="primary"
+              onClick={() => {
+                axios.put('http://7d17dc13931b9d11.app.tourdeapp.cz/api/reservation/updateTeacher', { "id": userData.uuid, "souhlas": 1 })
+                setPotvrzeno(1)
+
+              }}>potvrdit</Button>}
             <Button size="large" className='' variant='contained' color="secondary" aria-label='delete' onClick={() => setConfirmOpen(true)}>Zrušit</Button>
             <ConfirmDialog
               title="Odstranit studenta?"
@@ -108,6 +121,6 @@ export default function ReservedUser({userData }) {
 
 
       </div>
-    </>
+    </div>
   )
 }
