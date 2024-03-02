@@ -27,6 +27,7 @@ export default function LektorAdmin() {
   //date je vybrané datum v kalendáři, bude použito k třídění studentských rezervací
 
   const tomorrow = dayjs().add(1, 'day');
+  const [data, setData] = useState([])
   //console.log(date.$D, date.$M, date.$y)
 
   useEffect(() => {
@@ -35,21 +36,35 @@ export default function LektorAdmin() {
         const response = await axios(
           {
             method: 'post',
-            url: 'http://7d17dc13931b9d11.app.tourdeapp.cz//api/lecturers/a/id_lektor',
+            url: 'http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/a/id_lektor',
             data: {
               token: localStorage.getItem('token')
             }
           }
         );
+        console.log(response.data);
         try {
           const responsen = await axios(
             {
               method: 'get',
-              url: 'http://7d17dc13931b9d11.app.tourdeapp.cz//api/reservation/' + response.data,
+              url: 'http://7d17dc13931b9d11.app.tourdeapp.cz/api/reservation/' + response.data,
             }
           );
           console.log(responsen.data)
           setUserReservations(responsen.data)
+          //setUserId(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+        try {
+          const responsens = await axios(
+            {
+              method: 'get',
+              url: 'http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/' + response.data,
+            }
+          );
+          console.log(responsens.data)
+          setData(responsens.data)
           //setUserId(response.data);
         } catch (error) {
           console.error(error);
@@ -68,31 +83,14 @@ export default function LektorAdmin() {
   // console.log(dayjs(date).toISOString().slice(0, 10))
 
   //data pro test
-  const [data, setData] = useState(null)
   const [loading, setLoading] = useState(1);
 
-  useEffect(() => {
-    async function fetchData() {
-      let exception = false;
-      try {
-        const response = await fetch("http://7d17dc13931b9d11.app.tourdeapp.cz//api/lecturers/" + userId);
-        const result = await response.json();
-        setData(result);
-      }
-      catch (error) {
-        console.error("fetch:", error);
-        setLoading(2)
-        exception = true;
-      } if (!exception) {
-        setLoading(0)
-      };
-    }
-    fetchData();
-  }, [userId]);
+
 
 
 
   //přibylo username
+  const userData = data;
   const name = data.first_name;
   const mid_name = data.middle_name;
   const surname = data.last_name;
@@ -100,20 +98,20 @@ export default function LektorAdmin() {
   const title_a = data.title_after;
   const pic_url = data.picture_url;
   const cena = data.price_per_hour;
-  const tags = data.tags;
+  const tags = data.tags ? data.tags : [];
   const location = data.location;
   const claim = DOMPurify.sanitize(data.claim);
   const bio = DOMPurify.sanitize(data.bio);
   const username = data.username;
   //const allTags = data.tags //bude potřeba ukázat všechny tagy na výběr, popř přidat nové
   const [allTags, setAllTags] = useState(data.tags)
-  const [value, setValue] = useState(tags); //tagy ve value se mohou poslat do db, zbytek přes form name/id ? 
+  const [value, setValue] = useState([]); //tagy ve value se mohou poslat do db, zbytek přes form name/id ? 
 
   useEffect(() => {
     async function fetchData() {
       let exception = false;
       try {
-        const response = await fetch("http://7d17dc13931b9d11.app.tourdeapp.cz//api/tag");
+        const response = await fetch("http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag");
         const result = await response.json();
         setAllTags(result);
       }
@@ -144,8 +142,8 @@ export default function LektorAdmin() {
 
 
   if (loading === 0) {
-    const telephone_numbers = data.contact.telephone_numbers;
-    const emails = data.contact.emails;
+    const telephone_numbers = data.contact ? data.contact.telephone_numbers : [];
+    const emails = data.contact ? data.contact.emails : [];
 
     return (
       <div className='mx-10'>
@@ -300,8 +298,10 @@ export default function LektorAdmin() {
         <div className='mt-4 flex flex-row md:flex-col-reverse justify-between gap-2 flex-wrap-reverse'>
           <div className='flex flex-1 items-center flex-col gap-2'>
 
-            {userReservations.length === 0 ? null : filteredDATA.map((index, data) => (
-              <div><FadeInView><ReservedUser userData={data} key={index} /></FadeInView></div>))}
+            {userReservations.length === 0 ? null : filteredDATA.map((data, index) => {
+              console.log(index);
+              return (<div><FadeInView><ReservedUser userData={data} key={index} /></FadeInView></div>)
+            })}
 
 
           </div>

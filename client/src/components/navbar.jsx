@@ -29,7 +29,7 @@ export default function Menu() {
         const response = await axios(
           {
             method: 'POST',
-            url: 'http://localhost:8080/api/lecturers/a/id_lektor',
+            url: 'http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/a/id_lektor',
             data: {
               token: localStorage.getItem('token')
             }
@@ -52,7 +52,7 @@ export default function Menu() {
         const response = await axios(
           {
             method: 'POST',
-            url: 'http://localhost:8080/api/credentials/logout',
+            url: 'http://7d17dc13931b9d11.app.tourdeapp.cz/api/credentials/logout',
             data: {
               token: localStorage.getItem('token')
             }
@@ -75,7 +75,7 @@ export default function Menu() {
             <MenuItem to={"/"} text={"O TdA"} />
             <MenuItem to={"/lecturers"} text={"Lektoři"} />
             {isValidated ? <MenuItem to={"/admin"} text={"Profil"} /> : <MenuItem to={"/login"} text={"Přihlášení"} />}
-            {isValidated ? <div className="mt-auto" onClick={LogOut}><MenuItem to={null} text={"Odhlásit"} /></div> : null}
+            {isValidated ? <div className="mt-auto" onClick={LogOut}><MenuItem to={"/"} text={"Odhlásit"} /></div> : null}
           </div>
 
         </div>
