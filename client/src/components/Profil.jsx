@@ -13,32 +13,34 @@ export function Profil() {
   const { UUID } = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(1);
+  const [exception, setException] = useState(false)
 
 
   useEffect(() => {
     async function fetchData() {
-      let exception = false;
       try {
         const response = await fetch(/*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" + UUID */ "http://7d17dc13931b9d11.app.tourdeapp.cz/api/lecturers/" + UUID);
         const result = await response.json();
+        if (!response.ok) { setLoading(2) }
+        if (response.ok) { setLoading(0) }
         setData(result);
       }
       catch (error) {
-        console.error("fetch:", error);
         setLoading(2)
-        exception = true;
-      } if (!exception) {
-        setLoading(0)
-      };
+        console.error("fetch:", error);
+      }
     }
     fetchData();
   }, [UUID]);
 
   console.log(data)
+  console.log('loading state ',loading)
 
   if (loading === 1) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Vydržte, než se stránka připraví.</div></FadeInView> //zneužiju tenhle Fade efekt a hláška se ukáže zpožděně, tak aspoň nebude otravovat když je zpoždění <0.3s
   if (loading === 2) return <FadeInView><div className='font-nadpis text-white text-center flex justify-center'>Nepodařilo se nám získat data požadovaného lektora.</div></FadeInView>
   //snad to bude fungovat
+
+  
 
   if (loading === 0) {
     const name = data.first_name;
@@ -52,8 +54,8 @@ export function Profil() {
     const location = data.location;
     const claim = DOMPurify.sanitize(data.claim);
     const bio = DOMPurify.sanitize(data.bio);
-    const telephone_numbers = data.contact.telephone_numbers;
-    const emails = data.contact.emails;
+    const telephone_numbers = data.contact?.telephone_numbers;
+    const emails = data.contact?.emails;
 
 
 
