@@ -26,7 +26,7 @@ export function Vizitka({ lecturerData }) {
       <div className="bg-white p-2 rounded-lg w-full h-full py-4 px-4 flex flex-col gap-1 ">
 
 
-        <div className="flex gap-5">
+        <div className="flex sm:flex-col gap-5">
           <div className="aspect-square flex-[3.5]">
             <img src={pic_url} alt={'Picture of ' + name} className="rounded-md w-full" />
           </div>

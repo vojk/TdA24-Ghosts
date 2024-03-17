@@ -212,7 +212,7 @@ export function ListVizitek() {
             <div className='flex flex-wrap gap-10 justify-evenly w-full my-10 h-full'>
 
               {paging.map((data) => (
-                <div className='h-fit w-[calc(50%-2rem)]'><FadeInView><Vizitka key={data.uuid} lecturerData={data} /></FadeInView></div>))}
+                <div><FadeInView><Vizitka key={data.uuid} lecturerData={data} /></FadeInView></div>))}
 
             </div>
 

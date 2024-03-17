@@ -117,11 +117,11 @@ export default function ReserveBox({ tags, cena }) {
               <TextField required label="Telefonní číslo" type="tel" id="Telefon"></TextField>
             </Stack>
 
-            <Stack className="my-2">
-
-              <Switch
+            <Stack className="my-2 flex gap-2">
+            <div className="flex m-auto items-center">Schůzka online:<Switch
                 checked={checked}
-                onChange={handleChange} />
+                onChange={handleChange} /></div>
+              
             </Stack>
 
             <Autocomplete aria-required required className='bg-white p-2 rounded-xl'
