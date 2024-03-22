@@ -15,7 +15,7 @@ const [responses, setResponses] = useState([]);
 
             let data = "text: "+text;
 
-            let url = "http://7d17dc13931b9d11.app.tourdeapp.cz/api/test"
+            let url = "http://grf-4f82aad588e7b46f.app.tourdeapp.cz/api/test"
             try {
                 const response = await fetch(url, {
                     method: "POST",
