@@ -4,15 +4,6 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    colors: {
-      transparent: 'transparent',
-      current: 'currentColor',
-      sunglow: '#FECB2E',
-      jet: '#333333',
-      sky: '#74C7D3',
-      prussian: '#00384D',
-      white: '#FFFFFF'
-    },
     fontFamily: {
       nadpis: ["Lalezar", "sans-serif"],
       odstavec: ['"Open Sans"', "sans-serif"]
@@ -33,7 +24,17 @@ module.exports = {
       'sm': { 'max': '639px' },
       // => @media (max-width: 639px) { ... }
     },
-    extend: {},
+    extend: {
+      colors: {
+        transparent: {50: 'transparent'},
+        current:{50: 'currentColor'},
+        sunglow:{50: '#FECB2E'},
+        jet:{50: '#333333'},
+        sky:{50: '#74C7D3'},
+        prussian:{50: '#00384D'},
+        white:{50: '#FFFFFF'},
+      },
+    },
   },
   plugins: [],
 }
