@@ -1,141 +1,91 @@
-CREATE TABLE
-    emails
+CREATE TABLE IF NOT EXISTS Activities
 (
-    id    INTEGER      NOT NULL PRIMARY KEY,
-    email VARCHAR(120) NOT NULL
+    uuid           TEXT PRIMARY KEY,
+    activityName   TEXT NOT NULL,
+    description    TEXT,
+    lengthMin      INTEGER,
+    lengthMax      INTEGER,
+    classStructure TEXT,
+    potvrzovani    INTEGER DEFAULT 0
 );
 
-CREATE TABLE
-    seasson_user
+CREATE TABLE IF NOT EXISTS Objectives
 (
-    seasson_token VARCHAR(36) NOT NULL PRIMARY KEY,
-    user_id       VARCHAR(36) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES ucitele (uuid),
-    CONSTRAINT fk_seasson_user FOREIGN KEY (user_id) REFERENCES ucitele (uuid)
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    objective    TEXT NOT NULL,
+    activityUUID TEXT NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-
-CREATE TABLE
-    location
+CREATE TABLE IF NOT EXISTS EducationLevels
 (
-    id   INTEGER      NOT NULL PRIMARY KEY,
-    city VARCHAR(127) NOT NULL
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    level        TEXT NOT NULL,
+    activityUUID TEXT NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    prefixes
+CREATE TABLE IF NOT EXISTS Tools
 (
-    id         INTEGER    NOT NULL PRIMARY KEY,
-    tel_prefix VARCHAR(4) NOT NULL
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    tool         TEXT NOT NULL,
+    activityUUID TEXT NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    reservation
+CREATE TABLE IF NOT EXISTS HomePreparations
 (
-    uuid           VARCHAR(36)  NOT NULL PRIMARY KEY,
-    first_name     VARCHAR(64)  NOT NULL,
-    middle_name    VARCHAR(32),
-    last_name      VARCHAR(32)  NOT NULL,
-    date_of_reserv DATE         NOT NULL,
-    from_time      INTEGER      NOT NULL,
-    to_time        INTEGER      NOT NULL,
-    location       VARCHAR(128) NOT NULL,
-    email          VARCHAR(120) NOT NULL,
-    prefix         INTEGER      NOT NULL DEFAULT 420,
-    telephone      VARCHAR(12)  NOT NULL,
-    potvrzeno      INTEGER      NOT NULL DEFAULT 0
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    title        TEXT NOT NULL,
+    warn         TEXT,
+    note         TEXT,
+    activityUUID TEXT NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    tags
+CREATE TABLE IF NOT EXISTS Instructions
 (
-    id   VARCHAR(36) NOT NULL PRIMARY KEY,
-    name VARCHAR(64) NOT NULL
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    title        TEXT NOT NULL,
+    warn         TEXT,
+    note         TEXT,
+    activityUUID TEXT NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    telephone_nums
+CREATE TABLE IF NOT EXISTS Agendas
 (
-    id        INTEGER     NOT NULL PRIMARY KEY,
-    id_prefix INTEGER     NOT NULL,
-    telephone VARCHAR(12) NOT NULL,
-    FOREIGN KEY (id_prefix) REFERENCES prefixes (id)
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    duration     INTEGER NOT NULL,
+    title        TEXT    NOT NULL,
+    description  TEXT,
+    activityUUID TEXT    NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    titles
+CREATE TABLE IF NOT EXISTS Links
 (
-    id   INTEGER     NOT NULL PRIMARY KEY,
-    name VARCHAR(32) NOT NULL
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    title        TEXT NOT NULL,
+    url          TEXT NOT NULL,
+    activityUUID TEXT NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    ucitele
+CREATE TABLE IF NOT EXISTS Gallery
 (
-    uuid            VARCHAR(36)  NOT NULL PRIMARY KEY,
-    id_title_before INTEGER,
-    id_title_after  INTEGER,
-    id_location     INTEGER,
-    first_name      VARCHAR(64)  NOT NULL,
-    middle_name     VARCHAR(32),
-    last_name       VARCHAR(32)  NOT NULL,
-    picture_url     VARCHAR(255),
-    claim           VARCHAR(512),
-    bio             TEXT,
-    price_per_hour  INTEGER,
-    username        VARCHAR(100) NOT NULL,
-    password        VARCHAR(4096),
-    FOREIGN KEY (id_title_before) REFERENCES titles (id),
-    FOREIGN KEY (id_title_after) REFERENCES titles (id),
-    FOREIGN KEY (id_location) REFERENCES location (id)
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    title        TEXT NOT NULL,
+    activityUUID TEXT NOT NULL,
+    FOREIGN KEY (activityUUID) REFERENCES Activities (uuid) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    email_ucitel
+CREATE TABLE IF NOT EXISTS Images
 (
-    id_email  INTEGER     NOT NULL,
-    id_ucitel VARCHAR(36) NOT NULL,
-    CONSTRAINT pk_email_ucitel PRIMARY KEY (id_email, id_ucitel),
-    FOREIGN KEY (id_email) REFERENCES emails (id),
-    FOREIGN KEY (id_ucitel) REFERENCES ucitele (uuid)
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    lowRes    TEXT    NOT NULL,
+    highRes   TEXT    NOT NULL,
+    galleryID INTEGER NOT NULL,
+    FOREIGN KEY (galleryID) REFERENCES Gallery (id) ON DELETE CASCADE
 );
 
-CREATE TABLE
-    reservation_tag
-(
-    uuid_reversation VARCHAR(36) NOT NULL,
-    uuid_tags        VARCHAR(36) NOT NULL,
-    CONSTRAINT pk_reservation_tag PRIMARY KEY (uuid_reversation, uuid_tags),
-    FOREIGN KEY (uuid_reversation) REFERENCES reservation (uuid),
-    FOREIGN KEY (uuid_tags) REFERENCES tags (id)
-);
-
-CREATE TABLE
-    reservation_ucitele
-(
-    uuid_ucitele     VARCHAR(36) NOT NULL,
-    uuid_reservation VARCHAR(36) NOT NULL,
-    CONSTRAINT pk_reservation_ucitele PRIMARY KEY (uuid_ucitele, uuid_reservation),
-    FOREIGN KEY (uuid_ucitele) REFERENCES ucitele (uuid),
-    FOREIGN KEY (uuid_reservation) REFERENCES reservation (uuid)
-);
-
-CREATE TABLE
-    tags_ucitele
-(
-    id        INTEGER     NOT NULL PRIMARY KEY,
-    id_tag    VARCHAR(36) NOT NULL,
-    id_ucitel VARCHAR(36) NOT NULL,
-    FOREIGN KEY (id_tag) REFERENCES tags (id),
-    FOREIGN KEY (id_ucitel) REFERENCES ucitele (uuid)
-);
-
-CREATE TABLE
-    telephone_ucitel
-(
-    id_tel    INTEGER     NOT NULL,
-    id_ucitel VARCHAR(36) NOT NULL,
-    CONSTRAINT pk_telephone_ucitel PRIMARY KEY (id_tel, id_ucitel),
-    FOREIGN KEY (id_ucitel) REFERENCES ucitele (uuid),
-    FOREIGN KEY (id_tel) REFERENCES telephone_nums (id)
-);

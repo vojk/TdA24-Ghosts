@@ -10,7 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class Connection {
-  private String emaw = "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";
+  private String emaw = "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";
 
   public static String extractResponseText(JSONObject responseJson) {
     JSONObject message = responseJson.getJSONArray("choices").getJSONObject(0).getJSONObject("message");
