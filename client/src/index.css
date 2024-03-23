@@ -4,4 +4,6 @@
 
 *{
     box-sizing: border-box;
+    scroll-behavior: smooth;
+    background-color: "#333333";
 }
