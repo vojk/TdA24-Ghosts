@@ -4,9 +4,7 @@ import { useState, useEffect } from "react"
 export default function InputTitleWarnNote({setHomePreparation}) {
     const [inputs, setInputs] = useState([{title:"", warn:"", note:""}]) //všechny inputy zde
 
-    useEffect(() => {
-        setHomePreparation(inputs)
-    }, [inputs])
+
 
     const [titles, setTitles] = useState([""])
     const [warns, setWarns] = useState([""])

@@ -2,22 +2,9 @@ import { TextField } from "@mui/material"
 import { useState, useEffect } from "react"
 
 //simple string array
-export default function InputField({className}, {setObjectives}, {setTools}) {
+export default function InputField({className}) {
     const [inputs, setInputs] = useState([""]) //všechny inputy zde
 
-    
-        useEffect(() => {
-            if (setObjectives) {
-            setObjectives(inputs)}
-        }, [inputs])
-    
-    
-
-  
-        useEffect(() => {
-            if (setTools) {
-            setTools(inputs)}
-        }, [inputs])
     
     
 

@@ -3,9 +3,7 @@ import { useState, useEffect } from "react"
 
 export default function InputDurationTitleDesc({setAgenda}) {
     const [inputs, setInputs] = useState([{ duration: null, title: "", description: "" }]) //všechny inputy zde
-    useEffect(() => {
-        setAgenda(inputs)
-    }, [inputs])
+
     const [titles, setTitles] = useState([""])
     const [durations, setDurations] = useState([""])
     const [descriptions, setDescriptions] = useState([""])

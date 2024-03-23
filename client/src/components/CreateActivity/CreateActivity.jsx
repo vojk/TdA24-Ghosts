@@ -58,7 +58,7 @@ function CreateActivity() {
                 </div>
                 <div>
                     <p>Potřebné pomůcky:</p>
-                    <InputField className="max-w-sm m-auto" setTools={setTools}/>
+                    <InputField className="max-w-sm m-auto" />
                 </div>
                 <div className="flex flex-col items-center">
                     <p>Jedná se o skupinovou aktivitu?</p> {/* classStructure: "Group/Individual" */}

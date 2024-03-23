@@ -3,9 +3,7 @@ import { useState, useEffect } from "react"
 
 export default function InputTitleWarnNote({setLinks}) {
     const [inputs, setInputs] = useState([{title:"", url:""}]) //všechny inputy zde
-    useEffect(() => {
-        setLinks(inputs)
-    }, [inputs])
+
     const [titles, setTitles] = useState([""])
     const [urls, setUrls] = useState([""])
 
