@@ -4,7 +4,11 @@ export function RegisterPage() {
 
   return (
     <>
-      <div className="max-w-xl h-full flex items-center m-auto"><div className='w-full h-fit'><RegisterBox/></div></div>
+      <div className="container flex min-h-[70vh] items-center justify-center py-12">
+        <div className="w-full max-w-3xl">
+          <RegisterBox />
+        </div>
+      </div>
     </>
   );
 }
