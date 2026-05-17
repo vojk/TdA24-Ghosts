@@ -1,36 +1,35 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 
-const ConfirmDialog = (props) => {
-    const { title, children, open, setOpen, onConfirm } = props;
-    return (
-        <Dialog
-            open={open}
-            onClose={() => setOpen(false)}
-            aria-labelledby="confirm-dialog"
-        >
-            <DialogTitle id="confirm-dialog">{title}</DialogTitle>
-            <DialogContent>{children}</DialogContent>
-            <DialogActions>
-                <Button
-                    variant="contained"
-                    onClick={() => setOpen(false)}
-                    color="secondary"
-                >
-                    Ne
-                </Button>
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        setOpen(false);
-                        onConfirm();
-                    }}
-                    color="primary"
-                >
-                    Ano
-                </Button>
-            </DialogActions>
-        </Dialog>
-    )
-}
+const ConfirmDialog = ({ title, children, open, setOpen, onConfirm }) => {
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{children}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Ne</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              onConfirm();
+            }}
+          >
+            Ano
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
 
 export default ConfirmDialog;

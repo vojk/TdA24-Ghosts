@@ -1,150 +1,104 @@
-import { Paper, Stack, TextField, IconButton, InputAdornment, Button, Autocomplete } from "@mui/material"
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useContext, useState, useEffect } from "react";
-import axios from 'axios'
-
-/* https://medium.com/@sumsourabh14/how-i-created-toggle-password-visibility-with-material-ui-b3fb975b5ce4 */
-const PasswordInput = ({ password, handlePassword }) => {
-    const [showPassword, setShowPassword] = useState(false);
-
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    return (
-        <TextField
-            type={showPassword ? "text" : "password"}
-            label="Heslo"
-            id="Heslo"
-            value={password}
-            onChange={handlePassword}
-            required={true}
-            InputProps={{
-                endAdornment: (
-                    <InputAdornment position="end">
-                        <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            edge="end"
-                        >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                    </InputAdornment>
-                ),
-            }}
-            fullWidth
-        />
-    );
-};
-
-const handleLogin = async () => {
-    const username = document.getElementById('Username').value
-    const password = document.getElementById('Heslo').value;
-
-    try {
-        const response = await axios.post('/api/credentials/checkuser', {
-            username,
-            password //přidat hash
-        });
-        const token = response.data.token;
-        localStorage.setItem('token', token);
-    } catch (error) {
-        console.error('Login failed', error);
-    }
-};
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
+import { Checkbox } from "./ui/checkbox";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { ScrollArea } from "./ui/scroll-area";
 
 export function RegisterBox() {
-    const [tags, setTags] = useState([]);
-    const [value, setValue] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
-    const fetchURL = "http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag"
+  const fetchURL = "http://7d17dc13931b9d11.app.tourdeapp.cz/api";
 
-    useEffect(() => {
-        async function fetchData() {
-            var data = await fetch(fetchURL + "/tag" /*"http://7d17dc13931b9d11.app.tourdeapp.cz/api/tag"*/).then(res => {
-                return res.json();
-            }).catch((error) => {
-                console.log(error);
-            });
+  useEffect(() => {
+    async function fetchData() {
+      const data = await fetch(`${fetchURL}/tag`)
+        .then((res) => res.json())
+        .catch((error) => {
+          console.log(error);
+        });
 
-            setTags(data);
-            console.log(data);
-        }
-        fetchData();
+      setTags(data || []);
+    }
+    fetchData();
+  }, []);
 
+  const toggleTag = (tag) => {
+    setSelectedTags((prev) =>
+      prev.some((item) => item.uuid === tag.uuid)
+        ? prev.filter((item) => item.uuid !== tag.uuid)
+        : [...prev, tag]
+    );
+  };
 
-    }, []);
-
-    return (
-        <form onSubmit={(e) => {
-            e.preventDefault();
-        }}>
-            <Paper elevation={5} className="p-3 text-center font-semibold">
-
-                {(typeof tags === 'ChangeMe') ? 'Nepodařilo se nám načíst potřebné tagy, zkuste to prosím později' : <> Vytvořte účet a začněte vyučovat! <Stack className="my-2">
-                    <TextField required label="Username" type="text" id="Username"></TextField>
-                </Stack>
-
-                    <Stack className="my-2">
-                        <TextField required autoComplete="given-name" label="Jméno" type="text" id="Jmeno"></TextField>
-                    </Stack>
-
-                    <Stack className="my-2">
-                        <TextField required autoComplete="family-name" label="Příjmení" type="text" id="Prijmeni"></TextField>
-                    </Stack>
-
-                    <Stack className="my-2">
-                        <TextField required label="E-Mail" type="email" id="E-Mail"></TextField>
-                    </Stack>
-
-                    <Stack className="my-2">
-                        <TextField required label="Telefonní číslo" type="tel" id="Telefon"></TextField>
-                    </Stack>
-
-                    <Stack className="my-2">
-                        <PasswordInput />
-                    </Stack>
-                    <Stack className="my-2">
-                        <TextField required label="Odkaz na fotku" type="url" id="Username" placeholder="https://example.com/uzasnafotka.jpg"></TextField>
-                    </Stack>
-
-                    <Stack direction={"row"} flexWrap={"wrap"} justifyContent={"space-evenly"} className="my-2" gap={1}>
-
-                        <p>Vyberte si pomocí tagů svá zaměření</p>
-                        {(typeof tags === 'undefined') ? 'Nepodařilo se nám načíst potřebné tagy, zkuste to prosím později' : <Autocomplete aria-required required className='bg-white p-2 rounded-xl'
-                            multiple
-                            id="lector-tags"
-                            options={tags}
-                            getOptionLabel={(option) => option.name}
-                            isOptionEqualToValue={(option, value) => option.uuid === value.uuid}
-                            disableCloseOnSelect={true}
-                            value={value}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="standard"
-                                    label="Vyberte tagy, o které máte zájem"
-                                    placeholder="Tagy"
-                                    inputProps={{
-                                        ...params.inputProps,
-                                        required: value.length === 0
-                                    }}
-                                    required={true}
-                                />
-                            )}
-                            onChange={(event, value) => {
-                                console.log(value);
-                                setValue(value)
-
-                            }} />}
-                        <Button variant="contained" size="large" color="primary" type="submit">
-                            <span className="font-bold">Registrovat</span>
-                        </Button>
-                    </Stack></>}
-
-
-            </Paper>
-        </form>
-    )
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
+      <Card className="mx-auto w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle className="text-center text-xl">Vytvořte účet a začněte vyučovat</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="Username">Username</Label>
+            <Input required type="text" id="Username" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="Jmeno">Jméno</Label>
+            <Input required autoComplete="given-name" type="text" id="Jmeno" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="Prijmeni">Příjmení</Label>
+            <Input required autoComplete="family-name" type="text" id="Prijmeni" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="E-Mail">E-Mail</Label>
+            <Input required type="email" id="E-Mail" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="Telefon">Telefonní číslo</Label>
+            <Input required type="tel" id="Telefon" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="Heslo">Heslo</Label>
+            <Input required type="password" id="Heslo" />
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="PhotoUrl">Odkaz na fotku</Label>
+            <Input required type="url" id="PhotoUrl" placeholder="https://example.com/uzasnafotka.jpg" />
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <Label>Vyberte si pomocí tagů svá zaměření</Label>
+            {tags.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nepodařilo se nám načíst potřebné tagy.</p>
+            ) : (
+              <ScrollArea className="h-40 rounded-md border p-3">
+                <div className="grid gap-2 md:grid-cols-2">
+                  {tags.map((tag) => (
+                    <label key={tag.uuid} className="flex items-center gap-2 text-sm">
+                      <Checkbox
+                        checked={selectedTags.some((item) => item.uuid === tag.uuid)}
+                        onCheckedChange={() => toggleTag(tag)}
+                      />
+                      {tag.name}
+                    </label>
+                  ))}
+                </div>
+              </ScrollArea>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button type="submit" className="w-full">
+            Registrovat
+          </Button>
+        </CardFooter>
+      </Card>
+    </form>
+  );
 }

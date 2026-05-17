@@ -1,42 +1,40 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as TdALogo } from "./../TdA/TdA_LOGO/TeacherDigitalAgency_LOGO_white.svg";
-import { ReactComponent as TdAListLekt } from "./../TdA/TdA_ikony/SVG/TdA_ikony_studium_white.svg";
-import { ReactComponent as TdANapad } from "./../TdA/TdA_ikony/SVG/TdA_ikony_napad_white.svg";
-import { ReactComponent as TdA_nastaveni_white } from "../TdA/TdA_ikony/SVG/TdA_ikony_nastaveni_white.svg";
+import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
 
-
-
-function MenuItem({ Icon, text, to }) {
-  //<Icon className={"w-8"} /> 
+function MenuItem({ text, to }) {
   return (
-    //   <Link to={to} className="mx-4 ml-0 gap-2 flex items-center relative hover:after:contents hover:after:w-full hover:after:absolute hover:after:bg-white hover:after:h-0.5 hover:after:-bottom-0 hover:after:rounded transition-all">
-    <Link to={to} className="mx-4 ml-0 gap-2 flex items-center relative underline">
-
-      <p className="text-[1rem] font-bold font-odstavec">{text}</p>
-    </Link>
-  )
+    <Button variant="link" asChild className="text-muted-foreground">
+      <Link to={to}>{text}</Link>
+    </Button>
+  );
 }
 
 export default function Footer() {
   return (
     <>
-      <div className={"w-full flex text-white"}>
-        <div className="w-full h-full px-4 flex justify-between sm:mr-0 py-8 bg-prussian backdrop-blur-sm rounded-md drop-shadow-sm shadow-md">
-          <TdALogo className={"h-[64px] mx-6"} />
-          <div className="flex flex-row justify-between w-full gap-2">
-            <div className="flex gap-2">
-              <MenuItem to={"/"} text={"O TdA"} />
-              <MenuItem to={"/lecturers"} text={"Lektoři"} />
+      <footer className="border-t bg-background">
+        <div className="container py-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              <TdALogo className="h-10 w-auto" />
+              <div>
+                <p className="font-display text-lg">Teacher Digital Agency</p>
+                <p className="text-sm text-muted-foreground">Spojujeme lektory se studenty.</p>
+              </div>
             </div>
-
-            <div className="mx-4 ml-0 gap-2 flex items-center relative">
-              <p className="text-[1rem] font-bold font-odstavec">Copyright © Teacher Digital Agency 2024</p>
+            <div className="flex flex-col gap-2 text-sm text-muted-foreground md:items-end">
+              <div className="flex flex-wrap gap-3">
+                <MenuItem to="/about" text="O TdA" />
+                <MenuItem to="/lecturers" text="Lektoři" />
+              </div>
+              <Separator className="hidden md:block" />
+              <span>Copyright © Teacher Digital Agency 2024</span>
             </div>
           </div>
-
         </div>
-      </div>
+      </footer>
     </>
   )
 }
