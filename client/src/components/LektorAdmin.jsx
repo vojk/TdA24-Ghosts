@@ -177,7 +177,7 @@ export default function LektorAdmin() {
                 <p className="italic text-muted-foreground" dangerouslySetInnerHTML={{ __html: claim }} />
               </div>
               <div className="aspect-square w-full max-w-[220px] overflow-hidden rounded-lg bg-muted">
-                <img src={pic_url} alt={`Picture of ${name}`} className="h-full w-full object-cover" />
+                <img src={pic_url} alt={`${name} ${surname}`} className="h-full w-full object-cover" />
               </div>
             </div>
             <div>

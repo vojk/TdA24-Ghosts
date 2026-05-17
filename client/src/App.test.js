@@ -9,10 +9,14 @@ jest.mock("axios", () => {
   return { __esModule: true, default: mockAxios };
 });
 
+jest.mock("react-day-picker", () => ({
+  DayPicker: () => null,
+}));
+
 import App from "./App";
 
 test("renders site header", () => {
   render(<App />);
-  const linkElement = screen.getByText(/Teacher Digital Agency/i);
+  const linkElement = screen.getByRole("link", { name: /Teacher Digital Agency/i });
   expect(linkElement).toBeInTheDocument();
 });

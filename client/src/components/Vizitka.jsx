@@ -22,7 +22,7 @@ export function Vizitka({ lecturerData }) {
       <CardContent className="space-y-4 pt-6">
         <div className="flex flex-col gap-4 md:flex-row">
           <div className="aspect-square w-full max-w-[160px] overflow-hidden rounded-lg bg-muted">
-            <img src={pic_url} alt={`Picture of ${name}`} className="h-full w-full object-cover" />
+            <img src={pic_url} alt={`${name} ${surname}`} className="h-full w-full object-cover" />
           </div>
           <div className="flex flex-1 flex-col gap-3">
             <div>

@@ -28,7 +28,7 @@ export default function Navbar() {
             token: localStorage.getItem("token"),
           },
         });
-        setIsValidated(response.status === 200);
+        setIsValidated(response?.status === 200);
       } catch (error) {
         console.error("fetch:", error);
       }
